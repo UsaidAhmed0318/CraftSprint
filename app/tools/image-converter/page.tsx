@@ -1,0 +1,1 @@
+import type {Metadata} from 'next';import {ImageConverter} from '@/components/ImageTool';export const metadata:Metadata={title:'Image Converter Online — JPG, PNG & WebP',description:'Convert JPG, PNG and WebP images online for free. Fast browser-based image format conversion with no signup.'};export default function Page(){return <ImageConverter/>}

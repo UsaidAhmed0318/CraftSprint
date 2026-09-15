@@ -1,0 +1,1 @@
+import type {Metadata} from 'next';import {ImageResizer} from '@/components/ImageTool';export const metadata:Metadata={title:'Image Resizer Online — Resize Images to Exact Pixels',description:'Resize images online to exact width and height in pixels. Free browser-based image resizer.'};export default function Page(){return <ImageResizer/>}

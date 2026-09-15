@@ -1,0 +1,1 @@
+export const site={name:'CraftSprint',url:process.env.NEXT_PUBLIC_SITE_URL||'https://craftsprint.com',description:'Free online tools for images, text, developers and everyday work — compress, convert, resize, generate passwords and QR codes, format JSON and more, all in your browser.',email:'usaidahmeddon@gmail.com',whatsapp:'923181014996'};
