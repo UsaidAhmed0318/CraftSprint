@@ -1,4 +1,100 @@
-import type {Metadata,Viewport} from 'next';import './globals.css';import Header from '@/components/Header';import Footer from '@/components/Footer';import JsonLd from '@/components/JsonLd';import WhatsAppButton from '@/components/WhatsAppButton';import SiteLoader from '@/components/SiteLoader';import {site} from '@/lib/site';
-export const metadata:Metadata={metadataBase:new URL(site.url),title:{default:'CraftSprint — Free Online Image, Text & Developer Tools',template:'%s | CraftSprint'},description:site.description,keywords:['image compressor','image converter','image resizer','compress image online','convert image online','resize image online','text cleaner','password generator','qr code generator','json formatter','base64 encoder decoder','color converter','unit converter','word counter','case converter','lorem ipsum generator','css gradient generator','box shadow generator','color palette extractor','regex tester','uuid generator','hash generator sha256','unix timestamp converter','csv to json converter','markdown previewer','readability checker','seo meta tag preview','url slug generator','utm link builder','hashtag generator','profit margin calculator','percentage calculator','date calculator','ai prompt token counter','cron expression parser','json to csv converter','aspect ratio calculator','free tools for social media managers','free tools for marketers','free tools for freelancers','free online tools for designers','free tools for developers','free tools for content writers','pdf to image converter','digital signature creator','resume builder','invoice generator online','jwt decoder','meta tag generator','robots.txt generator','sitemap generator','json to typescript','css grid generator','css flexbox generator','keyword density checker','headline analyzer','pomodoro timer','currency converter','random picker wheel','password strength checker','barcode generator','svg pattern generator','video thumbnail grabber'],alternates:{canonical:'/'},openGraph:{type:'website',siteName:site.name,title:'CraftSprint — Free Online Image, Text & Developer Tools',description:site.description,url:'/',images:['/images/logo.png']},twitter:{card:'summary_large_image',title:'CraftSprint — Free Online Image, Text & Developer Tools',description:site.description,images:['/images/logo.png']},robots:{index:true,follow:true}};
-export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#0b1224'};
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body><JsonLd data={{'@context':'https://schema.org','@type':'Organization',name:site.name,url:site.url,description:site.description,email:site.email,logo:`${site.url}/images/logo.png`,sameAs:[]}}/><SiteLoader/><Header/>{children}<Footer/><WhatsAppButton/></body></html>}
+import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/sora';
+import './globals.css';
+import './vip.css';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import JsonLd from '@/components/shared/JsonLd';
+import WhatsAppButton from '@/components/layout/WhatsAppButton';
+import ToolAssistant from '@/components/shared/ToolAssistant';
+import SplashLoader from '@/components/layout/SplashLoader';
+import { themeInitScript, splashInitScript } from '@/lib/initScripts';
+import { site } from '@/lib/site';
+
+const GA = process.env.NEXT_PUBLIC_GA_ID;
+const gaOn = !!GA && !GA.includes('XXXX');
+const ADS = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const adsOn = !!ADS && !ADS.includes('XXXX');
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: {
+    default: 'CraftSprint — Free Online Tools for Images, PDFs, Code & More',
+    template: '%s | CraftSprint',
+  },
+  description: site.description,
+  applicationName: site.name,
+  openGraph: {
+    type: 'website',
+    siteName: site.name,
+    title: 'CraftSprint — Free Online Tools',
+    description: site.description,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'CraftSprint — Free Online Tools',
+    description: site.description,
+  },
+  robots: { index: true, follow: true },
+};
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f6fb' },
+    { media: '(prefers-color-scheme: dark)', color: '#080c1b' },
+  ],
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript + splashInitScript }} />
+        {adsOn && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS}`}
+            crossOrigin="anonymous"
+          />
+        )}
+      </head>
+      <body>
+        <SplashLoader />
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: site.name,
+            url: site.url,
+            description: site.description,
+            email: site.email,
+            logo: `${site.url}/images/logo.png`,
+          }}
+        />
+        <JsonLd
+          data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: site.url }}
+        />
+        <a href="#main" className="skipLink">
+          Skip to content
+        </a>
+        <Header />
+        <div id="main">{children}</div>
+        <Footer />
+        <ToolAssistant />
+        <WhatsAppButton />
+        {gaOn && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA}`} strategy="afterInteractive" />
+            <Script
+              id="ga"
+              strategy="afterInteractive"
+            >{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA}');`}</Script>
+          </>
+        )}
+      </body>
+    </html>
+  );
+}

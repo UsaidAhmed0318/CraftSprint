@@ -1,0 +1,113 @@
+'use client';
+/**
+ * File picker used by every file tool. Files never leave the browser.
+ * - "Try with a sample" lets a visitor see the tool work without a file of their own.
+ * - Resets the input after each pick, so choosing the same file again still works.
+ * - Rejects files that don't match `accept` (also on drag-and-drop).
+ * - Shows which file is currently loaded.
+ */
+import { useRef, useState } from 'react';
+import { UploadCloud, FileCheck2, Sparkles } from 'lucide-react';
+import { formatBytes } from '@/lib/utils/image';
+import { makeSampleFile, sampleKind } from '@/lib/utils/samples';
+
+function matches(file: File, accept: string) {
+  if (!accept || accept === '*') return true;
+  return accept
+    .split(',')
+    .map(a => a.trim().toLowerCase())
+    .some(rule => {
+      if (rule.endsWith('/*')) return file.type.toLowerCase().startsWith(rule.slice(0, -1));
+      if (rule.startsWith('.')) return file.name.toLowerCase().endsWith(rule);
+      return file.type.toLowerCase() === rule;
+    });
+}
+
+export default function Dropzone({
+  onFile,
+  accept = 'image/*',
+}: {
+  onFile: (f: File) => void;
+  accept?: string;
+}) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [drag, setDrag] = useState(false);
+  const [picked, setPicked] = useState<File | null>(null);
+  const [error, setError] = useState('');
+  const [making, setMaking] = useState(false);
+  const kind = sampleKind(accept);
+
+  const take = (f?: File | null, skipCheck = false) => {
+    if (!f) return;
+    if (!skipCheck && !matches(f, accept)) {
+      setError(`“${f.name}” is not a supported file for this tool.`);
+      return;
+    }
+    setError('');
+    setPicked(f);
+    onFile(f);
+  };
+
+  const useSample = async () => {
+    if (!kind) return;
+    setError('');
+    setMaking(true);
+    try {
+      take(await makeSampleFile(kind), true);
+    } catch {
+      setError('Your browser could not create a sample file. Please choose a file instead.');
+    } finally {
+      setMaking(false);
+    }
+  };
+
+  return (
+    <div
+      className={`dropzone ${drag ? 'drag' : ''} ${picked ? 'hasFile' : ''}`}
+      onDragOver={e => {
+        e.preventDefault();
+        setDrag(true);
+      }}
+      onDragLeave={() => setDrag(false)}
+      onDrop={e => {
+        e.preventDefault();
+        setDrag(false);
+        take(e.dataTransfer.files?.[0]);
+      }}
+    >
+      {picked ? <FileCheck2 size={34} /> : <UploadCloud size={38} />}
+      <h3>{picked ? picked.name : 'Drop a file here'}</h3>
+      <p>
+        {picked
+          ? `${formatBytes(picked.size)} · stays on your device`
+          : 'or choose one from your device — it never leaves your browser'}
+      </p>
+      <div className="dropActions">
+        <button className="btn btnPrimary" type="button" onClick={() => ref.current?.click()}>
+          {picked ? 'Choose another file' : 'Choose file'}
+        </button>
+        {kind && (
+          <button className="btn btnGhost" type="button" onClick={useSample} disabled={making}>
+            <Sparkles size={16} /> {making ? 'Creating sample…' : 'Try with a sample'}
+          </button>
+        )}
+      </div>
+      <input
+        ref={ref}
+        className="hidden"
+        type="file"
+        accept={accept}
+        aria-label="Choose a file"
+        onChange={e => {
+          take(e.target.files?.[0]);
+          e.target.value = '';
+        }}
+      />
+      {error && (
+        <div className="notice error" role="alert">
+          {error}
+        </div>
+      )}
+    </div>
+  );
+}

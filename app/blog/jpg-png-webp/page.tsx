@@ -1,1 +1,34 @@
-export const metadata={title:'JPG vs PNG vs WebP: Which Image Format Should You Use?',description:'Compare JPG, PNG and WebP for photographs, transparency, quality and website performance.'};export default function Page(){return <main className="section"><article className="container article"><span className="kicker">Image guide</span><h1>JPG vs PNG vs WebP: which should you use?</h1><p>There is no single best image format for every situation. The right choice depends on whether you need transparency, lossless quality, small files or broad compatibility.</p><h2>JPG</h2><p>JPG is a practical format for photographs and other complex images. It uses lossy compression, so quality can decrease as files are compressed repeatedly.</p><h2>PNG</h2><p>PNG is useful when transparency or lossless image data matters. It can be larger than JPG for photographs.</p><h2>WebP</h2><p>WebP is designed for efficient web delivery and supports both lossy and lossless compression. It is a strong default for many modern websites.</p></article></main>}
+import { withSeo } from '@/lib/seo';
+export const metadata = withSeo('/blog/jpg-png-webp', {
+  title: 'JPG vs PNG vs WebP: Which Image Format Should You Use?',
+  description: 'Compare JPG, PNG and WebP for photographs, transparency, quality and website performance.',
+});
+export default function Page() {
+  return (
+    <main className="section">
+      <article className="container article">
+        <span className="kicker">Image guide</span>
+        <h1>JPG vs PNG vs WebP: which should you use?</h1>
+        <p>
+          There is no single best image format for every situation. The right choice depends on whether you
+          need transparency, lossless quality, small files or broad compatibility.
+        </p>
+        <h2>JPG</h2>
+        <p>
+          JPG is a practical format for photographs and other complex images. It uses lossy compression, so
+          quality can decrease as files are compressed repeatedly.
+        </p>
+        <h2>PNG</h2>
+        <p>
+          PNG is useful when transparency or lossless image data matters. It can be larger than JPG for
+          photographs.
+        </p>
+        <h2>WebP</h2>
+        <p>
+          WebP is designed for efficient web delivery and supports both lossy and lossless compression. It is
+          a strong default for many modern websites.
+        </p>
+      </article>
+    </main>
+  );
+}

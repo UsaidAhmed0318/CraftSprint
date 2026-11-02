@@ -1,15 +1,43 @@
-import Link from 'next/link';import PromoSlider from '@/components/PromoSlider';import {tools,categories} from '@/data/tools';
-export const metadata={title:'Guides & All Tools',description:'In-depth guides plus a full directory of every free CraftSprint tool, organized by category.'};
-const posts=[['How to compress images without losing too much quality','A practical guide to choosing dimensions, formats and quality settings for smaller image files.','/blog/compress-images'],['JPG vs PNG vs WebP: which should you use?','Understand the trade-offs between common image formats for websites, documents and sharing.','/blog/jpg-png-webp'],['How to resize an image for a website','Learn how pixel dimensions, aspect ratio and file size affect images on the web.','/blog/resize-images']];
-export default function Blog(){return <main className="section"><div className="container">
- <div className="sectionHead"><span className="kicker">Guides</span><h1>Practical answers, plus every tool.</h1><p>In-depth guides for common questions, and a full directory of all {tools.length} free tools organized by category.</p></div>
- <PromoSlider/>
- <h2 style={{fontFamily:"'Space Grotesk'",fontSize:26,margin:'8px 0 18px'}}>Featured guides</h2>
- <div className="blogGrid">{posts.map(([t,d,u])=><Link href={u} className="postCard" key={u}><span className="kicker">Guide</span><h3>{t}</h3><p>{d}</p><span className="toolLink">Read guide →</span></Link>)}</div>
- <h2 style={{fontFamily:"'Space Grotesk'",fontSize:26,margin:'50px 0 8px'}}>Every tool, by category</h2>
- <p style={{color:'var(--muted)',marginBottom:20}}>Jump straight to any tool — each one has its own guide, FAQ and works instantly in your browser.</p>
- {categories.map(cat=><div key={cat} style={{marginBottom:36}}>
-  <h3 style={{fontSize:15,textTransform:'uppercase',letterSpacing:'.06em',color:'var(--brand)',fontWeight:800,marginBottom:14}}>{cat}</h3>
-  <div className="toolGrid">{tools.filter(t=>t.category===cat).map(t=>{const Icon=t.icon;return <Link href={`/tools/${t.slug}`} className="toolCard" key={t.slug}><div className="iconBox"><Icon size={21}/></div><h3>{t.name}</h3><p>{t.description}</p><span className="toolLink">Use tool →</span></Link>})}</div>
- </div>)}
-</div></main>}
+import Link from 'next/link';
+import { posts } from '@/data/posts';
+import { tools } from '@/data/tools';
+import { withSeo } from '@/lib/seo';
+
+export const metadata = withSeo('/blog', {
+  title: 'Free Guides: Images, PDFs, Passwords, JSON, Money & More',
+  description:
+    'Short, practical guides that answer everyday questions — and link straight to the free tool that does the job.',
+});
+
+export default function Blog() {
+  return (
+    <main className="section">
+      <div className="container">
+        <div className="sectionHead">
+          <h1>Guides</h1>
+          <p>
+            Short, practical answers to everyday questions — each one links to the free tool that does the
+            job.
+          </p>
+        </div>
+        <div className="blogGrid">
+          {posts.map(p => (
+            <Link href={`/blog/${p.slug}`} className="postCard" key={p.slug}>
+              <span className="kicker">{p.topic}</span>
+              <h3>{p.title}</h3>
+              <p>{p.description}</p>
+              <span className="toolLink">Read the guide</span>
+            </Link>
+          ))}
+        </div>
+        <p style={{ marginTop: 40, color: 'var(--muted)' }}>
+          Looking for a tool instead?{' '}
+          <Link href="/" style={{ color: 'var(--brand)', fontWeight: 700 }}>
+            Browse all {tools.length} free tools
+          </Link>
+          .
+        </p>
+      </div>
+    </main>
+  );
+}

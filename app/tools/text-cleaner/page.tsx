@@ -1,1 +1,0 @@
-import type {Metadata} from 'next';import {TextCleaner} from '@/components/ImageTool';export const metadata:Metadata={title:'Text Cleaner Online — Remove Extra Spaces & Blank Lines',description:'Clean messy copied text online. Remove extra spaces, blank lines and formatting without uploading your text.'};export default function Page(){return <TextCleaner/>}

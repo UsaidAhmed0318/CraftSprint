@@ -1,0 +1,42 @@
+import { describe, expect, it } from 'vitest';
+import { validateContact } from '@/lib/validateContact';
+import { formatBytes } from '@/lib/utils/image';
+import { matchTools } from '@/lib/toolMatch';
+import { evaluate } from '@/components/tools/calculators/MathCalculators';
+
+describe('contact form validation', () => {
+  const ok = { name: 'Ali', email: 'ali@example.com', message: 'Hello', startedAt: 0 };
+  it('accepts a normal message', () => expect(validateContact(ok, 10_000)).toBeNull());
+  it('flags the honeypot as spam', () =>
+    expect(validateContact({ ...ok, website: 'x' }, 10_000)).toBe('spam'));
+  it('flags instant submits as spam', () =>
+    expect(validateContact({ ...ok, startedAt: 9_000 }, 10_000)).toBe('spam'));
+  it('rejects a bad email', () =>
+    expect(validateContact({ ...ok, email: 'nope' }, 10_000)).toBe('Invalid email'));
+  it('rejects link spam', () =>
+    expect(validateContact({ ...ok, message: 'http://a http://b http://c http://d' }, 10_000)).toMatch(
+      /links/,
+    ));
+  it('rejects non-objects', () => expect(validateContact(null)).toBe('Invalid request'));
+});
+
+describe('formatBytes', () => {
+  it('formats sizes', () => {
+    expect(formatBytes(0)).toBe('0 B');
+    expect(formatBytes(1024)).toBe('1.0 KB');
+    expect(formatBytes(5 * 1024 * 1024)).toBe('5.0 MB');
+  });
+});
+
+describe('tool search', () => {
+  it('finds the image compressor', () =>
+    expect(matchTools('compress photo').map(t => t.slug)).toContain('image-compressor'));
+  it('finds PDF merge', () => expect(matchTools('merge pdf').map(t => t.slug)).toContain('pdf-merge'));
+});
+
+describe('scientific calculator engine', () => {
+  it('respects operator precedence', () => expect(evaluate('2+3*4', true)).toBe(14));
+  it('handles brackets and powers', () => expect(evaluate('(2+3)^2', true)).toBe(25));
+  it('uses degrees when asked', () => expect(evaluate('sin(90)', true)).toBeCloseTo(1));
+  it('throws on bad input', () => expect(() => evaluate('2+*', true)).toThrow());
+});

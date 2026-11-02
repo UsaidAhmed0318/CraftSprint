@@ -1,3 +1,62 @@
 import type { NextConfig } from 'next';
-const nextConfig: NextConfig = { poweredByHeader: false, compress: true, reactStrictMode: true };
+
+// Canonical URL: NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is used automatically.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:3000');
+
+const isDev = process.env.NODE_ENV !== 'production';
+
+// Ads and analytics hosts that AdSense / Google Analytics need.
+const google =
+  'https://*.google.com https://*.googlesyndication.com https://*.doubleclick.net https://*.googletagmanager.com https://*.google-analytics.com https://*.adtrafficquality.google https://*.gstatic.com https://*.googleadservices.com';
+
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval'" : ''} 'wasm-unsafe-eval' blob: ${google}`,
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' data: blob:",
+  "worker-src 'self' blob:",
+  // API tester sends requests from the visitor's browser to any HTTPS address they type.
+  "connect-src 'self' https: data: blob:",
+  `frame-src 'self' ${google}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'self'",
+  'upgrade-insecure-requests',
+].join('; ');
+
+const securityHeaders = [
+  { key: 'Content-Security-Policy', value: csp },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000' },
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
+  // Tools may use the camera (QR scanner) or microphone; nothing else is allowed.
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), interest-cohort=()',
+  },
+];
+
+const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  compress: true,
+  reactStrictMode: true,
+  env: { NEXT_PUBLIC_SITE_URL: siteUrl },
+  async headers() {
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      // API answers are always fresh; never stored by the browser or CDN.
+      { source: '/api/:path*', headers: [{ key: 'Cache-Control', value: 'no-store, max-age=0' }] },
+    ];
+  },
+};
+
 export default nextConfig;
