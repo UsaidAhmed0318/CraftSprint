@@ -2,12 +2,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { Star } from 'lucide-react';
+import { Star, ShieldCheck, Zap, Gift, Smartphone, ArrowRight } from 'lucide-react';
 import ToolCard from '@/components/shared/ToolCard';
 import AdSlot from '@/components/shared/AdSlot';
 import ResultBanner from '@/components/shared/ResultBanner';
 import { tools } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
+import { categories } from '@/data/tools';
 import { recordRecent, usePrefs } from '@/lib/userPrefs';
 import { site } from '@/lib/site';
 import { toolContent } from '@/data/toolContent';
@@ -17,11 +18,14 @@ export default function ToolShell({
   description,
   children,
   faq,
+  wide,
 }: {
   title: string;
   description: string;
   children: React.ReactNode;
   faq?: { q: string; a: string }[];
+  /** Full-width workspace without the info sidebar (for tools with their own two-column layout). */
+  wide?: boolean;
 }) {
   const path = usePathname() || '';
   const slug = path.split('/').filter(Boolean)[1] || '';
@@ -35,6 +39,23 @@ export default function ToolShell({
   const related = tool
     ? tools.filter(t => t.category === tool.category && t.slug !== tool.slug).slice(0, 4)
     : [];
+
+  const catIndex = tool ? categories.indexOf(tool.category) : 0;
+  const Icon = tool?.icon;
+  const isGame = tool?.category === 'Games';
+  const features = [
+    {
+      i: ShieldCheck,
+      t: isGame ? 'Plays in your browser' : 'Private',
+      d: isGame ? 'No download or install' : 'Runs on your device — nothing is uploaded',
+      g: 'g4',
+    },
+    { i: Zap, t: 'Fast', d: 'Works instantly, no waiting in a queue', g: 'g6' },
+    { i: Gift, t: 'Free', d: 'No signup, no watermark, no limits', g: 'g3' },
+    { i: Smartphone, t: 'Any device', d: 'Phone, tablet or computer', g: 'g1' },
+  ];
+  const steps = tool ? toolContent[tool.slug]?.steps : undefined;
+  const showSide = !wide && !!tool;
 
   const ld: Record<string, unknown>[] = [];
   if (tool && cat)
@@ -78,9 +99,16 @@ export default function ToolShell({
           </nav>
         )}
         <div className="toolTitleRow">
-          <div className="toolHeader">
-            <h1>{title}</h1>
-            <p>{description}</p>
+          <div className="toolHeader proHead">
+            {Icon && (
+              <span className={`proAppIcon g${(catIndex % 9) + 1}`} aria-hidden="true">
+                <Icon size={30} strokeWidth={1.8} />
+              </span>
+            )}
+            <div>
+              <h1>{title}</h1>
+              <p>{description}</p>
+            </div>
           </div>
           {tool && (
             <button
@@ -93,11 +121,73 @@ export default function ToolShell({
             </button>
           )}
         </div>
-        <div className="toolPanel">
-          {children}
-          <ResultBanner />
+        <div className={`proWorkspace ${showSide ? '' : 'noSide'}`}>
+          <div className="toolPanel">
+            {children}
+            <ResultBanner />
+          </div>
+          {showSide && (
+            <aside className="toolSide" aria-label="About this tool">
+              <div className="toolSideCard">
+                <h2>Why use this tool</h2>
+                <ul className="proFeatures">
+                  {features.map(({ i: FIcon, t, d, g }) => (
+                    <li key={t}>
+                      <span className={g}>
+                        <FIcon size={17} />
+                      </span>
+                      <div>
+                        <b>{t}</b>
+                        <small>{d}</small>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {steps && (
+                <div className="toolSideCard">
+                  <h2>Quick steps</h2>
+                  <ol className="sideSteps">
+                    {steps.map((st, n) => (
+                      <li key={st}>
+                        <span>{n + 1}</span>
+                        {st}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              {related.length > 0 && (
+                <div className="toolSideCard">
+                  <h2>Try next</h2>
+                  <div className="sideLinks">
+                    {related.slice(0, 4).map(t => {
+                      const RIcon = t.icon;
+                      return (
+                        <Link key={t.slug} href={`/tools/${t.slug}`}>
+                          <RIcon size={16} />
+                          <span>{t.name}</span>
+                          <ArrowRight size={14} />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </aside>
+          )}
         </div>
         <AdSlot />
+        {tool && toolContent[tool.slug]?.steps && (
+          <section className="toolHowTo" aria-labelledby="howto-title">
+            <h2 id="howto-title">How to use the {tool.name}</h2>
+            <ol>
+              {toolContent[tool.slug].steps!.map(st => (
+                <li key={st}>{st}</li>
+              ))}
+            </ol>
+          </section>
+        )}
         {tool && toolContent[tool.slug] && (
           <section className="section" style={{ paddingBottom: 0, paddingTop: 40 }}>
             <div className="article">

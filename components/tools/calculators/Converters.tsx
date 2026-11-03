@@ -1,4 +1,5 @@
 'use client';
+import { Dices } from 'lucide-react';
 import { useState } from 'react';
 import ToolShell from '@/components/shared/ToolShell';
 
@@ -187,7 +188,7 @@ export function ColorConverter() {
       </div>
       <div style={{ marginTop: 14 }}>
         <button className="btn btnGhost" onClick={randomColor}>
-          🎲 Random color
+          <Dices size={16} aria-hidden="true" /> Random color
         </button>
       </div>
       {valid ? (

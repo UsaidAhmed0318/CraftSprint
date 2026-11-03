@@ -1,4 +1,5 @@
 import {
+  WrapText,
   Image,
   FileImage,
   Maximize2,
@@ -617,6 +618,13 @@ export const tools: {
 
   // Content & SEO
   {
+    slug: 'line-break-remover',
+    name: 'Line Break Remover',
+    description: 'Remove unwanted line breaks from text copied out of PDFs, emails or websites.',
+    icon: WrapText,
+    category: 'Content & SEO',
+  },
+  {
     slug: 'text-cleaner',
     name: 'Text Cleaner',
     description: 'Remove extra spaces, blank lines and messy formatting from text.',
@@ -1125,3 +1133,5 @@ export const benefits = [
     icon: Image,
   },
 ];
+
+export type Tool = (typeof tools)[number];

@@ -11,6 +11,25 @@ import { UploadCloud, FileCheck2, Sparkles } from 'lucide-react';
 import { formatBytes } from '@/lib/utils/image';
 import { makeSampleFile, sampleKind } from '@/lib/utils/samples';
 
+/** Human-readable list of accepted formats, e.g. "image/*" → "JPG, PNG, WebP, GIF". */
+function formatsLabel(accept: string) {
+  if (!accept || accept === '*') return 'Any file';
+  const map: Record<string, string> = {
+    'image/*': 'JPG, PNG, WebP, GIF',
+    'video/*': 'MP4, WebM, MOV',
+    'audio/*': 'MP3, WAV, OGG, M4A',
+    'application/pdf': 'PDF',
+  };
+  return [
+    ...new Set(
+      accept
+        .split(',')
+        .map(a => a.trim().toLowerCase())
+        .map(a => map[a] || a.replace(/^\./, '').replace(/^.*\//, '').toUpperCase()),
+    ),
+  ].join(', ');
+}
+
 function matches(file: File, accept: string) {
   if (!accept || accept === '*') return true;
   return accept
@@ -75,12 +94,25 @@ export default function Dropzone({
         take(e.dataTransfer.files?.[0]);
       }}
     >
-      {picked ? <FileCheck2 size={34} /> : <UploadCloud size={38} />}
-      <h3>{picked ? picked.name : 'Drop a file here'}</h3>
+      <span className="dropIcon" aria-hidden="true">
+        {picked ? <FileCheck2 size={34} /> : <UploadCloud size={40} />}
+      </span>
+      <h3>
+        {picked ? (
+          picked.name
+        ) : (
+          <>
+            Drag &amp; drop your file or{' '}
+            <button type="button" className="dropLink" onClick={() => ref.current?.click()}>
+              click to upload
+            </button>
+          </>
+        )}
+      </h3>
       <p>
         {picked
           ? `${formatBytes(picked.size)} · stays on your device`
-          : 'or choose one from your device — it never leaves your browser'}
+          : `${formatsLabel(accept)} · processed in your browser, never uploaded`}
       </p>
       <div className="dropActions">
         <button className="btn btnPrimary" type="button" onClick={() => ref.current?.click()}>

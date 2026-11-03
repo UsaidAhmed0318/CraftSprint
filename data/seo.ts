@@ -1,7 +1,7 @@
 /** SEO text for every tool page. Edit a title or description here — nothing else needs to change. */
 export const toolSeo: Record<string, { title: string; description: string }> = {
   'age-calculator': {
-    title: 'Free Age Calculator — Exact Age in Years, Months & Days',
+    title: 'Age Calculator – Exact Years, Months & Days',
     description:
       'Find your exact age in years, months and days, total days lived and the countdown to your next birthday. Free and instant.',
   },
@@ -16,7 +16,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Send a REST request and inspect the status, headers and response body. Free, no sign-up, runs in your browser.',
   },
   'aspect-ratio-calculator': {
-    title: 'Free Aspect Ratio Calculator — Video & Social Media Sizes',
+    title: 'Aspect Ratio Calculator for Video & Social',
     description:
       'Calculate the simplified aspect ratio of any resolution, or jump to standard sizes for Instagram, YouTube, TikTok, X and LinkedIn. Free, no sign-up.',
   },
@@ -41,9 +41,9 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Generate a scannable CODE128, EAN-13, EAN-8 or UPC barcode from any text or number. Free, no sign-up, runs in your browser.',
   },
   'base64-converter': {
-    title: 'Base64 Encoder & Decoder Online — Free',
+    title: 'Online Base64 Encoder & Decoder – Free',
     description:
-      'Encode text to Base64 or decode Base64 back to plain text, fully in your browser. Free, no sign-up.',
+      'Encode text to Base64 or decode Base64 back to text instantly. A free developer utility that runs in your browser, so your data is never uploaded.',
   },
   'blog-outline-generator': {
     title: 'Blog / Article Outline Generator — Free',
@@ -71,12 +71,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Estimate basal metabolic rate and total daily calories with the Mifflin–St Jeor formula. Free, no sign-up, runs in your browser.',
   },
   'case-converter': {
-    title: 'Case Converter Online — UPPERCASE, lowercase, Title Case',
+    title: 'Online Case Converter – UPPER, lower, Title',
     description:
-      'Convert text between UPPERCASE, lowercase, Title Case, Sentence case, camelCase and snake_case instantly. Free, no sign-up, runs in your browser.',
+      'Convert text to UPPERCASE, lowercase, Title Case, Sentence case, camelCase or snake_case instantly. Free online case converter that runs in your browser.',
   },
   'chmod-calculator': {
-    title: 'Free Chmod Calculator — Linux File Permissions (755, 644)',
+    title: 'Chmod Calculator – Linux File Permissions',
     description:
       'Build Linux chmod permissions with checkboxes and get numeric and symbolic values like 755 and rwxr-xr-x. Free, no sign-up, runs in your browser.',
   },
@@ -101,7 +101,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Generate complementary, analogous and triadic color palettes from a base color. Free, no sign-up, runs in your browser.',
   },
   'compound-interest-calculator': {
-    title: 'Free Compound Interest Calculator with Monthly Deposits',
+    title: 'Compound Interest Calculator – Free',
     description:
       'See how savings grow with compound interest and monthly contributions, with a year-by-year table. Free, no sign-up, runs in your browser.',
   },
@@ -151,7 +151,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Convert between major world currencies using up-to-date exchange rates. Free, no sign-up, runs in your browser.',
   },
   'date-calculator': {
-    title: 'Free Date Calculator Online — Days Between Dates',
+    title: 'Date Calculator – Days Between Dates',
     description:
       'Find the number of days, weeks and business days between two dates, or add and subtract days from a date. Free, no sign-up, runs in your browser.',
   },
@@ -161,7 +161,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Draw your signature and download it as a transparent PNG to sign documents. Free, no sign-up, runs in your browser.',
   },
   'discount-calculator': {
-    title: 'Free Discount Calculator — Sale Price & Savings',
+    title: 'Discount Calculator – Sale Price & Savings',
     description:
       'Find the sale price and how much you save, including an extra discount on top. Free, no sign-up, runs in your browser.',
   },
@@ -181,12 +181,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Preview heading and body Google Font combinations side by side. Free, no sign-up, runs in your browser.',
   },
   'fraction-calculator': {
-    title: 'Free Fraction Calculator — Add, Subtract, Multiply & Divide',
+    title: 'Fraction Calculator – Add, Subtract & More',
     description:
       'Calculate with fractions and mixed numbers and get simplified, mixed and decimal answers. Free, no sign-up, runs in your browser.',
   },
   'fuel-cost-calculator': {
-    title: 'Free Fuel Cost Calculator — Trip Fuel & Cost per Person',
+    title: 'Fuel Cost Calculator – Trip Cost per Person',
     description:
       'Work out fuel needed and trip cost in km/litres or miles/gallons, and split it between passengers. Free, no sign-up, runs in your browser.',
   },
@@ -201,12 +201,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Shrink an animated GIF by reducing its resolution, quality or frame count. Free, no sign-up, runs in your browser.',
   },
   'gpa-calculator': {
-    title: 'Free GPA Calculator — 4.0 Scale for College & University',
+    title: 'GPA Calculator – 4.0 Scale, Free',
     description:
       'Add courses, credit hours and letter grades to calculate your GPA on the 4.0 scale. Free, no sign-up, runs in your browser.',
   },
   'hash-generator': {
-    title: 'Free Hash Generator Online — SHA-1, SHA-256, SHA-512',
+    title: 'Hash Generator – SHA-1, SHA-256, SHA-512',
     description:
       'Generate a cryptographic hash of any text using SHA-1, SHA-256, SHA-384 or SHA-512, computed locally in your browser. Free, no sign-up.',
   },
@@ -221,23 +221,23 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Score your headline against common copywriting best practices. Free, no sign-up, runs in your browser.',
   },
   'html-minifier': {
-    title: 'HTML Minifier Online — Free',
+    title: 'Free Online HTML Minifier & Compressor',
     description:
-      'Strip comments and extra whitespace from HTML to shrink file size. Free, no sign-up, runs in your browser.',
+      'Minify HTML online: remove comments, extra spaces and line breaks to reduce file size. Free, fast and runs entirely in your browser.',
   },
   'html-to-markdown-converter': {
     title: 'HTML to Markdown Converter — Free',
     description: 'Convert HTML markup into clean Markdown source. Free, no sign-up, runs in your browser.',
   },
   'image-compressor': {
-    title: 'Image Compressor Online — Free JPG, PNG & WebP Compressor',
+    title: 'Free Online Image Compressor – Reduce KB',
     description:
-      'Compress images online for free. Reduce JPG, PNG and WebP file size in your browser without uploading your files.',
+      'Compress JPEG, PNG and WebP images online and reduce file size in KB. Choose the quality, compare before and after, and download. Runs in your browser.',
   },
   'image-converter': {
-    title: 'Free Image Converter Online — JPG, PNG & WebP',
+    title: 'Free Image Converter – PNG, JPG, WebP',
     description:
-      'Convert JPG, PNG and WebP images online for free. Fast browser-based image format conversion with no signup.',
+      'Convert images between PNG, JPG and WebP online for free. Pick the output format and download in seconds. The conversion happens in your browser.',
   },
   'image-cropper': {
     title: 'Image Cropper & Rotator — Free Online Tool',
@@ -245,9 +245,9 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Crop to any area and rotate an image, then download the result. Free, no sign-up, runs in your browser.',
   },
   'image-resizer': {
-    title: 'Free Image Resizer Online — Resize Images to Exact Pixels',
+    title: 'Free Online Image Resizer – Exact Pixels',
     description:
-      'Resize images online to exact width and height in pixels. Free browser-based image resizer.',
+      'Resize photos to an exact width and height in pixels, with an option to keep proportions. Free online image resizer that works in your browser, no upload.',
   },
   'image-to-base64': {
     title: 'Image to Base64 Converter Online — Free',
@@ -260,7 +260,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Combine one or more images into a single downloadable PDF. Free, no sign-up, runs in your browser.',
   },
   'image-watermark': {
-    title: 'Add Watermark to Image Online — Free, No Upload',
+    title: 'Add Watermark to Image – Free, No Upload',
     description:
       'Add a text watermark to JPG, PNG or WebP images in your browser and download the result. Free, no sign-up.',
   },
@@ -280,9 +280,9 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Transform readable JavaScript into a hard-to-read but functionally identical version. Free, no sign-up, runs in your browser.',
   },
   'json-formatter': {
-    title: 'JSON Formatter & Validator Online — Free',
+    title: 'Online JSON Formatter & Validator – Free',
     description:
-      'Validate, format and minify JSON online with clear error messages, entirely in your browser. Free, no sign-up.',
+      'Format, beautify, minify and validate JSON instantly with clear error messages. Free online JSON formatter for developers. Your data stays in your browser.',
   },
   'json-to-csv-converter': {
     title: 'JSON to CSV Converter Online — Free',
@@ -309,12 +309,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'See how many times a keyword appears and what percentage of your text it makes up. Free, no sign-up, runs in your browser.',
   },
   'loan-emi-calculator': {
-    title: 'Free Loan EMI Calculator — Monthly Instalment & Interest',
+    title: 'Loan EMI Calculator – Monthly Payment',
     description:
       'Calculate monthly EMI, total interest and a yearly repayment schedule for any loan, in any currency. Free, no sign-up, runs in your browser.',
   },
   'lorem-ipsum-generator': {
-    title: 'Lorem Ipsum Generator Online — Free Placeholder Text',
+    title: 'Lorem Ipsum Generator – Placeholder Text',
     description:
       'Generate placeholder paragraphs, sentences or words for mockups and design layouts. Free, no sign-up, runs in your browser.',
   },
@@ -333,7 +333,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description: 'A free memory card matching game. Flip cards, find all pairs and beat your best score.',
   },
   'meta-tag-generator': {
-    title: 'Meta Tag Generator — Open Graph & Twitter Card Free',
+    title: 'Meta Tag Generator – Open Graph & Twitter',
     description:
       'Generate title, description, Open Graph and Twitter Card meta tags for your page. Free, no sign-up, runs in your browser.',
   },
@@ -348,17 +348,17 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Preview your screenshot inside a simple phone or laptop frame. Free, no sign-up, runs in your browser.',
   },
   'morse-code-translator': {
-    title: 'Free Morse Code Translator — Text to Morse & Back',
+    title: 'Morse Code Translator – Text to Morse',
     description:
       'Translate text to Morse code or decode Morse back to text, and play it as sound. Free, no sign-up, runs in your browser.',
   },
   'number-base-converter': {
-    title: 'Free Number Base Converter — Binary, Octal, Decimal, Hex',
+    title: 'Number Base Converter – Binary, Hex, Octal',
     description:
       'Convert numbers between binary, octal, decimal and hexadecimal instantly, including very large values. Free, no sign-up, runs in your browser.',
   },
   'ohms-law-calculator': {
-    title: "Ohm's Law Calculator — Voltage, Current, Resistance & Power",
+    title: "Ohm's Law Calculator – V, I, R & Power",
     description:
       "Enter any two of voltage, current, resistance and power to calculate the rest using Ohm's law. Free, no sign-up, runs in your browser.",
   },
@@ -444,12 +444,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Upload an image containing a QR code to instantly decode its content. Free, no sign-up, runs in your browser.',
   },
   'quadratic-equation-solver': {
-    title: 'Quadratic Equation Solver — Roots, Discriminant & Vertex',
+    title: 'Quadratic Equation Solver – Roots & Vertex',
     description:
       'Solve any quadratic equation ax² + bx + c = 0 and get real or complex roots, the discriminant and the vertex. Free, no sign-up, runs in your browser.',
   },
   'random-number-generator': {
-    title: 'Free Random Number Generator — Any Range, No Repeats',
+    title: 'Random Number Generator – Any Range',
     description:
       'Generate secure random numbers in any range, one or many, with or without repeats. Free, no sign-up, runs in your browser.',
   },
@@ -459,7 +459,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Enter a list of names or options and spin the wheel to randomly pick one. Free, no sign-up, runs in your browser.',
   },
   'readability-checker': {
-    title: 'Readability Checker Online — Free Flesch Score Tool',
+    title: 'Readability Checker – Flesch Score, Free',
     description:
       'Paste an article to see its Flesch reading-ease score and approximate US grade level. Free, no sign-up, runs in your browser.',
   },
@@ -469,12 +469,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Create a simple sales receipt and print or save it as a PDF. Free, no sign-up, runs in your browser.',
   },
   'regex-tester': {
-    title: 'Regex Tester Online — Free JavaScript Regex Tool',
+    title: 'Regex Tester – Free JavaScript Regex Tool',
     description:
       'Test regular expressions against sample text and see every match and capture group highlighted. Free, no sign-up, runs in your browser.',
   },
   'resistor-color-code': {
-    title: 'Free Resistor Color Code Calculator — 4 & 5 Band',
+    title: 'Resistor Color Code Calculator – 4 & 5 Band',
     description:
       'Pick resistor colour bands to get resistance, tolerance and range for 4-band and 5-band resistors. Free, no sign-up, runs in your browser.',
   },
@@ -489,12 +489,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Generate a robots.txt file that controls which parts of your site search engines can crawl. Free, no sign-up, runs in your browser.',
   },
   'roman-numeral-converter': {
-    title: 'Free Roman Numeral Converter — Numbers to Roman & Back',
+    title: 'Roman Numeral Converter – Free',
     description:
       'Convert numbers 1–3999 to Roman numerals and read Roman numerals as numbers, with validation. Free, no sign-up, runs in your browser.',
   },
   'scientific-calculator': {
-    title: 'Scientific Calculator Online — Free with Trig & Logs',
+    title: 'Scientific Calculator Online – Free',
     description:
       'Free online scientific calculator with sin, cos, tan, log, ln, powers, roots, factorials and brackets. Degrees or radians.',
   },
@@ -533,17 +533,17 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Renumber subtitle blocks and shift timestamps to resync an SRT subtitle file. Free, no sign-up, runs in your browser.',
   },
   'statistics-calculator': {
-    title: 'Statistics Calculator — Mean, Median, Mode & Standard Deviation',
+    title: 'Statistics Calculator – Mean, Median, SD',
     description:
       'Paste numbers to calculate mean, median, mode, range, variance and sample or population standard deviation. Free, no sign-up, runs in your browser.',
   },
   'stopwatch-countdown': {
-    title: 'Free Online Stopwatch & Countdown Timer with Alarm',
+    title: 'Online Stopwatch & Countdown Timer',
     description:
       'A precise online stopwatch with laps and a countdown timer that beeps at zero. Free, no sign-up, runs in your browser.',
   },
   'subnet-calculator': {
-    title: 'Free IP Subnet Calculator — IPv4 CIDR, Mask & Host Range',
+    title: 'IP Subnet Calculator – IPv4 CIDR & Mask',
     description:
       'Calculate network address, broadcast, subnet mask, wildcard and usable host range for any IPv4 address and prefix. Free, no sign-up, runs in your browser.',
   },
@@ -568,7 +568,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Generate a tailwind.config.js snippet from your brand colors and fonts. Free, no sign-up, runs in your browser.',
   },
   'text-cleaner': {
-    title: 'Free Text Cleaner Online — Remove Extra Spaces & Blank Lines',
+    title: 'Text Cleaner – Remove Extra Spaces',
     description:
       'Clean messy copied text online. Remove extra spaces, blank lines and formatting without uploading your text. Free, no sign-up, runs in your browser.',
   },
@@ -588,7 +588,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Paste text and hear it read aloud with your choice of voice, speed and pitch. Free, no signup.',
   },
   'tic-tac-toe': {
-    title: 'Free Tic-Tac-Toe — Play vs Computer or a Friend',
+    title: 'Tic-Tac-Toe – Play vs Computer or Friend',
     description: 'Play Tic-Tac-Toe free online against the computer or with a friend on the same device.',
   },
   'timestamp-converter': {
@@ -607,12 +607,12 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Add a tip and split a restaurant bill evenly between any number of people. Free, no sign-up, runs in your browser.',
   },
   'typing-speed-test': {
-    title: 'Free Typing Speed Test — Check Your WPM & Accuracy',
+    title: 'Typing Speed Test – Check Your WPM',
     description:
       'Test your typing speed in words per minute and accuracy with a free one-minute typing test.',
   },
   'unit-converter': {
-    title: 'Free Unit Converter Online — Length, Weight, Temperature',
+    title: 'Unit Converter – Length, Weight, Temperature',
     description:
       'Convert length, weight and temperature units in real time, entirely in your browser. Free, no sign-up.',
   },
@@ -622,7 +622,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Encode text for safe use in a URL, or decode a URL-encoded string. Free, no sign-up, runs in your browser.',
   },
   'utm-link-builder': {
-    title: 'UTM Link Builder Online — Free Campaign URL Tool',
+    title: 'UTM Link Builder – Campaign URL Tool',
     description:
       'Build trackable UTM links for ads, email and social campaigns so you can measure exactly what drives traffic. Free, no sign-up, runs in your browser.',
   },
@@ -632,7 +632,7 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Generate random UUID v4 identifiers for databases, testing and code, created locally in your browser. Free, no sign-up.',
   },
   'vat-calculator': {
-    title: 'Free VAT, GST & Sales Tax Calculator — Add or Remove Tax',
+    title: 'VAT, GST & Sales Tax Calculator – Free',
     description:
       'Add tax to a net price or remove it from a gross price for any VAT, GST or sales-tax rate. Free, no sign-up, runs in your browser.',
   },
@@ -646,17 +646,17 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description: 'Turn a short video clip into an animated GIF, in your browser. Free, no sign-up.',
   },
   'word-counter': {
-    title: 'Word Counter Online — Free Word & Character Count',
+    title: 'Free Online Word & Character Counter',
     description:
-      'Count words, characters, sentences and paragraphs, and estimate reading time for any text. Free, no sign-up, runs in your browser.',
+      'Count words, characters, sentences and paragraphs in real time and see reading time. Free online word counter for writers and students, no sign-up.',
   },
   'zakat-calculator': {
-    title: 'Free Zakat Calculator — Calculate 2.5% Zakat on Your Wealth',
+    title: 'Zakat Calculator – 2.5% on Your Wealth',
     description:
       'Total your cash, gold, silver, investments and business assets, subtract debts and see the zakat due against the nisab. Free, no sign-up, runs in your browser.',
   },
   'connect-four': {
-    title: 'Connect Four — Play Free Online vs Computer or Friend',
+    title: 'Connect Four – Play Free Online',
     description:
       'Play Connect Four free in your browser against the computer or a friend. No download, no sign-up, works on mobile.',
   },
@@ -674,5 +674,10 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     title: 'Simon Says Memory Game — Play Free Online',
     description:
       'Play Simon Says free online: watch the colour pattern and repeat it. A fun memory game with sound. No sign-up.',
+  },
+  'line-break-remover': {
+    title: 'Free Online Line Break Remover',
+    description:
+      'Remove unwanted line breaks and extra spaces from copied text instantly, with an option to keep paragraphs. Free, fast and runs entirely in your browser.',
   },
 };

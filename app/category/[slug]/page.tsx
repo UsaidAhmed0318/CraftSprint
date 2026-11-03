@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ToolCard from '@/components/shared/ToolCard';
+import GamePoster from '@/components/shared/GamePoster';
 import JsonLd from '@/components/shared/JsonLd';
 import { tools, categories } from '@/data/tools';
 import { categoryInfo, categoryBySlug } from '@/lib/categories';
@@ -68,7 +69,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         </nav>
         <h1>{info.title}</h1>
         <p>
-          {info.description} {list.length} tools, all free and private.
+          {info.description} {list.length} {cat === 'Games' ? 'games' : 'tools'}, all free and private.
         </p>
         <nav
           className="catChips"
@@ -84,11 +85,19 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             ))}
         </nav>
       </section>
-      <div className="toolGrid" style={{ marginTop: 36 }}>
-        {list.map(t => (
-          <ToolCard key={t.slug} tool={t} />
-        ))}
-      </div>
+      {cat === 'Games' ? (
+        <div className="posterGrid" style={{ marginTop: 36 }}>
+          {list.map((t, i) => (
+            <GamePoster key={t.slug} tool={t} index={i} />
+          ))}
+        </div>
+      ) : (
+        <div className="toolGrid" style={{ marginTop: 36 }}>
+          {list.map(t => (
+            <ToolCard key={t.slug} tool={t} />
+          ))}
+        </div>
+      )}
     </main>
   );
 }

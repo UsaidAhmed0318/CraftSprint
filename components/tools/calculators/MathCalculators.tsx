@@ -1,4 +1,5 @@
 'use client';
+import { Delete } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import ToolShell from '@/components/shared/ToolShell';
 import { fmt, money, Stat, Num } from '@/components/shared/ui';
@@ -273,8 +274,9 @@ export function ScientificCalculator() {
               key={k}
               className={/^[0-9.]$/.test(k) ? 'num' : k === '=' ? 'eq' : k === 'C' || k === '⌫' ? 'clr' : ''}
               onClick={() => press(k)}
+              aria-label={k === '⌫' ? 'Backspace' : undefined}
             >
-              {k}
+              {k === '⌫' ? <Delete size={20} aria-hidden="true" /> : k}
             </button>
           ))}
         </div>

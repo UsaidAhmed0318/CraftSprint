@@ -261,10 +261,10 @@ export function SocialBioGenerator() {
   const [niche, setNiche] = useState('brand identity');
   const [trait, setTrait] = useState('coffee-fueled');
   const templates = [
-    `${role} helping brands with ${niche}. ${trait} & always creating ✨`,
+    `${role} helping brands with ${niche}. ${trait} & always creating.`,
     `${trait} ${role.toLowerCase()} obsessed with ${niche}.`,
     `I'm a ${role} who loves ${niche}. Let's build something great.`,
-    `${role} · ${niche} · ${trait} human 🌱`,
+    `${role} · ${niche} · ${trait} human.`,
   ];
   const copy = (t: string) => navigator.clipboard?.writeText(t);
   return (

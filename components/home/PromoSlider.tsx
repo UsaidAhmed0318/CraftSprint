@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 
 const slides = [
   {
@@ -29,7 +29,9 @@ export default function PromoSlider() {
       aria-label={`${s.title} — visit overthestack.com`}
     >
       <div className="promoText">
-        <span className="promoEyebrow">✦ {s.eyebrow}</span>
+        <span className="promoEyebrow">
+          <Sparkles size={13} aria-hidden="true" /> {s.eyebrow}
+        </span>
         <div className="promoKicker">{s.kicker}</div>
         <h3>{s.title}</h3>
         <p>{s.text}</p>

@@ -1,4 +1,21 @@
 'use client';
+import {
+  Rocket,
+  Palette,
+  FileText,
+  Key,
+  Headphones,
+  Camera,
+  Zap,
+  Puzzle,
+  Moon,
+  Gem,
+  Target,
+  Clover,
+  Bomb,
+  Flag,
+  type LucideIcon,
+} from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import ToolShell from '@/components/shared/ToolShell';
 
@@ -356,7 +373,21 @@ export function SnakeGame() {
 }
 
 /* ================= Memory match ================= */
-const EMOJI = ['🚀', '🎨', '📄', '🔑', '🎧', '📷', '⚡', '🧩', '🌙', '💎', '🎯', '🍀'];
+const CARD_ICONS: Record<string, LucideIcon> = {
+  Rocket,
+  Palette,
+  Document: FileText,
+  Key,
+  Headphones,
+  Camera,
+  Bolt: Zap,
+  Puzzle,
+  Moon,
+  Gem,
+  Target,
+  Clover,
+};
+const EMOJI = Object.keys(CARD_ICONS);
 const deal = (pairs: number) => {
   const d = [...EMOJI.slice(0, pairs), ...EMOJI.slice(0, pairs)];
   for (let i = d.length - 1; i > 0; i--) {
@@ -432,7 +463,10 @@ export function MemoryMatch() {
               onClick={() => flip(i)}
               aria-label={open.includes(i) || done.includes(i) ? c : 'Hidden card'}
             >
-              {c}
+              {(() => {
+                const CardIcon = CARD_ICONS[c];
+                return <CardIcon size={30} strokeWidth={1.8} aria-hidden="true" />;
+              })()}
             </button>
           ))}
         </div>
@@ -850,7 +884,17 @@ export function Minesweeper() {
                 c.open ? (c.mine ? 'Mine' : c.n ? `${c.n}` : 'Empty') : c.flag ? 'Flagged' : 'Hidden'
               }
             >
-              {c.open ? (c.mine ? '✹' : c.n || '') : c.flag ? '⚑' : ''}
+              {c.open ? (
+                c.mine ? (
+                  <Bomb size={16} aria-label="Mine" />
+                ) : (
+                  c.n || ''
+                )
+              ) : c.flag ? (
+                <Flag size={15} aria-label="Flag" />
+              ) : (
+                ''
+              )}
             </button>
           ))}
         </div>

@@ -1,4 +1,5 @@
 'use client';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import ToolShell from '@/components/shared/ToolShell';
 
@@ -22,14 +23,23 @@ function loadBoard(): Board {
 }
 
 export function KanbanBoard() {
-  const [board, setBoard] = useState<Board>(loadBoard);
+  // Starts empty on the server (so the page is readable by Google), then loads saved tasks in the browser.
+  const [board, setBoard] = useState<Board>(EMPTY);
+  const [loaded, setLoaded] = useState(false);
   const [input, setInput] = useState('');
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage only exists in the browser
+    setBoard(loadBoard());
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
     } catch {}
-  }, [board]);
+  }, [board, loaded]);
 
   const addTask = () => {
     if (!input.trim()) return;
@@ -107,8 +117,9 @@ export function KanbanBoard() {
                       className="btn btnGhost"
                       style={{ padding: '4px 8px' }}
                       onClick={() => move(col.key, t.id, -1)}
+                      aria-label="Move back"
                     >
-                      ←
+                      <ChevronLeft size={16} />
                     </button>
                   )}
                   {col.key !== 'done' && (
@@ -116,16 +127,18 @@ export function KanbanBoard() {
                       className="btn btnGhost"
                       style={{ padding: '4px 8px' }}
                       onClick={() => move(col.key, t.id, 1)}
+                      aria-label="Move forward"
                     >
-                      →
+                      <ChevronRight size={16} />
                     </button>
                   )}
                   <button
                     className="btn btnGhost"
                     style={{ padding: '4px 8px' }}
                     onClick={() => remove(col.key, t.id)}
+                    aria-label="Delete task"
                   >
-                    ✕
+                    <X size={16} />
                   </button>
                 </span>
               </div>

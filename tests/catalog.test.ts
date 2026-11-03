@@ -24,7 +24,7 @@ describe('tool catalogue', () => {
     for (const t of tools) {
       const seo = toolSeo[t.slug];
       expect(seo, t.slug).toBeTruthy();
-      expect(seo.title.length, `${t.slug} title`).toBeLessThanOrEqual(70);
+      expect(seo.title.length + ' | CraftSprint'.length, `${t.slug} title`).toBeLessThanOrEqual(60);
       expect(seo.description.length, `${t.slug} description`).toBeGreaterThanOrEqual(50);
       expect(seo.description.length, `${t.slug} description`).toBeLessThanOrEqual(170);
     }

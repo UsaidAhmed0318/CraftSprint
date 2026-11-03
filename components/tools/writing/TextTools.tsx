@@ -211,3 +211,84 @@ export function LoremIpsumGenerator() {
     </ToolShell>
   );
 }
+
+/** Line break remover: joins lines from PDFs, emails and websites into clean text. */
+export function LineBreakRemover() {
+  const [text, setText] = useState('');
+  const [keepParagraphs, setKeepParagraphs] = useState(true);
+  const [tidySpaces, setTidySpaces] = useState(true);
+  const out = useMemo(() => {
+    let t = text.replace(/\r\n?/g, '\n');
+    if (keepParagraphs) {
+      t = t
+        .split(/\n\s*\n+/)
+        .map(p => p.replace(/\s*\n\s*/g, ' '))
+        .join('\n\n');
+    } else {
+      t = t.replace(/\s*\n\s*/g, ' ');
+    }
+    if (tidySpaces) t = t.replace(/[ \t]{2,}/g, ' ').replace(/ +\n/g, '\n');
+    return t.trim();
+  }, [text, keepParagraphs, tidySpaces]);
+  const lines = text ? text.split(/\r\n?|\n/).length : 0;
+  return (
+    <ToolShell
+      title="Line break remover"
+      description="Remove unwanted line breaks from text copied out of PDFs, emails or websites, and get clean, flowing paragraphs."
+      faq={[
+        {
+          q: 'Why does copied PDF text have line breaks in the middle of sentences?',
+          a: 'PDFs store text line by line as it appears on the page. When you copy it, every visual line ends with a break. This tool joins those lines back into sentences.',
+        },
+        {
+          q: 'Can I keep my paragraphs?',
+          a: 'Yes. With “Keep paragraphs” on, single line breaks are joined but blank lines between paragraphs are kept.',
+        },
+      ]}
+    >
+      <div className="field">
+        <label htmlFor="lbr-in">Text with line breaks</label>
+        <textarea
+          id="lbr-in"
+          className="textArea"
+          value={text}
+          onChange={e => setText(e.target.value)}
+          placeholder={
+            'Paste text here, for example:\nThis sentence was copied\nfrom a PDF and broke\nacross three lines.'
+          }
+        />
+      </div>
+      <div className="controls" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <label className="checkInline">
+          <input
+            type="checkbox"
+            checked={keepParagraphs}
+            onChange={e => setKeepParagraphs(e.target.checked)}
+          />{' '}
+          Keep paragraphs (blank lines)
+        </label>
+        <label className="checkInline">
+          <input type="checkbox" checked={tidySpaces} onChange={e => setTidySpaces(e.target.checked)} />{' '}
+          Remove extra spaces
+        </label>
+      </div>
+      <div className="field">
+        <label htmlFor="lbr-out">Clean text</label>
+        <textarea id="lbr-out" className="textArea" value={out} readOnly />
+      </div>
+      <div className="stats">
+        <span>{lines} lines in</span>
+        <span>{out ? out.split('\n').length : 0} lines out</span>
+        <span>{out.length} characters</span>
+      </div>
+      <button
+        className="btn btnPrimary"
+        type="button"
+        disabled={!out}
+        onClick={() => navigator.clipboard?.writeText(out).catch(() => {})}
+      >
+        Copy clean text
+      </button>
+    </ToolShell>
+  );
+}

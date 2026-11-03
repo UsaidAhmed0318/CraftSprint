@@ -42,8 +42,15 @@ export function MarkdownPreviewer() {
         <div className="field">
           <label>Preview</label>
           <div
-            className="article"
-            style={{ minHeight: 360, background: '#f7f8fb', borderRadius: 11, padding: 16, maxWidth: 'none' }}
+            className="article lightPaper"
+            style={{
+              minHeight: 360,
+              background: '#f7f8fb',
+              color: '#10131a',
+              borderRadius: 11,
+              padding: 16,
+              maxWidth: 'none',
+            }}
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>
@@ -186,7 +193,7 @@ export function SeoMetaPreview() {
         <label>URL</label>
         <input aria-label="URL" value={url} onChange={e => setUrl(e.target.value)} />
       </div>
-      <div className="result" style={{ display: 'block', marginTop: 22 }}>
+      <div className="result" style={{ display: 'block', marginTop: 22, background: '#fff' }}>
         <div style={{ color: '#1a0dab', fontSize: 20, lineHeight: 1.3, fontFamily: 'arial,sans-serif' }}>
           {title.slice(0, 70) || 'Page title'}
         </div>

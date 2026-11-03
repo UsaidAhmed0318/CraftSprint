@@ -87,7 +87,7 @@ export const categoryInfo: Record<
     short: 'Games',
     title: 'Free Online Games',
     description:
-      'Quick brain games to play in your browser — 2048, Snake, Memory Match, Tic-Tac-Toe and a typing speed test.',
+      'Quick brain games to play in your browser — 2048, Snake, Memory Match, Tic-Tac-Toe, Minesweeper and more.',
   },
 };
 

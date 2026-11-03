@@ -99,8 +99,11 @@ const CITIES = [
 export function TimezoneMeetingPlanner() {
   const [dateTime, setDateTime] = useState('');
   useEffect(() => {
+    const now = new Date();
+    // datetime-local expects local time, not UTC
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
     // eslint-disable-next-line react-hooks/set-state-in-effect -- runs once after mount (browser-only values)
-    setDateTime(new Date().toISOString().slice(0, 16));
+    setDateTime(now.toISOString().slice(0, 16));
   }, []);
   const results = useMemo(() => {
     const d = new Date(dateTime);

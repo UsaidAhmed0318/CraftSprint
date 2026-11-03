@@ -518,6 +518,7 @@ const FONT_PAIRS = [
 ];
 export function FontPairingFinder() {
   const families = [...new Set(FONT_PAIRS.flat())];
+  const [sample, setSample] = useState('The quick brown fox jumps over the lazy dog.');
   return (
     <ToolShell
       title="Font pairing finder"
@@ -533,11 +534,15 @@ export function FontPairingFinder() {
         rel="stylesheet"
         href={`https://fonts.googleapis.com/css2?${families.map(f => `family=${f.replace(/ /g, '+')}:wght@400;700`).join('&')}&display=swap`}
       />
+      <div className="field" style={{ marginBottom: 16 }}>
+        <label htmlFor="font-sample">Preview text</label>
+        <input id="font-sample" value={sample} maxLength={160} onChange={e => setSample(e.target.value)} />
+      </div>
       {FONT_PAIRS.map(([heading, body]) => (
         <div className="colorField" key={heading} style={{ marginBottom: 16, padding: 20 }}>
           <div style={{ fontFamily: heading, fontSize: 26, fontWeight: 700 }}>{heading}</div>
           <div style={{ fontFamily: body, fontSize: 15, color: 'var(--muted)', marginTop: 6 }}>
-            Paired with {body} — the quick brown fox jumps over the lazy dog.
+            Paired with {body} — {sample}
           </div>
         </div>
       ))}

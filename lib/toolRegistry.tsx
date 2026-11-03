@@ -166,7 +166,7 @@ const toolComponents: Record<string, ComponentType> = {
     import('@/components/tools/developer/CodeTools').then(m => m.JsonToTsConverter),
   ),
   'jwt-decoder': dynamic(() => import('@/components/tools/developer/CodeTools').then(m => m.JwtDecoder)),
-  'kanban-board': dynamic(() => import('@/components/tools/productivity/KanbanBoardClient')),
+  'kanban-board': dynamic(() => import('@/components/tools/productivity/KanbanBoard').then(m => m.KanbanBoard)),
   'keyword-density-checker': dynamic(() =>
     import('@/components/tools/writing/SeoContentTools').then(m => m.KeywordDensityChecker),
   ),
@@ -308,6 +308,9 @@ const toolComponents: Record<string, ComponentType> = {
   ),
   'tailwind-config-generator': dynamic(() =>
     import('@/components/tools/developer/WebDevTools').then(m => m.TailwindConfigGenerator),
+  ),
+  'line-break-remover': dynamic(() =>
+    import('@/components/tools/writing/TextTools').then(m => m.LineBreakRemover),
   ),
   'text-cleaner': dynamic(() => import('@/components/tools/images/ImageTools').then(m => m.TextCleaner)),
   'text-diff-checker': dynamic(() =>

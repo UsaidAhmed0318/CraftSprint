@@ -2,8 +2,13 @@
  * Longer "About this tool" text shown under a tool (good for Google).
  * Add an entry for any tool slug: each string becomes one paragraph. Aim for 150–300 words.
  */
-export const toolContent: Record<string, { heading: string; paragraphs: string[] }> = {
+export const toolContent: Record<string, { heading: string; paragraphs: string[]; steps?: string[] }> = {
   'image-compressor': {
+    steps: [
+      'Drop a JPEG, PNG or WebP image into the box, or press “Choose file”.',
+      'Move the quality slider — 60–80% is usually a good balance — and press “Compress image”.',
+      'Compare the size before and after, then press “Download”.',
+    ],
     heading: 'Compress images without uploading them',
     paragraphs: [
       'Large photos slow down websites, fill up email attachments and get rejected by upload forms that set a size limit. This free image compressor makes JPG, PNG and WebP files smaller directly in your browser, so your pictures never leave your device.',
@@ -12,6 +17,11 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'image-resizer': {
+    steps: [
+      'Choose an image; its current width and height are filled in for you.',
+      'Type the new width or height. Keep “Keep proportions” on to avoid stretching.',
+      'Press “Resize image” and download the result.',
+    ],
     heading: 'Resize photos to exact pixel sizes',
     paragraphs: [
       'Every platform wants a different size: a website banner, a passport photo form, a social media post or an online application. This free image resizer lets you set the exact width and height in pixels and download the result in seconds.',
@@ -20,6 +30,11 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'image-converter': {
+    steps: [
+      'Choose the image you want to convert.',
+      'Pick the output format: WebP, PNG or JPG.',
+      'Convert and download the new file.',
+    ],
     heading: 'Convert between JPG, PNG and WebP',
     paragraphs: [
       'Different formats suit different jobs. JPG is best for photographs, PNG keeps sharp edges and transparent backgrounds, and WebP gives smaller files for websites while keeping good quality. This converter changes an image from one format to another in one step.',
@@ -36,6 +51,11 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'json-formatter': {
+    steps: [
+      'Paste your JSON into the input box.',
+      'Press “Format” to indent it, or “Minify” to shrink it to one line.',
+      'If the JSON is invalid, read the error message, fix the text and try again.',
+    ],
     heading: 'Format, validate and beautify JSON',
     paragraphs: [
       'API responses and config files often arrive as one long unreadable line. The JSON formatter turns that into clean, indented JSON you can read at a glance, and tells you when the JSON is invalid so you can find the problem quickly.',
@@ -52,6 +72,10 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'word-counter': {
+    steps: [
+      'Type or paste your text into the box.',
+      'Words, characters, sentences, paragraphs and reading time update as you type.',
+    ],
     heading: 'Count words, characters and reading time',
     paragraphs: [
       'Essays, social posts, meta descriptions and job applications often have strict limits. The word counter shows words, characters, sentences and paragraphs as you type, so you always know where you stand.',
@@ -60,6 +84,11 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'base64-converter': {
+    steps: [
+      'Paste plain text to encode, or a Base64 string to decode.',
+      'Press “Encode” or “Decode”.',
+      'Copy the result.',
+    ],
     heading: 'Encode and decode Base64 online',
     paragraphs: [
       'Base64 turns binary data or text into plain characters that can travel safely in JSON, URLs, emails and HTML. Developers use it for data URIs, API payloads, basic authentication headers and debugging encoded strings.',
@@ -196,6 +225,11 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'case-converter': {
+    steps: [
+      'Paste your text into the box.',
+      'Click the style you need: UPPERCASE, lowercase, Title Case, Sentence case, camelCase or snake_case.',
+      'Copy the converted text.',
+    ],
     heading: 'Change text to UPPERCASE, Title Case and more',
     paragraphs: [
       'Text pasted from emails, PDFs or old documents is often in the wrong case. This case converter switches any text to UPPERCASE, lowercase, Title Case or Sentence case, and to camelCase or snake_case for code.',
@@ -321,6 +355,30 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
       'Typing speed matters for office work, exams, programming and data entry. This test measures your words per minute (WPM) and your accuracy over a short timed passage.',
       'Start typing when you are ready and the timer begins with your first key press. Aim for accuracy first: speed comes with practice, and fixing mistakes costs more time than typing steadily. Around 40 WPM is a common average; many office jobs look for 50 or more.',
       'The test runs in your browser and your results are not uploaded. Free, with no sign-up.',
+    ],
+  },
+  'html-minifier': {
+    steps: [
+      'Paste your HTML code.',
+      'Press the minify button to remove comments, extra spaces and line breaks.',
+      'Copy the smaller HTML and compare the size saved.',
+    ],
+    heading: 'Make HTML smaller for faster pages',
+    paragraphs: [
+      'Minifying HTML removes characters that browsers do not need — comments, indentation and extra line breaks — so pages download a little faster. Paste your code, minify it and see how much smaller it becomes.',
+      'Keep the original, readable file for editing and publish the minified version. For styles and scripts, use the CSS and JavaScript minifiers.',
+    ],
+  },
+  'line-break-remover': {
+    steps: [
+      'Paste text copied from a PDF, email or website.',
+      'Choose whether to keep paragraphs and remove extra spaces.',
+      'Copy the clean text from the second box.',
+    ],
+    heading: 'Fix text copied from PDFs and emails',
+    paragraphs: [
+      'Text copied from a PDF or an email often breaks in the middle of sentences, because each visual line on the page ends with a line break. Pasting that into a document, a form or a chat looks messy.',
+      'This tool joins those broken lines back into normal sentences. Keep “Keep paragraphs” on to preserve blank lines between paragraphs, and use “Remove extra spaces” to tidy double spaces. Everything happens in your browser, so nothing you paste is uploaded.',
     ],
   },
 };

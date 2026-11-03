@@ -24,8 +24,10 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    // Hysteresis: turn on past 24px, off below 4px, so the state never flips back and forth at one boundary.
-    const onScroll = () => setScrolled(s => (s ? window.scrollY > 4 : window.scrollY > 24));
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(prev => (prev ? y > 4 : y > 24));
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -69,9 +71,14 @@ export default function Header() {
               </div>
             )}
           </div>
+          <Link href="/category/online-games">Games</Link>
           <Link href="/blog">Guides</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
+          <Link href="/ai" className="navAi">
+            <Image src="/images/favicon.png" alt="" width={18} height={18} />
+            CraftSprint AI
+          </Link>
         </nav>
         <div className="navRight">
           <SearchBar compact />
@@ -115,6 +122,9 @@ export default function Header() {
               )}
             </div>
           ))}
+          <Link href="/category/online-games" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
+            Games
+          </Link>
           <Link href="/blog" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
             Guides
           </Link>
@@ -123,6 +133,10 @@ export default function Header() {
           </Link>
           <Link href="/contact" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
             Contact
+          </Link>
+          <Link href="/ai" className="navAi mobile" onClick={() => setOpen(false)}>
+            <Image src="/images/favicon.png" alt="" width={20} height={20} />
+            Ask CraftSprint AI
           </Link>
         </div>
       </div>

@@ -1,7 +1,8 @@
 'use client';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, X, Sparkles } from 'lucide-react';
+import Image from 'next/image';
+import { Search, X, ArrowRight } from 'lucide-react';
 import { tools } from '@/data/tools';
 import { openAssistant } from '@/lib/utils/assistant';
 
@@ -104,28 +105,37 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
           <X size={14} />
         </button>
       )}
-      {!compact && (
-        <button
-          className="searchAiBtn"
-          type="button"
-          onClick={() => {
-            if (q.trim()) askAssistant();
-            else {
-              openAssistant();
-              setOpen(false);
-            }
-          }}
-          aria-label="Ask CraftSprint Assistant"
-        >
-          <Sparkles size={15} />
-          <span>Ask</span>
-        </button>
-      )}
+      <button
+        className={`searchAiBtn ${compact ? 'mini' : ''}`}
+        type="button"
+        onClick={() => {
+          if (q.trim()) askAssistant();
+          else {
+            openAssistant();
+            setOpen(false);
+          }
+        }}
+        aria-label="Ask CraftSprint AI"
+        title="Ask CraftSprint AI"
+      >
+        <Image src="/images/favicon.png" alt="" width={20} height={20} />
+        {!compact && <span>Ask AI</span>}
+      </button>
       {open && q && (
         <div className="searchResults">
+          <button className="searchAsk" onClick={askAssistant}>
+            <span className="searchAskIcon">
+              <Image src="/images/favicon.png" alt="" width={22} height={22} />
+            </span>
+            <span className="searchAskText">
+              <small>Ask CraftSprint AI</small>
+              <b>&ldquo;{q.trim()}&rdquo;</b>
+            </span>
+            <ArrowRight size={16} />
+          </button>
           {results.length === 0 && (
             <div className="searchEmpty">
-              No tool name matches &ldquo;{q}&rdquo; — ask the assistant instead.
+              No tool name matches &ldquo;{q}&rdquo; — CraftSprint AI can help you find it.
             </div>
           )}
           {results.map((t, i) => {
@@ -147,14 +157,6 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
               </button>
             );
           })}
-          <button className="searchAsk" onClick={askAssistant}>
-            <span className="searchAskIcon">
-              <Sparkles size={15} />
-            </span>
-            <span>
-              Ask CraftSprint Assistant: <b>&ldquo;{q.trim()}&rdquo;</b>
-            </span>
-          </button>
         </div>
       )}
     </div>

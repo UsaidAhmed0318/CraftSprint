@@ -1,58 +1,58 @@
 :root {
-  --bg: #f4f6fb;
-  --bg2: #eef1f8;
+  --bg: #f6f4fe;
+  --bg2: #efebfd;
   --surface: #ffffff;
-  --surface2: #f7f8fc;
-  --field: #f1f3f9;
-  --text: #0e1430;
-  --text2: #3d4566;
-  --muted: #5d6685;
-  --line: #e2e6f0;
-  --line2: #d3d9ea;
-  --brand: #2f4bd8;
-  --brand2: #5b74f0;
-  --brandDark: #0b1230;
-  --soft: #e8ecff;
-  --gold: #b8892c;
-  --goldText: #7d5a12;
+  --surface2: #f8f6ff;
+  --field: #f2effc;
+  --text: #150f33;
+  --text2: #3b3363;
+  --muted: #625a88;
+  --line: #e6e1f7;
+  --line2: #d8d0f2;
+  --brand: #6d28d9;
+  --brand2: #8b5cf6;
+  --brandDark: #0e0826;
+  --soft: #efe8ff;
+  --gold: #0e7490;
+  --goldText: #0b5f75;
   --successText: #0b6b47;
   --dangerText: #a8172f;
-  --gold2: #e3c27a;
-  --goldSoft: #fbf3e1;
+  --gold2: #22d3ee;
+  --goldSoft: #e3f7fb;
   --success: #0e9f6e;
   --danger: #d92d4a;
-  --shadow: 0 18px 50px rgba(14, 20, 48, 0.08);
-  --shadowLg: 0 30px 70px rgba(14, 20, 48, 0.16);
-  --headerBg: rgba(255, 255, 255, 0.82);
+  --shadow: 0 18px 50px rgba(40, 20, 90, 0.08);
+  --shadowLg: 0 30px 70px rgba(40, 20, 90, 0.16);
+  --headerBg: rgba(255, 255, 255, 0.8);
   --whatsapp: #25d366;
-  --ink: #0e1430;
+  --ink: #150f33;
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --bg: #080c1b;
-  --bg2: #0c1226;
-  --surface: #10173a;
-  --surface2: #151d45;
-  --field: #0c1330;
-  --text: #eceff9;
-  --text2: #c3c9e3;
-  --muted: #98a1c4;
-  --line: #222b55;
-  --line2: #2e3870;
-  --brand: #8299ff;
-  --brand2: #a9b8ff;
-  --brandDark: #05081a;
-  --soft: #1a2352;
-  --gold: #e2be6a;
-  --goldText: #e2be6a;
+  --bg: #07051a;
+  --bg2: #0c0924;
+  --surface: #120e2e;
+  --surface2: #18133b;
+  --field: #0f0b28;
+  --text: #f3f0ff;
+  --text2: #d1cbf2;
+  --muted: #a39cc9;
+  --line: #251f4d;
+  --line2: #352c69;
+  --brand: #a78bfa;
+  --brand2: #c4b5fd;
+  --brandDark: #04030f;
+  --soft: #1e1748;
+  --gold: #22d3ee;
+  --goldText: #67e8f9;
   --successText: #4ee0a6;
   --dangerText: #ff8a9c;
-  --gold2: #f3dca3;
-  --goldSoft: #2a2414;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
-  --shadowLg: 0 30px 70px rgba(0, 0, 0, 0.5);
-  --headerBg: rgba(8, 12, 27, 0.78);
-  --ink: #1a2353;
+  --gold2: #a5f3fc;
+  --goldSoft: #0b2433;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --shadowLg: 0 30px 70px rgba(0, 0, 0, 0.6);
+  --headerBg: rgba(9, 6, 28, 0.72);
+  --ink: #1c1545;
   color-scheme: dark;
 }
 * {
@@ -2940,4 +2940,107 @@ button.swatch {
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
+}
+
+.toolHowTo {
+  max-width: 820px;
+  margin: 34px auto 0;
+  padding: 24px 26px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.toolHowTo h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+.toolHowTo ol {
+  margin: 0;
+  padding-left: 22px;
+  display: grid;
+  gap: 8px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+/* ===== Space theme background (dark) and soft aurora (light) ===== */
+body {
+  background:
+    radial-gradient(
+      900px 600px at 85% -10%,
+      color-mix(in srgb, var(--brand2) 16%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at -10% 30%,
+      color-mix(in srgb, var(--gold2) 10%, transparent),
+      transparent 60%
+    ),
+    var(--bg);
+  background-attachment: fixed;
+}
+:root[data-theme='dark'] body {
+  background:
+    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1px 1px at 30% 80%, rgba(255, 255, 255, 0.4), transparent 60%),
+    radial-gradient(1.5px 1.5px at 55% 35%, rgba(196, 181, 253, 0.7), transparent 60%),
+    radial-gradient(1px 1px at 75% 65%, rgba(255, 255, 255, 0.45), transparent 60%),
+    radial-gradient(1.5px 1.5px at 90% 15%, rgba(103, 232, 249, 0.6), transparent 60%),
+    radial-gradient(1000px 700px at 85% -10%, rgba(124, 58, 237, 0.28), transparent 60%),
+    radial-gradient(800px 600px at -10% 40%, rgba(34, 211, 238, 0.1), transparent 60%),
+    radial-gradient(900px 600px at 50% 110%, rgba(168, 85, 247, 0.16), transparent 60%), var(--bg);
+  background-size:
+    420px 420px,
+    380px 380px,
+    520px 520px,
+    460px 460px,
+    600px 600px,
+    auto,
+    auto,
+    auto,
+    auto;
+  background-attachment: fixed;
+}
+
+/* ===== contrast fixes for the violet theme ===== */
+.toggleBtn.active {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  color: #fff;
+}
+.notice {
+  color: var(--successText);
+}
+.printSheet {
+  --muted: #4b5563;
+  --text: #111827;
+  color: #111827;
+}
+:root[data-theme='dark'] .btnPrimary {
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.35);
+}
+.proGo {
+  background: linear-gradient(100deg, #2563eb, #7c3aed 60%, #0e7490) !important;
+}
+.lightPaper {
+  --text: #10131a;
+  --text2: #2f3550;
+  --muted: #4b5563;
+  --brand: #4c1d95;
+  color: #10131a;
+}
+.reactBox {
+  background: #6d28d9;
+}
+.reactBox.waiting {
+  background: #c2410c;
+}
+.reactBox.go {
+  background: #15803d;
+}
+.reactBox.early {
+  background: #b91c1c;
 }
