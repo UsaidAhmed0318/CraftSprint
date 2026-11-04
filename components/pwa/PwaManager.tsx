@@ -28,6 +28,7 @@ export default function PwaManager() {
   const [mode, setMode] = useState<Mode>('manual');
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState('');
+  const [appName, setAppName] = useState<string | undefined>();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -61,7 +62,8 @@ export default function PwaManager() {
   }, [router]);
 
   useEffect(() => {
-    const onOpen = () => {
+    const onOpen = (e: Event) => {
+      setAppName((e as CustomEvent<string | undefined>).detail);
       setNote('');
       if (isStandalone()) setMode('installed');
       else if (canPromptInstall()) setMode('prompt');
@@ -119,12 +121,14 @@ export default function PwaManager() {
           <Image src="/icons/icon-192.png" alt="" width={68} height={68} />
         </span>
         <h2 id="install-title">
-          {mode === 'installed' ? 'CraftSprint is installed' : 'Install CraftSprint'}
+          {mode === 'installed' ? 'Installed' : `Install ${appName || 'CraftSprint'}`}
         </h2>
         <p className="installLead">
           {mode === 'installed'
             ? 'You are using the CraftSprint app. Every tool and game is inside it.'
-            : 'One app with all 138 tools and games — open it from your home screen like any other app.'}
+            : appName
+              ? `Add ${appName} to your home screen as its own app — it opens straight into ${appName}.`
+              : 'One app with every CraftSprint tool and game — open it from your home screen like any other app.'}
         </p>
 
         {mode !== 'installed' && (

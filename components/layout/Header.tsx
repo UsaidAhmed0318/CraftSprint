@@ -118,6 +118,9 @@ export default function Header() {
         <div className="navRight">
           <SearchBar compact />
           <ThemeToggle />
+          <button type="button" className="navInstall" onClick={() => openInstall()}>
+            <Download size={16} aria-hidden="true" /> Install App
+          </button>
         </div>
         <div className="mobileOnly">
           <ThemeToggle />

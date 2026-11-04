@@ -63,6 +63,7 @@ export function rememberReturnRoute(path: string) {
   } catch {}
 }
 
-export function openInstall() {
-  window.dispatchEvent(new Event(OPEN_INSTALL_EVENT));
+/** Opens the install sheet. Pass the tool/game name when installing a single tool as its own app. */
+export function openInstall(appName?: string) {
+  window.dispatchEvent(new CustomEvent<string | undefined>(OPEN_INSTALL_EVENT, { detail: appName }));
 }

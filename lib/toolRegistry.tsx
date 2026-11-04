@@ -8,6 +8,12 @@ import type { ComponentType } from 'react';
  * Each tool loads on its own, so a page only downloads the code it needs.
  */
 const toolComponents: Record<string, ComponentType> = {
+  'block-stack': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.BlockStack)),
+  'brick-breaker': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.BrickBreaker)),
+  'space-defender': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.SpaceDefender)),
+  'sky-hopper': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.SkyHopper)),
+  'whack-a-mole': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.WhackAMole)),
+  sudoku: dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.Sudoku)),
   'age-calculator': dynamic(() =>
     import('@/components/tools/calculators/EverydayTools').then(m => m.AgeCalculator),
   ),

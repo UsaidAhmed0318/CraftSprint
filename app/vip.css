@@ -4728,3 +4728,245 @@ main {
     display: none !important;
   }
 }
+
+/* ===================== Games batch 1 ===================== */
+.bsBoard {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+  width: min(100%, 300px);
+  aspect-ratio: 1 / 2;
+  padding: 6px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #2a1d63, #150f36);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+}
+.bsBoard span {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.bsBoard span.on {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25);
+}
+.gameOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: inherit;
+  background: rgba(7, 5, 26, 0.72);
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+}
+.gameOverlay b {
+  font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+  font-size: 26px;
+}
+.gameOverlay small {
+  color: #c4b5fd;
+  font-weight: 700;
+}
+.canvasWrap {
+  position: relative;
+  width: min(100%, 480px);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, 0.35);
+}
+.gameCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: none;
+  background: linear-gradient(180deg, #1e1452, #0b0822);
+}
+.gameCanvas.space {
+  background: radial-gradient(circle at 50% 0%, #2e1065, #050314 70%);
+}
+.gameCanvas.sky {
+  background: linear-gradient(180deg, #38bdf8, #7c3aed);
+}
+.padRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.padRow button {
+  min-width: 52px;
+  min-height: 52px;
+  border-radius: 14px;
+  border: 1px solid var(--line2);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.moleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: min(100%, 360px);
+}
+.moleHole {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 70%, #1a1033 40%, #3b2a7a 41%, #2a1d63 70%);
+}
+.mole {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -70%;
+  height: 60%;
+  border-radius: 50% 50% 40% 40%;
+  background: linear-gradient(180deg, #a16207, #78350f);
+  transition: bottom 0.15s;
+}
+.moleHole.up .mole {
+  bottom: 18%;
+}
+.sudoku {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  width: min(100%, 450px);
+  border: 2px solid #a78bfa;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.sdCell {
+  aspect-ratio: 1;
+  border: 0;
+  border-right: 1px solid var(--line2);
+  border-bottom: 1px solid var(--line2);
+  background: var(--surface);
+  color: #8b5cf6;
+  font: inherit;
+  font-size: clamp(15px, 4vw, 22px);
+  font-weight: 800;
+  cursor: pointer;
+}
+:root[data-theme='dark'] .sdCell {
+  background: rgba(18, 12, 46, 0.9);
+  color: #c4b5fd;
+}
+.sdCell.fixed {
+  color: var(--text) !important;
+}
+.sdCell.rel {
+  background: color-mix(in srgb, #8b5cf6 12%, var(--surface)) !important;
+}
+.sdCell.sel {
+  background: color-mix(in srgb, #8b5cf6 35%, var(--surface)) !important;
+}
+.sdCell.br {
+  border-right: 2px solid #a78bfa;
+}
+.sdCell.bb {
+  border-bottom: 2px solid #a78bfa;
+}
+.numPad {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  width: min(100%, 450px);
+}
+.numPad button {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line2);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+}
+@media (max-width: 420px) {
+  .numPad {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+.navInstall {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  font-size: 14px;
+  background: linear-gradient(110deg, #6d28d9, #7c3aed 50%, #4f46e5);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+}
+.navInstall:hover {
+  filter: brightness(1.1);
+}
+@media (max-width: 1200px) {
+  .navInstall {
+    display: none;
+  }
+}
+/* Homepage numbers row on desktop too */
+@media (min-width: 901px) {
+  .heroMini {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 22px;
+    max-width: 600px;
+  }
+  .heroMini div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 14px 8px;
+    border-radius: 18px;
+    background: linear-gradient(170deg, rgba(36, 24, 84, 0.8), rgba(12, 8, 34, 0.9));
+    border: 1px solid rgba(167, 139, 250, 0.25);
+  }
+  :root:not([data-theme='dark']) .heroMini div {
+    background: var(--surface);
+    border-color: var(--line2);
+  }
+  .heroMini svg {
+    color: #a78bfa;
+  }
+  .heroMini b {
+    font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+    font-size: 24px;
+  }
+  .heroMini small {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+}
+@media (max-width: 900px) {
+  .heroMini {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px !important;
+  }
+  .heroMini b {
+    font-size: 19px !important;
+  }
+}

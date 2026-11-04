@@ -6,7 +6,7 @@ import Link from 'next/link';
 import type { Tool } from '@/data/tools';
 import { Play } from 'lucide-react';
 
-const TYPES: Record<string, string> = {
+export const GAME_TYPES: Record<string, string> = {
   'game-2048': 'Puzzle game',
   'snake-game': 'Arcade game',
   'memory-match': 'Memory game',
@@ -17,6 +17,12 @@ const TYPES: Record<string, string> = {
   hangman: 'Word game',
   'reaction-time-test': 'Reflex test',
   'simon-says': 'Memory game',
+  'block-stack': 'Puzzle game',
+  'brick-breaker': 'Arcade game',
+  'space-defender': 'Shooter game',
+  'sky-hopper': 'Arcade game',
+  'whack-a-mole': 'Reflex game',
+  sudoku: 'Logic puzzle',
 };
 const THEMES = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
 
@@ -28,7 +34,7 @@ export default function GamePoster({ tool, index = 0 }: { tool: Tool; index?: nu
         <Icon size={40} strokeWidth={1.7} />
       </span>
       <span className="gcName">{tool.name}</span>
-      <span className="gcType">{TYPES[tool.slug] || 'Browser game'}</span>
+      <span className="gcType">{GAME_TYPES[tool.slug] || 'Browser game'}</span>
       <span className="gcPlay">
         <Play size={12} fill="currentColor" aria-hidden="true" /> Play now
       </span>

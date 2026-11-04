@@ -88,9 +88,9 @@ export default function Home() {
               {tools.length} free tools · no signup · files stay on your device
             </span>
             <h1>
-              Your all-in-one <span className="violetText">online tools hub</span>
+              Your ultimate <span className="violetText">online tools hub</span>
             </h1>
-            <p className="heroSub">Work smarter, not harder.</p>
+            <p className="heroSub">Work smarter, create better, play more.</p>
             <p>
               Image editing, PDF tools, text and SEO helpers, developer utilities, calculators, media tools
               and quick games — plus <b>CraftSprint AI</b> to find the right tool for you.
@@ -123,6 +123,11 @@ export default function Home() {
                 <LayoutGrid size={20} />
                 <b>{categories.length}</b>
                 <small>Categories</small>
+              </div>
+              <div>
+                <Gift size={20} />
+                <b>100%</b>
+                <small>Free</small>
               </div>
             </div>
             <div className="heroTrust">

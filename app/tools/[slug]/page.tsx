@@ -17,14 +17,21 @@ export function generateStaticParams() {
 }
 
 const appCategory: Record<Category, string> = {
-  'Image & Design': 'DesignApplication',
-  'Documents & PDF': 'BusinessApplication',
+  'Image Tools': 'DesignApplication',
+  'Color Tools': 'DesignApplication',
+  'CSS & Web Design': 'DesignApplication',
+  'QR & Barcode': 'UtilitiesApplication',
+  'PDF Tools': 'BusinessApplication',
+  'Documents & Business': 'BusinessApplication',
   'Developer Tools': 'DeveloperApplication',
-  'Content & SEO': 'BusinessApplication',
+  'Security & Passwords': 'SecurityApplication',
+  'SEO Tools': 'BusinessApplication',
+  'Writing & Text': 'BusinessApplication',
   'Video & Audio': 'MultimediaApplication',
-  Calculators: 'FinanceApplication',
+  'Finance Calculators': 'FinanceApplication',
+  'Everyday Calculators': 'UtilitiesApplication',
   'Math & Engineering': 'EducationalApplication',
-  'Productivity & Business': 'BusinessApplication',
+  Productivity: 'BusinessApplication',
   Games: 'GameApplication',
 };
 
@@ -33,7 +40,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const tool = tools.find(t => t.slug === slug);
   if (!tool) return {};
   const seo = toolSeo[slug] ?? { title: `${tool.name} — Free Online Tool`, description: tool.description };
-  return withSeo(`/tools/${slug}`, { title: seo.title, description: seo.description });
+  // Each tool page links its own manifest, so it can be installed as a stand-alone app.
+  return {
+    ...withSeo(`/tools/${slug}`, { title: seo.title, description: seo.description }),
+    manifest: `/tools/${slug}/app.webmanifest`,
+  };
 }
 
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {

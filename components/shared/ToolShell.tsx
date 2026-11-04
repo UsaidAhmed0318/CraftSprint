@@ -143,7 +143,7 @@ export default function ToolShell({
           </div>
           {tool && (
             <div className="mobileInstall">
-              <InstallButton label={isGame ? 'Install app to play anytime' : 'Install App'} />
+              <InstallButton label={`Install ${tool.name} app`} appName={tool.name} />
             </div>
           )}
           {showSide && (

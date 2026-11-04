@@ -1,26 +1,40 @@
 import type { Category } from '@/data/tools';
 import {
   Image as ImageIcon,
-  FileText,
-  Code,
-  PenLine,
-  Clapperboard,
-  Calculator,
-  Sigma,
   Briefcase,
+  Calculator,
+  Clapperboard,
+  Code,
+  FileSignature,
+  FileText,
   Gamepad2,
+  Palette,
+  PenLine,
+  PenTool,
+  QrCode,
+  Search,
+  ShieldCheck,
+  Sigma,
+  Wallet,
   type LucideIcon,
 } from 'lucide-react';
 
 export const categoryIcon: Record<Category, LucideIcon> = {
-  'Image & Design': ImageIcon,
-  'Documents & PDF': FileText,
+  'Image Tools': ImageIcon,
+  'Color Tools': Palette,
+  'CSS & Web Design': PenTool,
+  'QR & Barcode': QrCode,
+  'PDF Tools': FileText,
+  'Documents & Business': FileSignature,
   'Developer Tools': Code,
-  'Content & SEO': PenLine,
+  'Security & Passwords': ShieldCheck,
+  'SEO Tools': Search,
+  'Writing & Text': PenLine,
   'Video & Audio': Clapperboard,
-  Calculators: Calculator,
+  'Finance Calculators': Wallet,
+  'Everyday Calculators': Calculator,
   'Math & Engineering': Sigma,
-  'Productivity & Business': Briefcase,
+  Productivity: Briefcase,
   Games: Gamepad2,
 };
 
@@ -28,66 +42,116 @@ export const categoryInfo: Record<
   Category,
   { slug: string; short: string; title: string; description: string }
 > = {
-  'Image & Design': {
-    slug: 'image-design-tools',
+  'Image Tools': {
+    slug: 'image-tools',
     short: 'Images',
-    title: 'Free Image & Design Tools',
+    title: 'Free Online Image Tools',
     description:
-      'Compress, convert, resize, crop and style images, build CSS effects and generate graphics — all inside your browser.',
+      'Compress, convert, resize, crop and watermark images, remove plain backgrounds and make favicons — all inside your browser.',
   },
-  'Documents & PDF': {
-    slug: 'pdf-document-tools',
-    short: 'PDF & Docs',
-    title: 'Free PDF & Document Tools',
+  'Color Tools': {
+    slug: 'color-tools',
+    short: 'Colors',
+    title: 'Free Color Tools',
     description:
-      'Merge, split, compress and protect PDFs, build resumes and invoices, and convert documents without uploading them.',
+      'Convert colour codes, build palettes, pull colours from a photo and check text contrast for accessibility.',
+  },
+  'CSS & Web Design': {
+    slug: 'css-design-tools',
+    short: 'CSS & Design',
+    title: 'Free CSS & Web Design Generators',
+    description:
+      'Generate CSS gradients, shadows, rounded corners, grids, flexbox, animations and SVG patterns, and preview font pairings.',
+  },
+  'QR & Barcode': {
+    slug: 'qr-barcode-tools',
+    short: 'QR & Barcode',
+    title: 'Free QR Code & Barcode Tools',
+    description: 'Create QR codes and barcodes and read QR codes from photos and screenshots.',
+  },
+  'PDF Tools': {
+    slug: 'pdf-tools',
+    short: 'PDF',
+    title: 'Free Online PDF Tools',
+    description:
+      'Merge, split, compress, protect and unlock PDFs, convert between PDF and images, and extract text — without uploading.',
+  },
+  'Documents & Business': {
+    slug: 'document-tools',
+    short: 'Documents',
+    title: 'Free Resume, Invoice & Document Makers',
+    description:
+      'Build a resume, an invoice or a receipt and draw your signature, ready to print or save as PDF.',
   },
   'Developer Tools': {
     slug: 'developer-tools',
     short: 'Developers',
     title: 'Free Online Developer Tools',
     description:
-      'Format JSON, test regex, decode JWTs, generate hashes and UUIDs, minify code and test APIs in one place.',
+      'Format JSON, test regex, decode JWTs, convert data, minify code, build SQL and test APIs in one place.',
   },
-  'Content & SEO': {
-    slug: 'content-seo-tools',
-    short: 'Writing & SEO',
-    title: 'Free Writing & SEO Tools',
+  'Security & Passwords': {
+    slug: 'password-security-tools',
+    short: 'Passwords',
+    title: 'Free Password Tools',
     description:
-      'Count words, change case, check readability, preview search results and build campaign links.',
+      'Generate strong passwords and check how strong a password really is — nothing leaves your device.',
+  },
+  'SEO Tools': {
+    slug: 'seo-tools',
+    short: 'SEO',
+    title: 'Free SEO Tools',
+    description:
+      'Write meta tags, preview Google results, create robots.txt and sitemaps, build UTM links and check keyword density.',
+  },
+  'Writing & Text': {
+    slug: 'writing-tools',
+    short: 'Writing',
+    title: 'Free Writing & Text Tools',
+    description:
+      'Count words, change case, clean text, check readability, write headlines and bios, and listen to text read aloud.',
   },
   'Video & Audio': {
     slug: 'video-audio-tools',
     short: 'Video & Audio',
     title: 'Free Video & Audio Tools',
-    description: 'Trim audio, change speed, make GIFs from video, grab thumbnails and fix subtitle files.',
+    description:
+      'Turn video clips into GIFs, grab thumbnails, trim audio, change speed and tidy subtitle files in your browser.',
   },
-  Calculators: {
+  'Finance Calculators': {
+    slug: 'finance-calculators',
+    short: 'Finance',
+    title: 'Free Finance Calculators',
+    description:
+      'Loan EMI, compound interest, profit margin, discounts, VAT, bill splitting, zakat and currency conversion.',
+  },
+  'Everyday Calculators': {
     slug: 'calculators',
     short: 'Calculators',
-    title: 'Free Online Calculators',
+    title: 'Free Everyday Calculators',
     description:
-      'Age, BMI, loan EMI, zakat, percentage, profit and date calculators that give instant answers.',
+      'Age, BMI, calories, percentages, dates, units, aspect ratios, fuel cost and Roman numerals.',
   },
   'Math & Engineering': {
     slug: 'math-engineering-tools',
-    short: 'Math & Engineering',
-    title: 'Free Math, Science & Engineering Tools',
+    short: 'Math',
+    title: 'Free Math & Engineering Calculators',
     description:
-      'Scientific calculator, Ohm’s law, resistor codes, equation solvers, statistics, fractions and GPA — for students and engineers.',
+      'Scientific calculator, Ohm’s law, resistor colour codes, equations, statistics, fractions and GPA.',
   },
-  'Productivity & Business': {
+  Productivity: {
     slug: 'productivity-tools',
     short: 'Productivity',
-    title: 'Free Productivity & Business Tools',
-    description: 'Timers, converters, planners and boards that keep everyday work moving.',
+    title: 'Free Online Productivity Tools',
+    description:
+      'Timers, a Kanban board, a meeting planner across time zones and random pickers for everyday work.',
   },
   Games: {
     slug: 'online-games',
     short: 'Games',
     title: 'Free Online Games',
     description:
-      'Quick brain games to play in your browser — 2048, Snake, Memory Match, Tic-Tac-Toe, Minesweeper and more.',
+      'Quick games that play in your browser — puzzles, arcade, memory and skill games. No download, no signup.',
   },
 };
 

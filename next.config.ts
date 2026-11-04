@@ -56,6 +56,14 @@ const nextConfig: NextConfig = {
   compress: true,
   reactStrictMode: true,
   env: { NEXT_PUBLIC_SITE_URL: siteUrl },
+  // Old category addresses keep working (permanent redirect) after the categories were split up.
+  async redirects() {
+    return [
+      { source: '/category/image-design-tools', destination: '/category/image-tools', permanent: true },
+      { source: '/category/pdf-document-tools', destination: '/category/pdf-tools', permanent: true },
+      { source: '/category/content-seo-tools', destination: '/category/writing-tools', permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },

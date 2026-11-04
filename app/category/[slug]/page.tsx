@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ToolCard from '@/components/shared/ToolCard';
-import GamePoster from '@/components/shared/GamePoster';
+import GamesBrowser from '@/components/shared/GamesBrowser';
 import JsonLd from '@/components/shared/JsonLd';
 import { tools, categories } from '@/data/tools';
 import { categoryInfo, categoryBySlug } from '@/lib/categories';
@@ -94,26 +94,24 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             </div>
           </section>
         )}
-        <nav
-          className="catChips"
-          style={{ justifyContent: 'flex-start', marginLeft: 0 }}
-          aria-label="Other categories"
-        >
-          {categories
-            .filter(c => c !== cat)
-            .map(c => (
-              <Link key={c} className="catChip" href={`/category/${categoryInfo[c].slug}`}>
-                {categoryInfo[c].short}
-              </Link>
-            ))}
-        </nav>
+        {cat !== 'Games' && (
+          <nav
+            className="catChips"
+            style={{ justifyContent: 'flex-start', marginLeft: 0 }}
+            aria-label="Other categories"
+          >
+            {categories
+              .filter(c => c !== cat)
+              .map(c => (
+                <Link key={c} className="catChip" href={`/category/${categoryInfo[c].slug}`}>
+                  {categoryInfo[c].short}
+                </Link>
+              ))}
+          </nav>
+        )}
       </section>
       {cat === 'Games' ? (
-        <div className="posterGrid" id="games-grid" style={{ marginTop: 36 }}>
-          {list.map((t, i) => (
-            <GamePoster key={t.slug} tool={t} index={i} />
-          ))}
-        </div>
+        <GamesBrowser />
       ) : (
         <div className="toolGrid" style={{ marginTop: 36 }}>
           {list.map(t => (

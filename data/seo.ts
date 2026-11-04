@@ -680,4 +680,34 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Remove unwanted line breaks and extra spaces from copied text instantly, with an option to keep paragraphs. Free, fast and runs entirely in your browser.',
   },
+  'block-stack': {
+    title: 'Block Stack \u2013 Falling Blocks Puzzle Game',
+    description:
+      'Play Block Stack free in your browser: rotate and drop falling blocks to clear lines. Keyboard and touch controls, best score saved.',
+  },
+  'brick-breaker': {
+    title: 'Brick Breaker \u2013 Free Online Arcade Game',
+    description:
+      'Break every brick with your paddle and ball. Free Brick Breaker game in your browser with keyboard, mouse and touch controls.',
+  },
+  'space-defender': {
+    title: 'Space Defender \u2013 Free Space Shooter Game',
+    description:
+      'Defend the galaxy in this free space shooter. Your ship fires automatically \u2014 dodge and aim with arrows or touch. Plays in your browser.',
+  },
+  'sky-hopper': {
+    title: 'Sky Hopper \u2013 Tap to Fly Arcade Game',
+    description:
+      'Tap or press space to hop through the gaps in this free one-button arcade game. Plays instantly in your browser on phone or computer.',
+  },
+  'whack-a-mole': {
+    title: 'Whack-a-Mole \u2013 Free Online Reflex Game',
+    description:
+      'Tap the moles as fast as you can in this free 30-second Whack-a-Mole game. Test your reflexes on phone or computer, no download.',
+  },
+  sudoku: {
+    title: 'Sudoku Online \u2013 Free Easy to Hard Puzzles',
+    description:
+      'Play free Sudoku online with new Easy, Medium and Hard puzzles every time. Check your answers and play on phone or computer.',
+  },
 };

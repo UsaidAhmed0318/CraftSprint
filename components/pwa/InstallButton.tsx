@@ -4,7 +4,13 @@ import { useEffect, useState } from 'react';
 import { Download, Smartphone, CheckCircle2 } from 'lucide-react';
 import { isStandalone, openInstall } from '@/lib/utils/pwa';
 
-export default function InstallButton({ label = 'Install App' }: { label?: string }) {
+export default function InstallButton({
+  label = 'Install App',
+  appName,
+}: {
+  label?: string;
+  appName?: string;
+}) {
   const [installed, setInstalled] = useState(false);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- display mode is only known in the browser
@@ -18,7 +24,7 @@ export default function InstallButton({ label = 'Install App' }: { label?: strin
     );
   }
   return (
-    <button type="button" className="installBtn" onClick={openInstall}>
+    <button type="button" className="installBtn" onClick={() => openInstall(appName)}>
       <Smartphone size={20} aria-hidden="true" />
       <span>{label}</span>
       <Download size={20} aria-hidden="true" />
