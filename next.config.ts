@@ -7,6 +7,12 @@ const siteUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : 'http://localhost:3000');
 
+if (process.env.NODE_ENV === 'production' && siteUrl.includes('localhost')) {
+  console.warn(
+    '\n[CraftSprint] NEXT_PUBLIC_SITE_URL is not set and this is not a Vercel build — canonical URLs and the sitemap will use localhost. Set NEXT_PUBLIC_SITE_URL to your real domain.\n',
+  );
+}
+
 const isDev = process.env.NODE_ENV !== 'production';
 
 // Ads and analytics hosts that AdSense / Google Analytics need.
@@ -56,7 +62,13 @@ const nextConfig: NextConfig = {
       // API answers are always fresh; never stored by the browser or CDN.
       { source: '/api/:path*', headers: [{ key: 'Cache-Control', value: 'no-store, max-age=0' }] },
       // The service worker must always be re-checked so updates reach installed apps quickly.
-      { source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache, max-age=0' }, { key: 'Content-Type', value: 'application/javascript; charset=utf-8' }] },
+      {
+        source: '/sw.js',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, max-age=0' },
+          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
+        ],
+      },
     ];
   },
 };

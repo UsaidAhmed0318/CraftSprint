@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { tools } from '@/data/tools';
 import { matchTools } from '@/lib/toolMatch';
 import { isRateLimited, clientIp } from '@/lib/rateLimit';
+import { readJsonBody, BodyError } from '@/lib/http';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
@@ -26,13 +27,17 @@ export async function POST(req: Request) {
     );
   let messages: Msg[] = [];
   try {
-    const body = await req.json();
-    messages = (Array.isArray(body.messages) ? body.messages : [])
-      .filter((m: Msg) => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+    // At most 16 KB, JSON only, at most 20 messages; only the last 6 (600 characters each) are used.
+    const body = (await readJsonBody(req, 16 * 1024)) as { messages?: unknown };
+    if (!Array.isArray(body?.messages) || body.messages.length > 20)
+      throw new BodyError(400, 'Invalid request.');
+    messages = (body.messages as Msg[])
+      .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
       .slice(-6)
-      .map((m: Msg) => ({ role: m.role, content: m.content.slice(0, 600) }));
-  } catch {
-    return NextResponse.json({ error: 'Bad request' }, { status: 400 });
+      .map(m => ({ role: m.role, content: m.content.slice(0, 600) }));
+  } catch (e) {
+    const err = e instanceof BodyError ? e : new BodyError(400, 'Invalid request.');
+    return NextResponse.json({ error: err.message }, { status: err.status });
   }
   const last = [...messages].reverse().find(m => m.role === 'user');
   if (!last) return NextResponse.json({ error: 'No question' }, { status: 400 });

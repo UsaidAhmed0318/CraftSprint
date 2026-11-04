@@ -4,7 +4,8 @@ import { tools, categories } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
 import { posts } from '@/data/posts';
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  // Only blog posts have a real "last changed" date; other pages leave lastModified out rather than invent one.
+  const postDate = new Map(posts.map(p => [`/blog/${p.slug}`, p.date]));
   const staticPaths = [
     '',
     '/about',
@@ -21,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const toolPaths = tools.map(t => `/tools/${t.slug}`);
   return [...staticPaths, ...catPaths, ...toolPaths].map(path => ({
     url: `${site.url}${path}`,
-    lastModified: now,
+    ...(postDate.get(path) ? { lastModified: new Date(postDate.get(path)!) } : {}),
     changeFrequency: path.startsWith('/tools') ? 'monthly' : 'weekly',
     priority: path === '' ? 1 : path.startsWith('/category') ? 0.9 : path.startsWith('/tools') ? 0.8 : 0.5,
   }));

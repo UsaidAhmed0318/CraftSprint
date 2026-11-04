@@ -19,6 +19,12 @@ function memoryLimited(key: string, limit: number, windowMs: number) {
   return list.length > limit;
 }
 
+let warned = false;
+/** 'shared' when Upstash Redis is configured (limits hold across all servers), otherwise 'memory'. */
+export function rateLimitMode(): 'shared' | 'memory' {
+  return process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN ? 'shared' : 'memory';
+}
+
 export async function isRateLimited(
   scope: string,
   ip: string,
@@ -46,6 +52,10 @@ export async function isRateLimited(
     } catch {
       /* fall back to memory */
     }
+  }
+  if (!warned && process.env.NODE_ENV === 'production' && rateLimitMode() === 'memory') {
+    warned = true;
+    console.warn('[rate-limit] Upstash Redis is not configured — limits are per server instance only.');
   }
   return memoryLimited(key, limit, windowMs);
 }

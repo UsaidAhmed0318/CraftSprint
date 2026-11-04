@@ -89,14 +89,16 @@ export default function PwaManager() {
   const install = async () => {
     setBusy(true);
     rememberReturnRoute(pathname);
-    const r = await promptInstall();
-    setBusy(false);
-    if (r === 'accepted') {
-      setMode('installed');
-    } else if (r === 'dismissed') {
-      setNote('No problem — you can install CraftSprint any time from the menu.');
-    } else {
+    try {
+      const r = await promptInstall();
+      if (r === 'accepted') setMode('installed');
+      else if (r === 'dismissed') setNote('No problem — you can install CraftSprint any time from the menu.');
+      else setMode('manual');
+    } catch {
       setMode('manual');
+      setNote('Your browser could not show the install window. Use the steps below instead.');
+    } finally {
+      setBusy(false);
     }
   };
 

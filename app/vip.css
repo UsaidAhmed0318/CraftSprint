@@ -4667,19 +4667,64 @@ main {
   }
 }
 @media (max-width: 600px) {
-  .hero3d.v2 { position: relative; height: 290px; display: block; overflow: visible; }
-  .hero3d.v2 .hero3dScene { position: absolute; left: 50%; top: 0; margin-left: -230px; transform-origin: 50% 0; transform: scale(0.62) rotateX(8deg) rotateY(-10deg); }
-  .heroVipText > p:not(.heroSub) { font-size: 15px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .heroCtas { margin-top: 4px; }
+  .hero3d.v2 {
+    position: relative;
+    height: 290px;
+    display: block;
+    overflow: visible;
+  }
+  .hero3d.v2 .hero3dScene {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    margin-left: -230px;
+    transform-origin: 50% 0;
+    transform: scale(0.62) rotateX(8deg) rotateY(-10deg);
+  }
+  .heroVipText > p:not(.heroSub) {
+    font-size: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .heroCtas {
+    margin-top: 4px;
+  }
 }
 @media (max-width: 900px) {
-  .siteHeader { background: rgba(9, 6, 28, 0.97) !important; }
-  :root:not([data-theme='dark']) .siteHeader { background: rgba(255, 255, 255, 0.98) !important; }
+  .siteHeader {
+    background: rgba(9, 6, 28, 0.97) !important;
+  }
+  :root:not([data-theme='dark']) .siteHeader {
+    background: rgba(255, 255, 255, 0.98) !important;
+  }
 }
 /* Phones: keep only the light entrance animation; scroll-linked reveals run on desktop only (saves CPU) */
 @media (max-width: 900px) {
-  .catTile, .tbCard, .toolCard, .gameCard, .whyItem, .toolSideCard, .faqItem, .statsRow > div, .panelHead, .aiShow, .postCard { animation: none !important; }
-  .h3Tile, .toolArtSpark, .eyebrowDot, .tabBar .on svg { animation: none !important; }
+  .catTile,
+  .tbCard,
+  .toolCard,
+  .gameCard,
+  .whyItem,
+  .toolSideCard,
+  .faqItem,
+  .statsRow > div,
+  .panelHead,
+  .aiShow,
+  .postCard {
+    animation: none !important;
+  }
+  .h3Tile,
+  .toolArtSpark,
+  .eyebrowDot,
+  .tabBar .on svg {
+    animation: none !important;
+  }
 }
 /* Phones: skip the intro loader so the page appears immediately (biggest mobile speed win) */
-@media (max-width: 600px) { .csSplash { display: none !important; } }
+@media (max-width: 600px) {
+  .csSplash {
+    display: none !important;
+  }
+}

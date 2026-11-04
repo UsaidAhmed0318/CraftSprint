@@ -1,7 +1,7 @@
 /* CraftSprint service worker — makes the installed app open fast and keeps visited pages available offline.
  * Strategy: pages = network first (always fresh when online), app files = cache first (they have unique names).
  * Never caches /api requests or other websites. Bump VERSION to clear old caches. */
-const VERSION = 'cs-v1';
+const VERSION = 'cs-v2';
 const PAGES = `${VERSION}-pages`;
 const ASSETS = `${VERSION}-assets`;
 const PRECACHE = ['/', '/offline', '/icons/icon-192.png', '/icons/icon-512.png', '/images/favicon.png'];
@@ -14,7 +14,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches
       .keys()
-      .then(keys => Promise.all(keys.filter(k => !k.startsWith(VERSION)).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('cs-') && !k.startsWith(VERSION)).map(k => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });

@@ -14,6 +14,7 @@ export default function ContactForm() {
   }, []);
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (busy) return; // no double submissions
     setBusy(true);
     setState('Sending…');
     setIsError(false);
@@ -24,11 +25,15 @@ export default function ContactForm() {
         body: JSON.stringify({ name, email, message, website, startedAt: startedAt.current }),
       });
       const data = await r.json().catch(() => ({}));
-      if (r.ok) {
+      if (r.ok && data.delivered === true) {
         setState("Thanks — your message was sent. We'll reply by email soon.");
         setName('');
         setEmail('');
         setMessage('');
+      } else if (r.ok) {
+        // Accepted by the server but not emailed (e.g. flagged as spam) — never claim delivery.
+        setIsError(true);
+        setState('Your message could not be sent. Please try again in a moment.');
       } else {
         setIsError(true);
         setState(data.error || 'Could not send. Please try again.');
