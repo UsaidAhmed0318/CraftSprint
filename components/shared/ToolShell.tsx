@@ -107,10 +107,24 @@ export default function ToolShell({
               </span>
             )}
             <div>
-              <h1>{title}</h1>
+              <h1 className="proTitle">
+                {title.split(' ').slice(0, -1).join(' ')}{' '}
+                <span className={isGame ? 'goldGrad' : 'violetText'}>{title.split(' ').slice(-1)}</span>
+              </h1>
               <p>{description}</p>
             </div>
           </div>
+          {Icon && (
+            <div className={`toolArt g${(catIndex % 9) + 1}`} aria-hidden="true">
+              <span className="toolArtDisc" />
+              <span className="toolArtTile">
+                <Icon size={64} strokeWidth={1.5} />
+              </span>
+              <span className="toolArtSpark s1" />
+              <span className="toolArtSpark s2" />
+              <span className="toolArtSpark s3" />
+            </div>
+          )}
           {tool && (
             <button
               className={`favBtn ${isFav ? 'on' : ''}`}

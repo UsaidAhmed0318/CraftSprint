@@ -200,9 +200,6 @@ export function Game2048() {
         <div className="gameBar">
           <Pill label="Score" value={score} />
           <Pill label="Best" value={best} />
-          <button className="btn btnGhost" onClick={reset}>
-            New game
-          </button>
         </div>
         <div className="g2048" ref={board} role="group" aria-label="2048 board">
           {grid.map((v, i) => (
@@ -211,6 +208,9 @@ export function Game2048() {
             </div>
           ))}
         </div>
+        <button className="btn btnPrimary gameBigBtn" onClick={reset}>
+          New game
+        </button>
         {won && !over && <p className="notice">You made 2048! Keep going for a higher score.</p>}
         {over && <p className="notice error">No moves left. Final score {score}.</p>}
       </div>

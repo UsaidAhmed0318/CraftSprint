@@ -16,11 +16,13 @@ import {
   BookOpen,
   Info,
   Mail,
+  MessageCircle,
 } from 'lucide-react';
 import ThemeToggle from '@/components/layout/ThemeToggle';
 import { categoryInfo } from '@/lib/categories';
 import SearchBar from '@/components/layout/SearchBar';
 import { openInstall } from '@/lib/utils/pwa';
+import { site } from '@/lib/site';
 import { OPEN_MENU_EVENT } from '@/components/layout/MobileTabBar';
 import { usePathname } from 'next/navigation';
 import { tools, categories } from '@/data/tools';
@@ -185,6 +187,9 @@ export default function Header() {
             <Link href="/contact" onClick={() => setOpen(false)}>
               <Mail size={19} /> Contact us
             </Link>
+            <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer">
+              <MessageCircle size={19} /> WhatsApp us
+            </a>
           </nav>
           <div className="drawerBrand">
             <Image src="/icons/icon-192.png" alt="" width={44} height={44} />

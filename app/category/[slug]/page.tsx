@@ -72,6 +72,28 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         <p>
           {info.description} {list.length} {cat === 'Games' ? 'games' : 'tools'}, all free and private.
         </p>
+        {cat === 'Games' && (
+          <section className="gamesHero" aria-label="Games">
+            <div className="gamesHeroArt" aria-hidden="true">
+              <span className="ghPad">
+                <Gamepad2 size={92} strokeWidth={1.4} />
+              </span>
+              <span className="ghRing" />
+            </div>
+            <div>
+              <h2>
+                Play amazing <span className="violetText">online games</span>
+              </h2>
+              <p>
+                Relax, have fun and challenge yourself — no download, no signup. Your best scores are saved on
+                this device.
+              </p>
+              <a href="#games-grid" className="btn btnPrimary">
+                Browse all games <ArrowRight size={16} />
+              </a>
+            </div>
+          </section>
+        )}
         <nav
           className="catChips"
           style={{ justifyContent: 'flex-start', marginLeft: 0 }}
@@ -86,25 +108,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             ))}
         </nav>
       </section>
-      {cat === 'Games' && (
-        <section className="gamesHero" aria-label="Games">
-          <div className="gamesHeroArt" aria-hidden="true">
-            <span className="ghPad">
-              <Gamepad2 size={92} strokeWidth={1.4} />
-            </span>
-            <span className="ghRing" />
-          </div>
-          <div>
-            <h2>
-              Play quick games, <span className="violetText">right in your browser</span>
-            </h2>
-            <p>No download, no signup. Your best scores are saved on this device.</p>
-            <a href="#games-grid" className="btn btnPrimary">
-              Browse all games <ArrowRight size={16} />
-            </a>
-          </div>
-        </section>
-      )}
       {cat === 'Games' ? (
         <div className="posterGrid" id="games-grid" style={{ marginTop: 36 }}>
           {list.map((t, i) => (

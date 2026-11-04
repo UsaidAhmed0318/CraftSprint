@@ -28,3 +28,11 @@ One app is installed (CraftSprint) — not one per tool. The button text never c
 ## Not verifiable here
 - The real Android install prompt (Chrome only fires it on a real, installable HTTPS site).
 - Real iPhone “Add to Home Screen”.
+
+## v11 — matched to the 8-screen reference
+- Phone homepage order: headline → search → 3D art → Explore button → 3 stat cards (138 tools, 10 games, 9 categories — real numbers).
+- Tool pages: gradient last word in the title + a floating 3D icon on a glowing platform (desktop: right of the title; phone: under it).
+- Games: hero first, dark game cards with colourful icon, type and “Play now”; 2048 with gold title, big Score/Best cards and a big “New game” button.
+- Motion: entrance animation for hero and tool header; scroll-in reveals on desktop; press feedback on buttons and tabs; reduced-motion respected.
+- Phones: WhatsApp button moved into the menu (it covered content); header solid; intro loader skipped on small phones and shortened on tablets for speed.
+- Checks: 167 pages at 390 px and 10 key pages at 10 widths — 0 errors, 0 sideways scroll; axe-core 0 issues (all pages + mobile menu/install sheet, dark and light).

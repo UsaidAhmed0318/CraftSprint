@@ -108,6 +108,23 @@ export default function Home() {
               </Link>
               <AskAiButton />
             </div>
+            <div className="heroMini" aria-label="CraftSprint in numbers">
+              <div>
+                <Wrench size={20} />
+                <b>{tools.length}</b>
+                <small>Tools</small>
+              </div>
+              <div>
+                <Gamepad2 size={20} />
+                <b>{tools.filter(t => t.category === 'Games').length}</b>
+                <small>Games</small>
+              </div>
+              <div>
+                <LayoutGrid size={20} />
+                <b>{categories.length}</b>
+                <small>Categories</small>
+              </div>
+            </div>
             <div className="heroTrust">
               <span>
                 <ShieldCheck size={16} /> Files stay on your device

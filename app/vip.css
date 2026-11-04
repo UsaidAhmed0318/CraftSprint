@@ -4102,13 +4102,584 @@ html.menuOpen {
   }
 }
 @media (max-width: 600px) {
-  .proHead { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .proHead h1 { font-size: clamp(28px, 8vw, 36px); }
-  .toolTitleRow { gap: 12px; }
+  .proHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .proHead h1 {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+  .toolTitleRow {
+    gap: 12px;
+  }
 }
 /* Upload box title (a paragraph, so headings stay in order) */
-.dropzone .dropTitle { margin: 14px 0 8px; font-family: 'Sora Variable', 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: var(--text); overflow-wrap: anywhere; }
-.proDownload:disabled { opacity: 0.45; cursor: not-allowed; }
+.dropzone .dropTitle {
+  margin: 14px 0 8px;
+  font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.proDownload:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 /* Keep the footer below the first screen so late-loading content never pushes it (layout shift) */
-main { min-height: 100svh; }
-.routeLoader { min-height: 100svh; display: grid; place-items: start center; padding-top: 30vh; }
+main {
+  min-height: 100svh;
+}
+.routeLoader {
+  min-height: 100svh;
+  display: grid;
+  place-items: start center;
+  padding-top: 30vh;
+}
+
+/* ===================== v11: reference-matched details ===================== */
+/* Gradient last word in tool titles */
+.proTitle .violetText {
+  background: linear-gradient(100deg, #c084fc, #818cf8 45%, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.goldGrad {
+  background: linear-gradient(180deg, #fde68a, #f59e0b 70%, #d97706);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Tool hero art (3D tile on a glowing platform) */
+.toolTitleRow {
+  position: relative;
+}
+.toolArt {
+  position: relative;
+  width: 190px;
+  height: 150px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  perspective: 600px;
+  background: none !important;
+}
+.toolArtDisc {
+  position: absolute;
+  bottom: 4px;
+  width: 170px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(139, 92, 246, 0.75),
+    rgba(34, 211, 238, 0.2) 55%,
+    transparent 72%
+  );
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.45);
+}
+.toolArtTile {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  border-radius: 30px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  transform: rotateX(14deg) rotateY(-18deg) translateY(-6px);
+  box-shadow:
+    0 24px 40px rgba(10, 4, 30, 0.55),
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.25);
+  animation: artFloat 5s ease-in-out infinite;
+}
+.toolArt.g1 .toolArtTile {
+  background: linear-gradient(145deg, #38bdf8, #2563eb);
+}
+.toolArt.g2 .toolArtTile {
+  background: linear-gradient(145deg, #fb7185, #dc2626);
+}
+.toolArt.g3 .toolArtTile {
+  background: linear-gradient(145deg, #a78bfa, #6d28d9);
+}
+.toolArt.g4 .toolArtTile {
+  background: linear-gradient(145deg, #34d399, #059669);
+}
+.toolArt.g5 .toolArtTile {
+  background: linear-gradient(145deg, #f0abfc, #c026d3);
+}
+.toolArt.g6 .toolArtTile {
+  background: linear-gradient(145deg, #fbbf24, #ea580c);
+}
+.toolArt.g7 .toolArtTile {
+  background: linear-gradient(145deg, #22d3ee, #0e7490);
+}
+.toolArt.g8 .toolArtTile {
+  background: linear-gradient(145deg, #60a5fa, #4f46e5);
+}
+.toolArt.g9 .toolArtTile {
+  background: linear-gradient(145deg, #f472b6, #9333ea);
+}
+@keyframes artFloat {
+  50% {
+    transform: rotateX(10deg) rotateY(-12deg) translateY(-14px);
+  }
+}
+.toolArtSpark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c4b5fd;
+  box-shadow: 0 0 12px #a78bfa;
+  animation: twinkle2 3s ease-in-out infinite;
+}
+.toolArtSpark.s1 {
+  top: 18px;
+  left: 22px;
+}
+.toolArtSpark.s2 {
+  top: 40px;
+  right: 14px;
+  animation-delay: -1s;
+  background: #67e8f9;
+}
+.toolArtSpark.s3 {
+  bottom: 52px;
+  left: 8px;
+  animation-delay: -2s;
+}
+@keyframes twinkle2 {
+  50% {
+    opacity: 0.2;
+    transform: scale(0.5);
+  }
+}
+.proAppIcon {
+  display: none !important;
+}
+
+/* Game cards like the reference */
+.gameCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  padding: 20px 12px 16px;
+  border-radius: 22px;
+  background: linear-gradient(170deg, rgba(36, 24, 84, 0.85), rgba(12, 8, 34, 0.92));
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  color: #f3f0ff;
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+:root:not([data-theme='dark']) .gameCard {
+  background: #fff;
+  color: var(--text);
+  border-color: var(--line2);
+}
+.gameCard:hover {
+  transform: translateY(-5px);
+  border-color: #a78bfa;
+  box-shadow: 0 20px 44px rgba(124, 58, 237, 0.3);
+}
+.gcIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  margin-bottom: 8px;
+  background: var(--pg);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.35);
+  transition: transform 0.3s;
+}
+.gameCard:hover .gcIcon {
+  transform: rotate(-6deg) scale(1.06);
+}
+.gcName {
+  font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+}
+.gcType {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.gcPlay {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
+}
+.gameCard.p1 {
+  --pg: linear-gradient(145deg, #fbbf24, #ea580c);
+}
+.gameCard.p2 {
+  --pg: linear-gradient(145deg, #34d399, #059669);
+}
+.gameCard.p3 {
+  --pg: linear-gradient(145deg, #818cf8, #4338ca);
+}
+.gameCard.p4 {
+  --pg: linear-gradient(145deg, #f472b6, #be185d);
+}
+.gameCard.p5 {
+  --pg: linear-gradient(145deg, #22d3ee, #0e7490);
+}
+.gameCard.p6 {
+  --pg: linear-gradient(145deg, #c084fc, #7c3aed);
+}
+.gameCard.p7 {
+  --pg: linear-gradient(145deg, #f87171, #b91c1c);
+}
+.gameCard.p8 {
+  --pg: linear-gradient(145deg, #2dd4bf, #0f766e);
+}
+.gameCard.p9 {
+  --pg: linear-gradient(145deg, #fb923c, #c2410c);
+}
+.gameCard.p10 {
+  --pg: linear-gradient(145deg, #60a5fa, #1d4ed8);
+}
+.posterGrid {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+/* 2048 screen */
+.gameWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.gameBar {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+}
+.scorePill {
+  min-width: 110px;
+  padding: 10px 16px;
+  text-align: center;
+  font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+}
+.scorePill span {
+  font-family: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+.gameBigBtn {
+  width: min(100%, 360px);
+  min-height: 54px;
+  justify-content: center;
+  font-size: 17px;
+  border-radius: 18px;
+  color: #fff !important;
+  background: linear-gradient(110deg, #6d28d9, #7c3aed 50%, #4f46e5) !important;
+}
+
+/* Homepage mini stats (phones) */
+.heroMini {
+  display: none;
+}
+
+/* ===================== Phones: reference layout ===================== */
+@media (max-width: 900px) {
+  .whatsappFloat {
+    display: none !important;
+  }
+  .heroVipGrid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  .heroVipText {
+    display: contents;
+  }
+  .heroVipText .eyebrow {
+    order: 1;
+    align-self: center;
+  }
+  .heroVipText h1 {
+    order: 2;
+    text-align: center;
+  }
+  .heroVipText .heroSub {
+    order: 3;
+    text-align: center;
+  }
+  .heroVipText > p:not(.heroSub) {
+    order: 4;
+    text-align: center;
+  }
+  .heroVipText .heroSearch {
+    order: 5;
+    width: 100%;
+  }
+  .hero3d {
+    order: 6;
+  }
+  .heroCtas {
+    order: 7;
+  }
+  .heroMini {
+    order: 8;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .heroTrust {
+    order: 9;
+  }
+  .heroMini div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 14px 6px;
+    border-radius: 18px;
+    background: linear-gradient(170deg, rgba(36, 24, 84, 0.8), rgba(12, 8, 34, 0.9));
+    border: 1px solid rgba(167, 139, 250, 0.25);
+  }
+  :root:not([data-theme='dark']) .heroMini div {
+    background: var(--surface);
+    border-color: var(--line2);
+  }
+  .heroMini svg {
+    color: #a78bfa;
+  }
+  .heroMini b {
+    font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+    font-size: 22px;
+  }
+  .heroMini small {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .hero3d.v2 .hero3dCard,
+  .hero3d.v2 .hero3dAi {
+    display: none;
+  }
+  .toolTitleRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .toolArt {
+    order: 2;
+    align-self: center;
+    width: 200px;
+    height: 160px;
+    margin: 4px 0;
+  }
+  .favBtn {
+    order: 3;
+    align-self: flex-start;
+  }
+  .proHead h1,
+  .proHead p {
+    text-align: center;
+  }
+  .proHead {
+    align-items: center !important;
+  }
+  .catChips {
+    order: 3;
+  }
+}
+@media (max-width: 600px) {
+  .heroVipText .eyebrow,
+  .heroTrust,
+  .heroCtas .btnGhost,
+  .heroCtas .aiBtn {
+    display: none !important;
+  }
+  .heroCtas .heroCta {
+    width: 100%;
+    justify-content: center;
+    min-height: 54px;
+    font-size: 16px;
+    border-radius: 18px;
+  }
+  .hero3d.v2 {
+    height: 270px;
+    margin: 6px 0;
+  }
+  .hero3d.v2 .hero3dScene {
+    transform: scale(0.6) rotateX(10deg) rotateY(-12deg);
+  }
+  .posterGrid,
+  .posterRow {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .gcIcon {
+    width: 68px;
+    height: 68px;
+  }
+  .scorePill {
+    min-width: 120px;
+  }
+  .siteHeader .nav {
+    height: 64px;
+  }
+}
+@media (max-width: 380px) {
+  .heroMini b {
+    font-size: 18px;
+  }
+}
+
+/* ===================== Motion: content rises in as you scroll (pure CSS, no JS) ===================== */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  .catTile,
+  .tbCard,
+  .toolCard,
+  .gameCard,
+  .whyItem,
+  .toolSideCard,
+  .faqItem,
+  .statsRow > div,
+  .panelHead,
+  .aiShow,
+  .postCard {
+    animation: riseIn linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+.heroVipText h1,
+.heroVipText .heroSub,
+.heroVipText .heroSearch,
+.heroCtas {
+  animation: riseIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.heroVipText .heroSub {
+  animation-delay: 0.08s;
+}
+.heroVipText .heroSearch {
+  animation-delay: 0.16s;
+}
+.heroCtas {
+  animation-delay: 0.24s;
+}
+.proHead,
+.toolArt,
+.proWorkspace {
+  animation: riseIn 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.toolArt {
+  animation-delay: 0.1s;
+}
+.proWorkspace {
+  animation-delay: 0.15s;
+}
+.btn,
+.tabBar a,
+.tabBar button,
+.tbChips button {
+  transition:
+    transform 0.15s,
+    filter 0.2s,
+    background 0.25s,
+    box-shadow 0.25s;
+}
+.btn:active,
+.tabBar a:active,
+.tabBar button:active,
+.tbChips button:active,
+.gameCard:active,
+.tbCard:active {
+  transform: scale(0.97);
+}
+.tabBar .on svg {
+  animation: tabPop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+@keyframes tabPop {
+  from {
+    transform: scale(0.7) translateY(4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catTile,
+  .tbCard,
+  .toolCard,
+  .gameCard,
+  .whyItem,
+  .toolSideCard,
+  .faqItem,
+  .statsRow > div,
+  .panelHead,
+  .aiShow,
+  .postCard,
+  .heroVipText h1,
+  .heroVipText .heroSub,
+  .heroVipText .heroSearch,
+  .heroCtas,
+  .proHead,
+  .toolArt,
+  .proWorkspace,
+  .toolArtTile,
+  .toolArtSpark,
+  .tabBar .on svg {
+    animation: none !important;
+  }
+}
+/* Faster intro loader on phones so the first screen appears sooner */
+@media (max-width: 900px) {
+  .csSplash {
+    animation-delay: 0.85s !important;
+    animation-duration: 0.35s !important;
+  }
+}
+@media (max-width: 600px) {
+  .hero3d.v2 { position: relative; height: 290px; display: block; overflow: visible; }
+  .hero3d.v2 .hero3dScene { position: absolute; left: 50%; top: 0; margin-left: -230px; transform-origin: 50% 0; transform: scale(0.62) rotateX(8deg) rotateY(-10deg); }
+  .heroVipText > p:not(.heroSub) { font-size: 15px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .heroCtas { margin-top: 4px; }
+}
+@media (max-width: 900px) {
+  .siteHeader { background: rgba(9, 6, 28, 0.97) !important; }
+  :root:not([data-theme='dark']) .siteHeader { background: rgba(255, 255, 255, 0.98) !important; }
+}
+/* Phones: keep only the light entrance animation; scroll-linked reveals run on desktop only (saves CPU) */
+@media (max-width: 900px) {
+  .catTile, .tbCard, .toolCard, .gameCard, .whyItem, .toolSideCard, .faqItem, .statsRow > div, .panelHead, .aiShow, .postCard { animation: none !important; }
+  .h3Tile, .toolArtSpark, .eyebrowDot, .tabBar .on svg { animation: none !important; }
+}
+/* Phones: skip the intro loader so the page appears immediately (biggest mobile speed win) */
+@media (max-width: 600px) { .csSplash { display: none !important; } }
