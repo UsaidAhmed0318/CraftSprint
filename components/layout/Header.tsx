@@ -2,10 +2,27 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Home,
+  LayoutGrid,
+  Gamepad2,
+  Sparkles,
+  Shapes,
+  Heart,
+  Download,
+  BookOpen,
+  Info,
+  Mail,
+} from 'lucide-react';
 import ThemeToggle from '@/components/layout/ThemeToggle';
 import { categoryInfo } from '@/lib/categories';
 import SearchBar from '@/components/layout/SearchBar';
+import { openInstall } from '@/lib/utils/pwa';
+import { OPEN_MENU_EVENT } from '@/components/layout/MobileTabBar';
+import { usePathname } from 'next/navigation';
 import { tools, categories } from '@/data/tools';
 
 export default function Header() {
@@ -13,6 +30,22 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileCat, setMobileCat] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  // "More" in the bottom tab bar opens this menu.
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(OPEN_MENU_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_MENU_EVENT, onOpen);
+  }, []);
+  // Close the menu after navigating.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- close the drawer when the page changes
+    setOpen(false);
+  }, [pathname]);
+  // Stop the page behind the open menu from scrolling.
+  useEffect(() => {
+    document.documentElement.classList.toggle('menuOpen', open);
+  }, [open]);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -91,53 +124,75 @@ export default function Header() {
           </button>
         </div>
       </div>
-      <div className={`mobileMenu ${open ? 'open' : ''}`}>
-        <div className="container" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ padding: '14px 0' }}>
+      <div className={`mobileMenu ${open ? 'open' : ''}`} aria-hidden={!open}>
+        <div className="drawerInner">
+          <div className="drawerSearch">
             <SearchBar />
           </div>
-          {categories.map(cat => (
-            <div key={cat}>
-              <button className="mobileCatToggle" onClick={() => setMobileCat(c => (c === cat ? null : cat))}>
-                {categoryInfo[cat].short}{' '}
-                <ChevronDown size={15} style={{ transform: mobileCat === cat ? 'rotate(180deg)' : 'none' }} />
-              </button>
-              {mobileCat === cat && (
-                <div className="mobileCatList">
-                  <Link
-                    href={`/category/${categoryInfo[cat].slug}`}
-                    onClick={() => setOpen(false)}
-                    style={{ fontWeight: 800 }}
-                  >
-                    See all {categoryInfo[cat].short.toLowerCase()}
+          <nav className="drawerList" aria-label="Menu">
+            <Link href="/" onClick={() => setOpen(false)}>
+              <Home size={19} /> Home
+            </Link>
+            <Link href="/tools" onClick={() => setOpen(false)}>
+              <LayoutGrid size={19} /> All tools
+            </Link>
+            <Link href="/category/online-games" onClick={() => setOpen(false)}>
+              <Gamepad2 size={19} /> Games
+            </Link>
+            <Link href="/ai" onClick={() => setOpen(false)}>
+              <Sparkles size={19} /> AI assistant
+            </Link>
+            <button
+              type="button"
+              className="drawerToggle"
+              onClick={() => setMobileCat(c => (c ? null : 'all'))}
+              aria-expanded={!!mobileCat}
+            >
+              <Shapes size={19} /> Categories{' '}
+              <ChevronDown
+                size={15}
+                style={{ marginLeft: 'auto', transform: mobileCat ? 'rotate(180deg)' : 'none' }}
+              />
+            </button>
+            {mobileCat && (
+              <div className="drawerSub">
+                {categories.map(cat => (
+                  <Link key={cat} href={`/category/${categoryInfo[cat].slug}`} onClick={() => setOpen(false)}>
+                    {categoryInfo[cat].short}
+                    <small>{tools.filter(t => t.category === cat).length}</small>
                   </Link>
-                  {tools
-                    .filter(t => t.category === cat)
-                    .map(t => (
-                      <Link key={t.slug} href={`/tools/${t.slug}`} onClick={() => setOpen(false)}>
-                        {t.name}
-                      </Link>
-                    ))}
-                </div>
-              )}
+                ))}
+              </div>
+            )}
+            <Link href="/my-tools" onClick={() => setOpen(false)}>
+              <Heart size={19} /> Favourites &amp; history
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                openInstall();
+              }}
+            >
+              <Download size={19} /> Install app <span className="drawerNew">New</span>
+            </button>
+            <Link href="/blog" onClick={() => setOpen(false)}>
+              <BookOpen size={19} /> Guides
+            </Link>
+            <Link href="/about" onClick={() => setOpen(false)}>
+              <Info size={19} /> About us
+            </Link>
+            <Link href="/contact" onClick={() => setOpen(false)}>
+              <Mail size={19} /> Contact us
+            </Link>
+          </nav>
+          <div className="drawerBrand">
+            <Image src="/icons/icon-192.png" alt="" width={44} height={44} />
+            <div>
+              <b>CraftSprint</b>
+              <small>Work smarter, not harder.</small>
             </div>
-          ))}
-          <Link href="/category/online-games" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
-            Games
-          </Link>
-          <Link href="/blog" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
-            Guides
-          </Link>
-          <Link href="/about" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
-            About
-          </Link>
-          <Link href="/contact" onClick={() => setOpen(false)} style={{ padding: '14px 0' }}>
-            Contact
-          </Link>
-          <Link href="/ai" className="navAi mobile" onClick={() => setOpen(false)}>
-            <Image src="/images/favicon.png" alt="" width={20} height={20} />
-            Ask CraftSprint AI
-          </Link>
+          </div>
         </div>
       </div>
     </header>

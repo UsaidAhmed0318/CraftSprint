@@ -55,6 +55,8 @@ const nextConfig: NextConfig = {
       { source: '/:path*', headers: securityHeaders },
       // API answers are always fresh; never stored by the browser or CDN.
       { source: '/api/:path*', headers: [{ key: 'Cache-Control', value: 'no-store, max-age=0' }] },
+      // The service worker must always be re-checked so updates reach installed apps quickly.
+      { source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache, max-age=0' }, { key: 'Content-Type', value: 'application/javascript; charset=utf-8' }] },
     ];
   },
 };

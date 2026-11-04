@@ -6,6 +6,7 @@ import { Star, ShieldCheck, Zap, Gift, Smartphone, ArrowRight } from 'lucide-rea
 import ToolCard from '@/components/shared/ToolCard';
 import AdSlot from '@/components/shared/AdSlot';
 import ResultBanner from '@/components/shared/ResultBanner';
+import InstallButton from '@/components/pwa/InstallButton';
 import { tools } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
 import { categories } from '@/data/tools';
@@ -126,6 +127,11 @@ export default function ToolShell({
             {children}
             <ResultBanner />
           </div>
+          {tool && (
+            <div className="mobileInstall">
+              <InstallButton label={isGame ? 'Install app to play anytime' : 'Install App'} />
+            </div>
+          )}
           {showSide && (
             <aside className="toolSide" aria-label="About this tool">
               <div className="toolSideCard">

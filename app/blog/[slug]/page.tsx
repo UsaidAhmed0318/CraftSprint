@@ -5,7 +5,7 @@ import JsonLd from '@/components/shared/JsonLd';
 import ToolCard from '@/components/shared/ToolCard';
 import { posts } from '@/data/posts';
 import { tools } from '@/data/tools';
-import { withSeo } from '@/lib/seo';
+import { withSeo, fitTitle } from '@/lib/seo';
 import { site } from '@/lib/site';
 
 /** One page renders every blog post written in data/posts.ts. */
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = written.find(p => p.slug === slug);
   if (!post) return {};
-  return withSeo(`/blog/${slug}`, { title: post.title, description: post.description });
+  return withSeo(`/blog/${slug}`, { title: fitTitle(post.title), description: post.description });
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {

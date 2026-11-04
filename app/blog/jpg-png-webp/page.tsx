@@ -1,6 +1,6 @@
-import { withSeo } from '@/lib/seo';
+import { withSeo, fitTitle } from '@/lib/seo';
 export const metadata = withSeo('/blog/jpg-png-webp', {
-  title: 'JPG vs PNG vs WebP: Which Image Format Should You Use?',
+  title: fitTitle('JPG vs PNG vs WebP: Which Image Format Should You Use?'),
   description: 'Compare JPG, PNG and WebP for photographs, transparency, quality and website performance.',
 });
 export default function Page() {

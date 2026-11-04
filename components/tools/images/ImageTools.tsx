@@ -206,14 +206,19 @@ export function ImageCompressor() {
               </div>
             </li>
           </ul>
-          <a
-            className={`btn btnDark proDownload ${out ? '' : 'isDisabled'}`}
-            href={out || undefined}
-            aria-disabled={!out}
-            download={`${baseName(file)}-compressed.${OUT_EXT[outType] || 'webp'}`}
-          >
-            Download
-          </a>
+          {out ? (
+            <a
+              className="btn btnDark proDownload"
+              href={out}
+              download={`${baseName(file)}-compressed.${OUT_EXT[outType] || 'webp'}`}
+            >
+              Download
+            </a>
+          ) : (
+            <button type="button" className="btn btnDark proDownload" disabled>
+              Download
+            </button>
+          )}
         </aside>
       </div>
     </ToolShell>

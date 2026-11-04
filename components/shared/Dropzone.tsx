@@ -97,7 +97,7 @@ export default function Dropzone({
       <span className="dropIcon" aria-hidden="true">
         {picked ? <FileCheck2 size={34} /> : <UploadCloud size={40} />}
       </span>
-      <h3>
+      <p className="dropTitle">
         {picked ? (
           picked.name
         ) : (
@@ -108,7 +108,7 @@ export default function Dropzone({
             </button>
           </>
         )}
-      </h3>
+      </p>
       <p>
         {picked
           ? `${formatBytes(picked.size)} · stays on your device`

@@ -1,6 +1,6 @@
-import { withSeo } from '@/lib/seo';
+import { withSeo, fitTitle } from '@/lib/seo';
 export const metadata = withSeo('/blog/compress-images', {
-  title: 'How to Compress Images Without Losing Too Much Quality',
+  title: fitTitle('How to Compress Images Without Losing Too Much Quality'),
   description: 'A practical guide to image compression, dimensions, formats and quality settings.',
 });
 export default function Page() {

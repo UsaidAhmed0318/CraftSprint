@@ -10,6 +10,8 @@ import JsonLd from '@/components/shared/JsonLd';
 import WhatsAppButton from '@/components/layout/WhatsAppButton';
 import ToolAssistant from '@/components/shared/ToolAssistant';
 import SplashLoader from '@/components/layout/SplashLoader';
+import MobileTabBar from '@/components/layout/MobileTabBar';
+import PwaManager from '@/components/pwa/PwaManager';
 import { themeInitScript, splashInitScript } from '@/lib/initScripts';
 import { site } from '@/lib/site';
 
@@ -20,8 +22,10 @@ const adsOn = !!ADS && !ADS.includes('XXXX');
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  // iPhone/iPad: 'Add to Home Screen' opens CraftSprint full-screen with its own name
+  appleWebApp: { capable: true, title: 'CraftSprint', statusBarStyle: 'black-translucent' },
   title: {
-    default: 'CraftSprint — Free Online Tools for Images, PDFs, Code & More',
+    default: 'CraftSprint — Free Online Tools for Images, PDFs & Code',
     template: '%s | CraftSprint',
   },
   description: site.description,
@@ -42,10 +46,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4f6fb' },
-    { media: '(prefers-color-scheme: dark)', color: '#080c1b' },
-  ],
+  viewportFit: 'cover',
+  themeColor: '#07051a',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -83,6 +85,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <div id="main">{children}</div>
         <Footer />
+        <MobileTabBar />
+        <PwaManager />
         <ToolAssistant />
         <WhatsAppButton />
         {gaOn && (

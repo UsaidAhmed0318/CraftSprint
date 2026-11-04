@@ -166,7 +166,9 @@ const toolComponents: Record<string, ComponentType> = {
     import('@/components/tools/developer/CodeTools').then(m => m.JsonToTsConverter),
   ),
   'jwt-decoder': dynamic(() => import('@/components/tools/developer/CodeTools').then(m => m.JwtDecoder)),
-  'kanban-board': dynamic(() => import('@/components/tools/productivity/KanbanBoard').then(m => m.KanbanBoard)),
+  'kanban-board': dynamic(() =>
+    import('@/components/tools/productivity/KanbanBoard').then(m => m.KanbanBoard),
+  ),
   'keyword-density-checker': dynamic(() =>
     import('@/components/tools/writing/SeoContentTools').then(m => m.KeywordDensityChecker),
   ),

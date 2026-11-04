@@ -1,6 +1,6 @@
-import { withSeo } from '@/lib/seo';
+import { withSeo, fitTitle } from '@/lib/seo';
 export const metadata = withSeo('/blog/resize-images', {
-  title: 'How to Resize an Image for a Website',
+  title: fitTitle('How to Resize an Image for a Website'),
   description: 'Learn how pixel dimensions, aspect ratio and image size affect website images.',
 });
 export default function Page() {

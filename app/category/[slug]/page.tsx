@@ -1,3 +1,4 @@
+import { Gamepad2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -6,7 +7,7 @@ import GamePoster from '@/components/shared/GamePoster';
 import JsonLd from '@/components/shared/JsonLd';
 import { tools, categories } from '@/data/tools';
 import { categoryInfo, categoryBySlug } from '@/lib/categories';
-import { withSeo } from '@/lib/seo';
+import { withSeo, fitTitle } from '@/lib/seo';
 import { site } from '@/lib/site';
 
 export function generateStaticParams() {
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const info = categoryInfo[cat];
   const n = tools.filter(t => t.category === cat).length;
   return withSeo(`/category/${slug}`, {
-    title: `${info.title} — ${n} Tools, No Signup`,
+    title: fitTitle(`${info.title} — ${n} ${info.short === 'Games' ? 'Games' : 'Tools'}`),
     description: info.description,
   });
 }
@@ -85,8 +86,27 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             ))}
         </nav>
       </section>
+      {cat === 'Games' && (
+        <section className="gamesHero" aria-label="Games">
+          <div className="gamesHeroArt" aria-hidden="true">
+            <span className="ghPad">
+              <Gamepad2 size={92} strokeWidth={1.4} />
+            </span>
+            <span className="ghRing" />
+          </div>
+          <div>
+            <h2>
+              Play quick games, <span className="violetText">right in your browser</span>
+            </h2>
+            <p>No download, no signup. Your best scores are saved on this device.</p>
+            <a href="#games-grid" className="btn btnPrimary">
+              Browse all games <ArrowRight size={16} />
+            </a>
+          </div>
+        </section>
+      )}
       {cat === 'Games' ? (
-        <div className="posterGrid" style={{ marginTop: 36 }}>
+        <div className="posterGrid" id="games-grid" style={{ marginTop: 36 }}>
           {list.map((t, i) => (
             <GamePoster key={t.slug} tool={t} index={i} />
           ))}
