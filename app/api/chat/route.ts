@@ -20,35 +20,83 @@ ${tools.map(t => `/tools/${t.slug} — ${t.name}`).join('\n')}
 - Be honest: you cannot browse the internet, open files, or remember past chats. Do not invent facts, prices or statistics.
 - Refuse harmful, illegal or adult requests politely.`;
 
-/** Google Gemini (has a free tier). Model is configurable; the "latest Flash" alias follows Google's current free model. */
+/** Google Gemini (has a free tier). */
+const GEMINI = 'https://generativelanguage.googleapis.com/v1beta';
+let discoveredModel: string | null = null;
+
+/** Finds a Flash model this key may use (model names change over time), preferring stable over preview. */
+async function findGeminiModel(key: string): Promise<string | null> {
+  if (discoveredModel) return discoveredModel;
+  try {
+    const r = await fetch(`${GEMINI}/models?pageSize=200`, {
+      headers: { 'x-goog-api-key': key },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    const names: string[] = (d.models || [])
+      .filter((m: { supportedGenerationMethods?: string[] }) =>
+        m.supportedGenerationMethods?.includes('generateContent'),
+      )
+      .map((m: { name: string }) => m.name.replace(/^models\//, ''))
+      .filter((n: string) => /flash/i.test(n) && !/image|tts|live|audio|embedding|thinking|exp/i.test(n));
+    const score = (n: string) =>
+      (/preview/i.test(n) ? 0 : 10) +
+      (/lite/i.test(n) ? 0 : 5) +
+      (parseFloat(n.replace(/^gemini-/, '')) || 0);
+    names.sort((x, y) => score(y) - score(x));
+    discoveredModel = names[0] || null;
+    return discoveredModel;
+  } catch {
+    return null;
+  }
+}
+
+async function callGemini(key: string, model: string, messages: Msg[]) {
+  return fetch(`${GEMINI}/models/${encodeURIComponent(model)}:generateContent`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SYSTEM }] },
+      contents: messages.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      })),
+      generationConfig: { maxOutputTokens: 4096, temperature: 0.7 },
+    }),
+    signal: AbortSignal.timeout(45000),
+  });
+}
+
 async function askGemini(key: string, messages: Msg[]) {
-  const model = process.env.GEMINI_MODEL || 'gemini-flash-latest';
-  const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-    {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents: messages.map(m => ({
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: m.content }],
-        })),
-        generationConfig: { maxOutputTokens: 4096, temperature: 0.7 },
-      }),
-      signal: AbortSignal.timeout(45000),
-    },
-  );
+  let model = process.env.GEMINI_MODEL || discoveredModel || 'gemini-flash-latest';
+  let r = await callGemini(key, model, messages);
+  // Unknown or retired model name: look up an available Flash model once and retry.
+  if ((r.status === 404 || r.status === 400) && !process.env.GEMINI_MODEL) {
+    const found = await findGeminiModel(key);
+    if (found && found !== model) {
+      model = found;
+      r = await callGemini(key, model, messages);
+    }
+  }
   if (r.status === 429) return { status: 429 as const };
   if (!r.ok) {
-    console.error('[chat] Gemini error', r.status);
-    return { status: 502 as const };
+    let detail = '';
+    try {
+      detail = (await r.json())?.error?.message?.slice(0, 200) || '';
+    } catch {}
+    // Visible in Vercel → Logs. Never includes the key or the visitor's messages.
+    console.error('[chat] Gemini error', r.status, model, detail);
+    const badKey = r.status === 401 || r.status === 403 || /api key/i.test(detail);
+    return { status: badKey ? (403 as const) : (502 as const) };
   }
   const data = await r.json();
   const text: string = (data.candidates?.[0]?.content?.parts || [])
     .map((p: { text?: string }) => p.text || '')
     .join('')
     .trim();
+  if (!text && data.promptFeedback?.blockReason)
+    return { status: 200 as const, text: 'Sorry, I can’t help with that request.' };
   return { status: 200 as const, text };
 }
 
@@ -96,6 +144,14 @@ export async function POST(req: Request) {
         return NextResponse.json(
           { error: 'The free AI limit for today has been reached. Please try again later.' },
           { status: 429 },
+        );
+      if (g.status === 403)
+        return NextResponse.json(
+          {
+            error:
+              'CraftSprint AI is not set up correctly yet (the AI key was not accepted). Please try again later.',
+          },
+          { status: 503 },
         );
       if (g.status !== 200)
         return NextResponse.json(

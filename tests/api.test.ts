@@ -123,16 +123,14 @@ describe('AI chat with Gemini (free tier)', () => {
   it('returns the Gemini answer and a friendly message when the free limit is reached', async () => {
     process.env.GEMINI_API_KEY = 'test';
     const real = global.fetch;
-    global.fetch = vi
-      .fn()
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            candidates: [{ content: { parts: [{ text: 'Salaam! Main madad kar sakta hoon.' }] } }],
-          }),
-          { status: 200 },
-        ),
-      ) as unknown as typeof fetch;
+    global.fetch = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          candidates: [{ content: { parts: [{ text: 'Salaam! Main madad kar sakta hoon.' }] } }],
+        }),
+        { status: 200 },
+      ),
+    ) as unknown as typeof fetch;
     const ok = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Salaam' }] }));
     expect((await ok.json()).reply).toContain('madad');
     global.fetch = vi
@@ -142,5 +140,58 @@ describe('AI chat with Gemini (free tier)', () => {
     expect(limited.status).toBe(429);
     global.fetch = real;
     delete process.env.GEMINI_API_KEY;
+  });
+});
+
+describe('Gemini model discovery', () => {
+  it('finds an available Flash model when the default name is unknown, then answers', async () => {
+    process.env.GEMINI_API_KEY = 'test';
+    const real = global.fetch;
+    const calls: string[] = [];
+    global.fetch = vi.fn(async (url: string) => {
+      calls.push(String(url));
+      if (String(url).includes('gemini-flash-latest'))
+        return new Response(JSON.stringify({ error: { message: 'model not found' } }), { status: 404 });
+      if (String(url).endsWith('/models?pageSize=200'))
+        return new Response(
+          JSON.stringify({
+            models: [
+              { name: 'models/gemini-9-flash-preview', supportedGenerationMethods: ['generateContent'] },
+              { name: 'models/gemini-9-flash', supportedGenerationMethods: ['generateContent'] },
+              { name: 'models/gemini-9-flash-image', supportedGenerationMethods: ['generateContent'] },
+              { name: 'models/text-embedding', supportedGenerationMethods: ['embedContent'] },
+            ],
+          }),
+          { status: 200 },
+        );
+      return new Response(
+        JSON.stringify({ candidates: [{ content: { parts: [{ text: 'Use the Image Compressor.' }] } }] }),
+        { status: 200 },
+      );
+    }) as unknown as typeof fetch;
+    const r = await chat(
+      req('/api/chat', { messages: [{ role: 'user', content: 'Make my photo under 100 KB' }] }),
+    );
+    expect((await r.json()).reply).toContain('Image Compressor');
+    expect(calls.some(c => c.includes('/models/gemini-9-flash:generateContent'))).toBe(true);
+    global.fetch = real;
+    delete process.env.GEMINI_API_KEY;
+  });
+  it('reports a rejected key clearly (503) instead of "busy"', async () => {
+    process.env.GEMINI_API_KEY = 'bad';
+    process.env.GEMINI_MODEL = 'gemini-x';
+    const real = global.fetch;
+    global.fetch = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({ error: { message: 'API key not valid. Please pass a valid API key.' } }),
+          { status: 400 },
+        ),
+    ) as unknown as typeof fetch;
+    const r = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hi' }] }));
+    expect(r.status).toBe(503);
+    global.fetch = real;
+    delete process.env.GEMINI_API_KEY;
+    delete process.env.GEMINI_MODEL;
   });
 });
