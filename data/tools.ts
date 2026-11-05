@@ -128,6 +128,10 @@ import {
   RotateCw,
   CalendarClock,
   SpellCheck2,
+  MonitorPlay,
+  Mic,
+  AudioLines,
+  Webcam,
 } from 'lucide-react';
 
 export const categories = [
@@ -1171,6 +1175,34 @@ export const tools: {
     description: 'See when a domain was registered, its expiry date and registrar.',
     icon: CalendarClock,
     category: 'SEO Tools',
+  },
+  {
+    slug: 'screen-recorder',
+    name: 'Screen Recorder',
+    description: 'Record your screen, a window or a tab with sound — no watermark.',
+    icon: MonitorPlay,
+    category: 'Video & Audio',
+  },
+  {
+    slug: 'voice-recorder',
+    name: 'Voice Recorder',
+    description: 'Record audio with your microphone and download it.',
+    icon: Mic,
+    category: 'Video & Audio',
+  },
+  {
+    slug: 'speech-to-text',
+    name: 'Speech to Text',
+    description: 'Speak and turn your words into text in 12 languages.',
+    icon: AudioLines,
+    category: 'Video & Audio',
+  },
+  {
+    slug: 'webcam-mic-test',
+    name: 'Webcam & Mic Test',
+    description: 'Check your camera and microphone before a call.',
+    icon: Webcam,
+    category: 'Video & Audio',
   },
   {
     slug: 'game-2048',

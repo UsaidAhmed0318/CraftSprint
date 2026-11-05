@@ -8,6 +8,18 @@ import type { ComponentType } from 'react';
  * Each tool loads on its own, so a page only downloads the code it needs.
  */
 const toolComponents: Record<string, ComponentType> = {
+  'screen-recorder': dynamic(() =>
+    import('@/components/tools/batch2/MediaRecorders').then(m => m.ScreenRecorder),
+  ),
+  'voice-recorder': dynamic(() =>
+    import('@/components/tools/batch2/MediaRecorders').then(m => m.VoiceRecorder),
+  ),
+  'speech-to-text': dynamic(() =>
+    import('@/components/tools/batch2/MediaRecorders').then(m => m.SpeechToText),
+  ),
+  'webcam-mic-test': dynamic(() =>
+    import('@/components/tools/batch2/MediaRecorders').then(m => m.WebcamMicTest),
+  ),
   'word-guess': dynamic(() => import('@/components/tools/games/WordPuzzle').then(m => m.WordGuess)),
   'sliding-puzzle': dynamic(() => import('@/components/tools/games/WordPuzzle').then(m => m.SlidingPuzzle)),
   'domain-age-checker': dynamic(() =>

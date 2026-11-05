@@ -795,4 +795,24 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Play the classic 15 sliding puzzle online in 3×3, 4×4 or 5×5. Slide the tiles into order in as few moves as you can.',
   },
+  'screen-recorder': {
+    title: 'Screen Recorder Online \u2013 Free, No Watermark',
+    description:
+      'Record your screen, a window or a browser tab with sound and download the video. Free online screen recorder with no watermark or signup.',
+  },
+  'voice-recorder': {
+    title: 'Online Voice Recorder \u2013 Free & Private',
+    description:
+      'Record your voice online with the microphone, play it back and download the audio. Free, private and works on phones.',
+  },
+  'speech-to-text': {
+    title: 'Speech to Text Online \u2013 Free Voice Typing',
+    description:
+      'Free voice typing: speak and see your words as text in English, Urdu, Hindi, Arabic and more. Copy or download the text.',
+  },
+  'webcam-mic-test': {
+    title: 'Webcam & Mic Test \u2013 Check Camera Online',
+    description:
+      'Test your webcam and microphone online before a call: live video, resolution and a sound level meter. Nothing is recorded.',
+  },
 };

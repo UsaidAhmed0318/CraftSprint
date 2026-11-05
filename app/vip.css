@@ -5448,3 +5448,17 @@ body {
     display: none !important;
   }
 }
+.aiDetail {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.recBar { display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
+.btnDanger { background: #dc2626 !important; color: #fff !important; border: 0; }
+.recDot { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: #dc2626; }
+.recDot::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #dc2626; animation: twinkle2 1s infinite; }
+.recPreview { display: block; width: 100%; max-height: 420px; margin: 12px 0; border-radius: 14px; background: #000; }
+.micMeter { height: 14px; border-radius: 999px; background: var(--soft); overflow: hidden; margin: 8px 0; }
+.micMeter span { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); transition: width 0.08s; }

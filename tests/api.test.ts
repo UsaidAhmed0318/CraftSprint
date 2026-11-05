@@ -177,7 +177,7 @@ describe('Gemini model discovery', () => {
     global.fetch = real;
     delete process.env.GEMINI_API_KEY;
   });
-  it('reports a rejected key clearly (503) instead of "busy"', async () => {
+  it('reports a rejected key clearly and still suggests tools', async () => {
     process.env.GEMINI_API_KEY = 'bad';
     process.env.GEMINI_MODEL = 'gemini-x';
     const real = global.fetch;
@@ -188,10 +188,48 @@ describe('Gemini model discovery', () => {
           { status: 400 },
         ),
     ) as unknown as typeof fetch;
-    const r = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hi' }] }));
-    expect(r.status).toBe(503);
+    const r = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'compress image' }] }));
+    const body = await r.json();
+    expect(body.reply).toContain('not accepted');
+    expect(body.detail).toContain('API key');
+    expect(body.tools).toContain('image-compressor');
     global.fetch = real;
     delete process.env.GEMINI_API_KEY;
     delete process.env.GEMINI_MODEL;
+  });
+});
+
+describe('Gemini fallbacks', () => {
+  it('tries the next model when one has no free quota, and falls back to tool suggestions if none work', async () => {
+    process.env.GEMINI_API_KEY = 'k';
+    const real = global.fetch;
+    const tried: string[] = [];
+    global.fetch = vi.fn(async (url: string) => {
+      const u = String(url);
+      if (u.includes(':generateContent')) {
+        tried.push(u.split('/models/')[1].split(':')[0]);
+        if (u.includes('gemini-2.0-flash:'))
+          return new Response(
+            JSON.stringify({ candidates: [{ content: { parts: [{ text: 'Hello!' }] } }] }),
+            { status: 200 },
+          );
+        return new Response(JSON.stringify({ error: { message: 'Quota exceeded, limit: 0' } }), {
+          status: 429,
+        });
+      }
+      return new Response(JSON.stringify({ models: [] }), { status: 200 });
+    }) as unknown as typeof fetch;
+    const ok = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hi' }] }));
+    expect((await ok.json()).reply).toBe('Hello!');
+    expect(tried.length).toBeGreaterThan(1);
+    global.fetch = vi.fn(
+      async () => new Response(JSON.stringify({ error: { message: 'Internal error' } }), { status: 500 }),
+    ) as unknown as typeof fetch;
+    const down = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'merge pdf' }] }));
+    const body = await down.json();
+    expect(body.tools).toContain('pdf-merge');
+    expect(body.detail).toContain('500');
+    global.fetch = real;
+    delete process.env.GEMINI_API_KEY;
   });
 });

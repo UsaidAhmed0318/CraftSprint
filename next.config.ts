@@ -47,7 +47,7 @@ const securityHeaders = [
   // Tools may use the camera (QR scanner) or microphone; nothing else is allowed.
   {
     key: 'Permissions-Policy',
-    value: 'camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), interest-cohort=()',
+    value: 'camera=(self), microphone=(self), display-capture=(self), geolocation=(), payment=(), usb=(), interest-cohort=()',
   },
 ];
 

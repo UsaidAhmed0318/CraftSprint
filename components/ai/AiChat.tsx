@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { tools } from '@/data/tools';
 
-type Msg = { role: 'user' | 'assistant'; content: string; tools?: string[] };
+type Msg = { role: 'user' | 'assistant'; content: string; tools?: string[]; detail?: string };
 
 const SUGGEST = [
   { t: 'Make my photo under 100 KB', i: ImageIcon },
@@ -130,6 +130,7 @@ export default function AiChat() {
                         .trim()}
                     </p>
                   )}
+                  {m.detail && <small className="aiDetail">Details for the site owner: {m.detail}</small>}
                   {!!m.tools?.length && (
                     <div className="assistTools">
                       {m.tools.map(s => {

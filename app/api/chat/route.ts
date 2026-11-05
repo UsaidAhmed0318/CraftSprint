@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { tools } from '@/data/tools';
 import { isRateLimited, clientIp } from '@/lib/rateLimit';
 import { readJsonBody, BodyError } from '@/lib/http';
+import { matchTools } from '@/lib/toolMatch';
 
 /**
  * CraftSprint AI — general chat (answers questions, writes, explains, writes code) in the visitor's language.
@@ -22,7 +23,8 @@ ${tools.map(t => `/tools/${t.slug} — ${t.name}`).join('\n')}
 
 /** Google Gemini (has a free tier). */
 const GEMINI = 'https://generativelanguage.googleapis.com/v1beta';
-let discoveredModel: string | null = null;
+let discoveredModel: string | null = null; // from Google's model list
+let workingModel: string | null = null; // last model that answered
 
 /** Finds a Flash model this key may use (model names change over time), preferring stable over preview. */
 async function findGeminiModel(key: string): Promise<string | null> {
@@ -68,36 +70,62 @@ async function callGemini(key: string, model: string, messages: Msg[]) {
   });
 }
 
-async function askGemini(key: string, messages: Msg[]) {
-  let model = process.env.GEMINI_MODEL || discoveredModel || 'gemini-flash-latest';
-  let r = await callGemini(key, model, messages);
-  // Unknown or retired model name: look up an available Flash model once and retry.
-  if ((r.status === 404 || r.status === 400) && !process.env.GEMINI_MODEL) {
-    const found = await findGeminiModel(key);
-    if (found && found !== model) {
-      model = found;
-      r = await callGemini(key, model, messages);
+/** Model names to try, newest-style aliases first. GEMINI_MODEL (if set) and the discovered model go first. */
+const FALLBACK_MODELS = [
+  'gemini-flash-latest',
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-flash-lite-latest',
+  'gemini-2.5-flash-lite',
+];
+
+type GeminiResult = { status: 200; text: string } | { status: 403 | 429 | 502; detail: string };
+
+async function askGemini(key: string, messages: Msg[]): Promise<GeminiResult> {
+  const tried = new Set<string>();
+  const queue = [process.env.GEMINI_MODEL, workingModel, discoveredModel, ...FALLBACK_MODELS].filter(Boolean) as string[];
+  let lastDetail = '';
+  let looked = false;
+  while (queue.length) {
+    const model = queue.shift()!;
+    if (tried.has(model)) continue;
+    tried.add(model);
+    const r = await callGemini(key, model, messages);
+    if (r.ok) {
+      const data = await r.json();
+      const text: string = (data.candidates?.[0]?.content?.parts || [])
+        .filter((p: { thought?: boolean }) => !p.thought)
+        .map((p: { text?: string }) => p.text || '')
+        .join('')
+        .trim();
+      workingModel = model;
+      if (!text && data.promptFeedback?.blockReason)
+        return { status: 200, text: 'Sorry, I can’t help with that request.' };
+      if (!text) {
+        lastDetail = `empty answer from ${model} (${data.candidates?.[0]?.finishReason || 'no reason'})`;
+        continue;
+      }
+      return { status: 200, text };
     }
-  }
-  if (r.status === 429) return { status: 429 as const };
-  if (!r.ok) {
     let detail = '';
     try {
-      detail = (await r.json())?.error?.message?.slice(0, 200) || '';
+      detail = (await r.json())?.error?.message?.slice(0, 180) || '';
     } catch {}
+    lastDetail = `${r.status} ${model}: ${detail}`;
     // Visible in Vercel → Logs. Never includes the key or the visitor's messages.
-    console.error('[chat] Gemini error', r.status, model, detail);
-    const badKey = r.status === 401 || r.status === 403 || /api key/i.test(detail);
-    return { status: badKey ? (403 as const) : (502 as const) };
+    console.error('[chat] Gemini error', lastDetail);
+    if (r.status === 401 || r.status === 403 || /api key/i.test(detail))
+      return { status: 403, detail: lastDetail };
+    if (r.status === 429 && !/limit: 0|free_tier.*0/i.test(detail))
+      return { status: 429, detail: lastDetail };
+    // Unknown model, model without free quota, or a temporary server error: try the next model.
+    if (!looked) {
+      looked = true;
+      const found = await findGeminiModel(key);
+      if (found && !tried.has(found)) queue.unshift(found);
+    }
   }
-  const data = await r.json();
-  const text: string = (data.candidates?.[0]?.content?.parts || [])
-    .map((p: { text?: string }) => p.text || '')
-    .join('')
-    .trim();
-  if (!text && data.promptFeedback?.blockReason)
-    return { status: 200 as const, text: 'Sorry, I can’t help with that request.' };
-  return { status: 200 as const, text };
+  return { status: 502, detail: lastDetail };
 }
 
 export async function POST(req: Request) {
@@ -140,25 +168,26 @@ export async function POST(req: Request) {
   if (gemini) {
     try {
       const g = await askGemini(gemini, messages);
+      if (g.status === 200) return NextResponse.json({ reply: g.text });
       if (g.status === 429)
         return NextResponse.json(
-          { error: 'The free AI limit for today has been reached. Please try again later.' },
+          { error: 'The free AI limit has been reached for now. Please try again a little later.' },
           { status: 429 },
         );
-      if (g.status === 403)
-        return NextResponse.json(
-          {
-            error:
-              'CraftSprint AI is not set up correctly yet (the AI key was not accepted). Please try again later.',
-          },
-          { status: 503 },
-        );
-      if (g.status !== 200)
-        return NextResponse.json(
-          { error: 'The AI service is busy. Please try again in a moment.' },
-          { status: 502 },
-        );
-      return NextResponse.json({ reply: g.text || 'Sorry, I could not answer that. Please rephrase.' });
+      // Still useful when the AI is unavailable: suggest matching tools, and show the reason for the site owner.
+      const found = matchTools(messages[messages.length - 1].content);
+      return NextResponse.json(
+        {
+          reply:
+            g.status === 403
+              ? 'CraftSprint AI is not set up correctly yet (the AI key was not accepted).'
+              : 'CraftSprint AI could not answer right now.' +
+                (found.length ? ' These tools may help meanwhile:' : ''),
+          tools: found.map(t => t.slug),
+          detail: g.detail,
+        },
+        { status: 200 },
+      );
     } catch {
       return NextResponse.json(
         { error: 'The AI service did not respond in time. Please try again.' },
