@@ -8,6 +8,34 @@ import type { ComponentType } from 'react';
  * Each tool loads on its own, so a page only downloads the code it needs.
  */
 const toolComponents: Record<string, ComponentType> = {
+  'open-graph-generator': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.OpenGraphGenerator),
+  ),
+  'website-speed-checker': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.WebsiteSpeedChecker),
+  ),
+  'whatsapp-link-generator': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.WhatsAppLinkGenerator),
+  ),
+  'payment-reminder-generator': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.PaymentReminder),
+  ),
+  'google-review-qr-generator': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.GoogleReviewQr),
+  ),
+  'sip-calculator': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.SipCalculator)),
+  'roi-calculator': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.RoiCalculator)),
+  'break-even-calculator': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.BreakEvenCalculator),
+  ),
+  'remove-duplicate-lines': dynamic(() =>
+    import('@/components/tools/batch2/NewTools3').then(m => m.RemoveDuplicateLines),
+  ),
+  'text-sorter': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.TextSorter)),
+  'find-and-replace': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.FindReplace)),
+  'sql-formatter': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.SqlFormatter)),
+  'xml-formatter': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.XmlFormatter)),
+  'rotate-pdf': dynamic(() => import('@/components/tools/batch2/NewTools3').then(m => m.RotatePdf)),
   'block-stack': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.BlockStack)),
   'brick-breaker': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.BrickBreaker)),
   'space-defender': dynamic(() => import('@/components/tools/games/MoreArcade').then(m => m.SpaceDefender)),

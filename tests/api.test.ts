@@ -79,15 +79,42 @@ describe('contact form API', () => {
 describe('assistant API', () => {
   it('answers with tool suggestions without an AI key', async () => {
     delete process.env.ANTHROPIC_API_KEY;
-    const r = await assistant(req('/api/assistant', { messages: [{ role: 'user', content: 'compress image' }] }));
+    const r = await assistant(
+      req('/api/assistant', { messages: [{ role: 'user', content: 'compress image' }] }),
+    );
     expect(r.status).toBe(200);
     expect((await r.json()).tools).toContain('image-compressor');
   });
   it('rejects malformed, oversized, wrong-type and too-long conversations', async () => {
     expect((await assistant(req('/api/assistant', '{bad'))).status).toBe(400);
-    expect((await assistant(req('/api/assistant', { messages: [] }, { 'content-type': 'text/plain' }))).status).toBe(415);
-    expect((await assistant(req('/api/assistant', { messages: [{ role: 'user', content: 'x'.repeat(20000) }] }))).status).toBe(413);
+    expect(
+      (await assistant(req('/api/assistant', { messages: [] }, { 'content-type': 'text/plain' }))).status,
+    ).toBe(415);
+    expect(
+      (await assistant(req('/api/assistant', { messages: [{ role: 'user', content: 'x'.repeat(20000) }] })))
+        .status,
+    ).toBe(413);
     const many = Array.from({ length: 21 }, () => ({ role: 'user', content: 'hi' }));
     expect((await assistant(req('/api/assistant', { messages: many }))).status).toBe(400);
+  });
+});
+
+import { POST as chat } from '@/app/api/chat/route';
+import { formatSql } from '@/components/tools/batch2/NewTools3';
+
+describe('AI chat API', () => {
+  it('is honest when the AI key is missing (503)', async () => {
+    delete process.env.ANTHROPIC_API_KEY;
+    const r = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Hello' }] }));
+    expect(r.status).toBe(503);
+  });
+});
+
+describe('SQL formatter', () => {
+  it('puts clauses on their own lines and keeps quoted text', () => {
+    const out = formatSql("select id, name from users where name = 'select from' and age > 3 order by id");
+    expect(out).toContain('SELECT\n  id,\n  name\nFROM\n  users\nWHERE');
+    expect(out).toContain("'select from'");
+    expect(out).toContain('ORDER BY');
   });
 });

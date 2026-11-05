@@ -24,7 +24,9 @@ export function GET() {
     const info = categoryInfo[c];
     lines.push(`## ${c}`, '', `${info.description} (${site.url}/category/${info.slug})`, '');
     for (const t of tools.filter(x => x.category === c)) {
-      lines.push(`- [${t.name}](${site.url}/tools/${t.slug}): ${toolSeo[t.slug]?.description ?? t.description}`);
+      lines.push(
+        `- [${t.name}](${site.url}/tools/${t.slug}): ${toolSeo[t.slug]?.description ?? t.description}`,
+      );
     }
     lines.push('');
   }

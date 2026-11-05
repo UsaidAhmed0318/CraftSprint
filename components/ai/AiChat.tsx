@@ -38,6 +38,7 @@ export default function AiChat() {
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [aiOn, setAiOn] = useState<boolean | null>(null);
+  const [mode, setMode] = useState<'tools' | 'chat'>('tools');
   const end = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,7 +59,7 @@ export default function AiChat() {
     setText('');
     setBusy(true);
     try {
-      const r = await fetch('/api/assistant', {
+      const r = await fetch(mode === 'chat' ? '/api/chat' : '/api/assistant', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })) }),
@@ -68,7 +69,7 @@ export default function AiChat() {
         ...m,
         {
           role: 'assistant',
-          content: d.reply || 'Something went wrong. Please try again.',
+          content: d.reply || d.error || 'Something went wrong. Please try again.',
           tools: d.tools || [],
         },
       ]);
@@ -108,12 +109,18 @@ export default function AiChat() {
               <div key={i} className={`aiMsg ${m.role}`}>
                 {m.role === 'assistant' && <Image src="/images/favicon.png" alt="" width={30} height={30} />}
                 <div>
-                  <p>
-                    {m.content
-                      .replace(/\(?\/tools\/[a-z0-9-]+\)?/g, '')
-                      .replace(/\s{2,}/g, ' ')
-                      .trim()}
-                  </p>
+                  {m.role === 'assistant' && mode === 'chat' ? (
+                    <div className="aiMd">
+                      <Markdown text={m.content} />
+                    </div>
+                  ) : (
+                    <p>
+                      {m.content
+                        .replace(/\(?\/tools\/[a-z0-9-]+\)?/g, '')
+                        .replace(/\s{2,}/g, ' ')
+                        .trim()}
+                    </p>
+                  )}
                   {!!m.tools?.length && (
                     <div className="assistTools">
                       {m.tools.map(s => {
@@ -145,6 +152,30 @@ export default function AiChat() {
           </div>
         )}
 
+        <div className="aiModes" role="group" aria-label="Chat mode">
+          <button
+            type="button"
+            className={mode === 'tools' ? 'on' : ''}
+            aria-pressed={mode === 'tools'}
+            onClick={() => {
+              setMode('tools');
+              setMsgs([]);
+            }}
+          >
+            Find a tool
+          </button>
+          <button
+            type="button"
+            className={mode === 'chat' ? 'on' : ''}
+            aria-pressed={mode === 'chat'}
+            onClick={() => {
+              setMode('chat');
+              setMsgs([]);
+            }}
+          >
+            Chat with AI
+          </button>
+        </div>
         <form
           className="aiComposer"
           onSubmit={e => {
@@ -194,5 +225,82 @@ export default function AiChat() {
         )}
       </div>
     </div>
+  );
+}
+
+/** Small, safe Markdown renderer (no HTML injection): code blocks, lists, headings, bold, inline code, tool links. */
+function Inline({ text }: { text: string }) {
+  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\/tools\/[a-z0-9-]+)/g);
+  return (
+    <>
+      {parts.map((p, i) => {
+        if (p.startsWith('`') && p.endsWith('`') && p.length > 1)
+          return <code key={i}>{p.slice(1, -1)}</code>;
+        if (p.startsWith('**') && p.endsWith('**') && p.length > 3) return <b key={i}>{p.slice(2, -2)}</b>;
+        const tool = /^\/tools\/[a-z0-9-]+$/.test(p) ? tools.find(t => `/tools/${t.slug}` === p) : undefined;
+        if (tool)
+          return (
+            <Link key={i} href={p}>
+              {tool.name}
+            </Link>
+          );
+        return <span key={i}>{p}</span>;
+      })}
+    </>
+  );
+}
+function Markdown({ text }: { text: string }) {
+  const blocks = text.split('```');
+  return (
+    <>
+      {blocks.map((b, i) => {
+        if (i % 2 === 1) {
+          const nl = b.indexOf('\n');
+          const code = (nl >= 0 ? b.slice(nl + 1) : b).replace(/\n$/, '');
+          return (
+            <div key={i} className="aiCode">
+              <pre>
+                <code>{code}</code>
+              </pre>
+              <button type="button" onClick={() => navigator.clipboard?.writeText(code).catch(() => {})}>
+                Copy
+              </button>
+            </div>
+          );
+        }
+        return b
+          .split(/\n{2,}/)
+          .filter(x => x.trim())
+          .map((para, j) => {
+            const lines = para.split('\n').filter(l => l.trim());
+            if (lines.length && lines.every(l => /^\s*([-*]|\d+\.)\s+/.test(l)))
+              return (
+                <ul key={`${i}-${j}`}>
+                  {lines.map((l, k) => (
+                    <li key={k}>
+                      <Inline text={l.replace(/^\s*([-*]|\d+\.)\s+/, '')} />
+                    </li>
+                  ))}
+                </ul>
+              );
+            if (/^#{1,4}\s/.test(para))
+              return (
+                <h3 key={`${i}-${j}`}>
+                  <Inline text={para.replace(/^#{1,4}\s/, '')} />
+                </h3>
+              );
+            return (
+              <p key={`${i}-${j}`}>
+                {lines.map((l, k) => (
+                  <span key={k}>
+                    <Inline text={l} />
+                    {k < lines.length - 1 && <br />}
+                  </span>
+                ))}
+              </p>
+            );
+          });
+      })}
+    </>
   );
 }

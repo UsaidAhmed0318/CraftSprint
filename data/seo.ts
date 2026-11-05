@@ -710,4 +710,74 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Play free Sudoku online with new Easy, Medium and Hard puzzles every time. Check your answers and play on phone or computer.',
   },
+  'open-graph-generator': {
+    title: 'Open Graph & Twitter Card Generator',
+    description:
+      'Generate Open Graph and Twitter Card meta tags with a live share preview for Facebook, LinkedIn, WhatsApp and X. Free, no signup.',
+  },
+  'website-speed-checker': {
+    title: 'Website Speed Checker – Core Web Vitals',
+    description:
+      'Check any website’s speed with Google PageSpeed Insights: performance score, LCP, CLS and more for mobile and desktop.',
+  },
+  'whatsapp-link-generator': {
+    title: 'WhatsApp Link Generator – Click to Chat',
+    description:
+      'Create a wa.me click-to-chat link with a pre-filled message for your website, Instagram bio or ads. Free and instant.',
+  },
+  'payment-reminder-generator': {
+    title: 'Payment Reminder Message Generator',
+    description:
+      'Write a polite, firm or final payment reminder for an unpaid invoice in seconds. Copy it for email or WhatsApp.',
+  },
+  'google-review-qr-generator': {
+    title: 'Google Review QR Code Generator – Free',
+    description:
+      'Make a QR code for your Google review link so customers can scan and leave a review. Download a print-ready PNG.',
+  },
+  'sip-calculator': {
+    title: 'SIP Calculator – Monthly Investment Returns',
+    description:
+      'Estimate the future value of a monthly SIP investment with compounding: total invested, gains and final value.',
+  },
+  'roi-calculator': {
+    title: 'ROI Calculator – Return on Investment',
+    description:
+      'Calculate ROI and annualised return for any investment, business or marketing campaign. Free online calculator.',
+  },
+  'break-even-calculator': {
+    title: 'Break-even Calculator – Units & Revenue',
+    description:
+      'Find how many units you need to sell and how much revenue covers your fixed and variable costs. Free and instant.',
+  },
+  'remove-duplicate-lines': {
+    title: 'Remove Duplicate Lines Online – Free',
+    description:
+      'Remove duplicate lines from lists and text instantly, keeping the original order. Options to ignore case and spaces.',
+  },
+  'text-sorter': {
+    title: 'Text Sorter – Sort Lines A–Z Online',
+    description:
+      'Sort lines of text alphabetically, in reverse, by number or by length, or shuffle them. Free online text sorter.',
+  },
+  'find-and-replace': {
+    title: 'Find and Replace Text Online – Free',
+    description:
+      'Find and replace words in any text, with match-case and regular-expression options. Runs in your browser.',
+  },
+  'sql-formatter': {
+    title: 'SQL Formatter – Beautify SQL Online',
+    description:
+      'Format messy SQL queries into readable, indented code with consistent keyword case. Free online SQL beautifier.',
+  },
+  'xml-formatter': {
+    title: 'XML Formatter & Validator Online – Free',
+    description:
+      'Format and validate XML in your browser: clean indentation and clear error messages for invalid XML. No upload.',
+  },
+  'rotate-pdf': {
+    title: 'Rotate PDF Pages Online – Free',
+    description:
+      'Rotate all pages of a PDF by 90°, 180° or 270° and download the fixed file. No upload, no quality loss.',
+  },
 };
