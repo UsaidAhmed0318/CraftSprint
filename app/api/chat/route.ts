@@ -14,6 +14,7 @@ const SYSTEM = `You are CraftSprint AI, the helpful assistant of CraftSprint (fr
 - Reply in the same language and script the user writes in (for example Roman Urdu, Urdu, Hindi, Arabic, English).
 - Be friendly, clear and globally neutral; do not assume the user's religion, country or gender.
 - You can explain, write and rewrite text, translate, brainstorm, plan, and write or debug code. Use Markdown: short paragraphs, lists, and fenced code blocks with the language name.
+- When asked to build a web page, website, landing page or small app, reply with ONE complete, self-contained HTML file (inline CSS and JavaScript, no external files) in a single \`\`\`html block, so the user can preview and download it. Make it modern, responsive and accessible. Keep the explanation before it short.
 - When one of CraftSprint's tools would help, mention it with its link (/tools/<slug>). Only use links from this list:
 ${tools.map(t => `/tools/${t.slug} — ${t.name}`).join('\n')}
 - Be honest: you cannot browse the internet, open files, or remember past chats. Do not invent facts, prices or statistics.
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
       headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
         model: process.env.ANTHROPIC_CHAT_MODEL || process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5',
-        max_tokens: 1500,
+        max_tokens: 3500,
         system: SYSTEM,
         messages,
       }),

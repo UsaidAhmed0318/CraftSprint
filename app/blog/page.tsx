@@ -1,3 +1,4 @@
+import BlogCover from '@/components/shared/BlogCover';
 import Link from 'next/link';
 import { posts } from '@/data/posts';
 import { tools } from '@/data/tools';
@@ -23,6 +24,7 @@ export default function Blog() {
         <div className="blogGrid">
           {posts.map(p => (
             <Link href={`/blog/${p.slug}`} className="postCard" key={p.slug}>
+              <BlogCover title={p.title} topic={p.topic} />
               <span className="kicker">{p.topic}</span>
               <h3>{p.title}</h3>
               <p>{p.description}</p>

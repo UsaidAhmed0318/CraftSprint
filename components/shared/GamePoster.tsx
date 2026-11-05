@@ -23,6 +23,8 @@ export const GAME_TYPES: Record<string, string> = {
   'sky-hopper': 'Arcade game',
   'whack-a-mole': 'Reflex game',
   sudoku: 'Logic puzzle',
+  'word-guess': 'Word game',
+  'sliding-puzzle': 'Puzzle game',
 };
 const THEMES = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'];
 

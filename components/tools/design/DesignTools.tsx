@@ -5,7 +5,7 @@ import ToolShell from '@/components/shared/ToolShell';
 
 export function CssGradientGenerator() {
   const [c1, setC1] = useState('#6d4aff');
-  const [c2, setC2] = useState('#8b5cf6');
+  const [c2, setC2] = useState('#3b82f6');
   const [angle, setAngle] = useState(135);
   const [type, setType] = useState<'linear' | 'radial'>('linear');
   const css =

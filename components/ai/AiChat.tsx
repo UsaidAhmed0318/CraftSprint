@@ -41,6 +41,15 @@ export default function AiChat() {
   const [mode, setMode] = useState<'tools' | 'chat'>('tools');
   const end = useRef<HTMLDivElement>(null);
 
+  // Opened from the prompt library (/ai?prompt=...): switch to chat and pre-fill the message.
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get('prompt');
+    if (p) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read the URL once in the browser
+      setMode('chat');
+      setText(p.slice(0, 4000));
+    }
+  }, []);
   useEffect(() => {
     fetch('/api/assistant')
       .then(r => r.json())
@@ -256,17 +265,9 @@ function Markdown({ text }: { text: string }) {
       {blocks.map((b, i) => {
         if (i % 2 === 1) {
           const nl = b.indexOf('\n');
+          const lang = (nl >= 0 ? b.slice(0, nl) : '').trim().toLowerCase();
           const code = (nl >= 0 ? b.slice(nl + 1) : b).replace(/\n$/, '');
-          return (
-            <div key={i} className="aiCode">
-              <pre>
-                <code>{code}</code>
-              </pre>
-              <button type="button" onClick={() => navigator.clipboard?.writeText(code).catch(() => {})}>
-                Copy
-              </button>
-            </div>
-          );
+          return <CodeBlock key={i} lang={lang} code={code} />;
         }
         return b
           .split(/\n{2,}/)
@@ -302,5 +303,88 @@ function Markdown({ text }: { text: string }) {
           });
       })}
     </>
+  );
+}
+
+const EXT: Record<string, string> = {
+  html: 'html',
+  css: 'css',
+  javascript: 'js',
+  js: 'js',
+  typescript: 'ts',
+  ts: 'ts',
+  tsx: 'tsx',
+  jsx: 'jsx',
+  python: 'py',
+  py: 'py',
+  json: 'json',
+  sql: 'sql',
+  java: 'java',
+  php: 'php',
+  c: 'c',
+  cpp: 'cpp',
+  csharp: 'cs',
+  go: 'go',
+  bash: 'sh',
+  sh: 'sh',
+};
+
+/** Code from CraftSprint AI: copy, download as a file, and — for HTML — a live, sandboxed preview. */
+function CodeBlock({ lang, code }: { lang: string; code: string }) {
+  const [preview, setPreview] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const isHtml = lang === 'html' || /^\s*<!doctype html|^\s*<html/i.test(code);
+  const ext = EXT[lang] || (isHtml ? 'html' : 'txt');
+  const download = () => {
+    const url = URL.createObjectURL(new Blob([code], { type: 'text/plain;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `craftsprint-ai.${ext}`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  };
+  return (
+    <div className="aiCode">
+      <div className="aiCodeBar">
+        <span>{lang || 'code'}</span>
+        <div>
+          {isHtml && (
+            <button type="button" onClick={() => setPreview(p => !p)} aria-pressed={preview}>
+              {preview ? 'Code' : 'Preview'}
+            </button>
+          )}
+          <button type="button" onClick={download}>
+            Download
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              navigator.clipboard
+                ?.writeText(code)
+                .then(() => {
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1200);
+                })
+                .catch(() => {})
+            }
+          >
+            {copied ? 'Copied' : 'Copy'}
+          </button>
+        </div>
+      </div>
+      {preview && isHtml ? (
+        // Sandboxed: scripts may run, but the page cannot touch CraftSprint, cookies or storage.
+        <iframe
+          className="aiPreview"
+          title="Preview of the generated page"
+          sandbox="allow-scripts"
+          srcDoc={code}
+        />
+      ) : (
+        <pre>
+          <code>{code}</code>
+        </pre>
+      )}
+    </div>
   );
 }

@@ -780,4 +780,19 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Rotate all pages of a PDF by 90°, 180° or 270° and download the fixed file. No upload, no quality loss.',
   },
+  'domain-age-checker': {
+    title: 'Domain Age Checker – Registration Date',
+    description:
+      'Check how old a domain is: registration date, expiry date and registrar from official RDAP registry data. Free and instant.',
+  },
+  'word-guess': {
+    title: 'Word Guess – Free 5-Letter Word Game',
+    description:
+      'Guess the hidden five-letter word in six tries with colour hints. A free daily-style word puzzle you can play again and again.',
+  },
+  'sliding-puzzle': {
+    title: 'Sliding Puzzle – Free 15 Puzzle Game',
+    description:
+      'Play the classic 15 sliding puzzle online in 3×3, 4×4 or 5×5. Slide the tiles into order in as few moves as you can.',
+  },
 };

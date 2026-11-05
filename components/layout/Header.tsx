@@ -107,6 +107,7 @@ export default function Header() {
             )}
           </div>
           <Link href="/category/online-games">Games</Link>
+          <Link href="/prompts">Prompts</Link>
           <Link href="/blog">Guides</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
@@ -181,6 +182,9 @@ export default function Header() {
             >
               <Download size={19} /> Install app <span className="drawerNew">New</span>
             </button>
+            <Link href="/prompts" onClick={() => setOpen(false)}>
+              <Sparkles size={19} /> AI prompt library
+            </Link>
             <Link href="/blog" onClick={() => setOpen(false)}>
               <BookOpen size={19} /> Guides
             </Link>

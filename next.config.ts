@@ -29,7 +29,7 @@ const csp = [
   "worker-src 'self' blob:",
   // API tester sends requests from the visitor's browser to any HTTPS address they type.
   "connect-src 'self' https: data: blob:",
-  `frame-src 'self' ${google}`,
+  `frame-src 'self' about: blob: data: ${google}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

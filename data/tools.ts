@@ -126,6 +126,8 @@ import {
   ArrowDownAZ,
   Replace,
   RotateCw,
+  CalendarClock,
+  SpellCheck2,
 } from 'lucide-react';
 
 export const categories = [
@@ -1164,6 +1166,13 @@ export const tools: {
     category: 'PDF Tools',
   },
   {
+    slug: 'domain-age-checker',
+    name: 'Domain Age Checker',
+    description: 'See when a domain was registered, its expiry date and registrar.',
+    icon: CalendarClock,
+    category: 'SEO Tools',
+  },
+  {
     slug: 'game-2048',
     name: '2048',
     description: 'Slide and merge tiles to reach 2048. Works with arrow keys and swipes.',
@@ -1273,6 +1282,20 @@ export const tools: {
     name: 'Sudoku',
     description: 'Classic 9×9 Sudoku with Easy, Medium and Hard puzzles.',
     icon: Grid3x3,
+    category: 'Games',
+  },
+  {
+    slug: 'word-guess',
+    name: 'Word Guess',
+    description: 'Guess the hidden 5-letter word in 6 tries.',
+    icon: SpellCheck2,
+    category: 'Games',
+  },
+  {
+    slug: 'sliding-puzzle',
+    name: 'Sliding Puzzle',
+    description: 'Slide numbered tiles into order — 3×3, 4×4 or 5×5.',
+    icon: LayoutGrid,
     category: 'Games',
   },
 ];

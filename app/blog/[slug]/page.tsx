@@ -1,3 +1,4 @@
+import BlogCover from '@/components/shared/BlogCover';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -52,6 +53,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           <span>/</span>
           <span aria-current="page">{post.topic}</span>
         </nav>
+        <BlogCover title={post.title} topic={post.topic} large />
         <h1>{post.title}</h1>
         <p className="lead">{post.description}</p>
         {post.sections!.map(s => (

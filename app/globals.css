@@ -1,58 +1,58 @@
 :root {
-  --bg: #f6f4fe;
-  --bg2: #efebfd;
+  --bg: #f5f7fb;
+  --bg2: #eef2f8;
   --surface: #ffffff;
-  --surface2: #f8f6ff;
-  --field: #f2effc;
-  --text: #150f33;
-  --text2: #3b3363;
-  --muted: #625a88;
-  --line: #e6e1f7;
-  --line2: #d8d0f2;
-  --brand: #6d28d9;
-  --brand2: #8b5cf6;
-  --brandDark: #0e0826;
-  --soft: #efe8ff;
+  --surface2: #f8fafd;
+  --field: #f2f5fa;
+  --text: #0f172a;
+  --text2: #334155;
+  --muted: #5b6478;
+  --line: #e3e8f0;
+  --line2: #d3dbe8;
+  --brand: #2563eb;
+  --brand2: #3b82f6;
+  --brandDark: #0b1220;
+  --soft: #eaf1ff;
   --gold: #0e7490;
   --goldText: #0b5f75;
   --successText: #0b6b47;
   --dangerText: #a8172f;
-  --gold2: #22d3ee;
-  --goldSoft: #e3f7fb;
+  --gold2: #06b6d4;
+  --goldSoft: #e6f8fb;
   --success: #0e9f6e;
   --danger: #d92d4a;
-  --shadow: 0 18px 50px rgba(40, 20, 90, 0.08);
-  --shadowLg: 0 30px 70px rgba(40, 20, 90, 0.16);
-  --headerBg: rgba(255, 255, 255, 0.8);
+  --shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+  --shadowLg: 0 24px 56px rgba(15, 23, 42, 0.12);
+  --headerBg: rgba(255, 255, 255, 0.92);
   --whatsapp: #25d366;
-  --ink: #150f33;
+  --ink: #0f172a;
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --bg: #07051a;
-  --bg2: #0c0924;
-  --surface: #120e2e;
-  --surface2: #18133b;
-  --field: #0f0b28;
-  --text: #f3f0ff;
-  --text2: #d1cbf2;
-  --muted: #a39cc9;
-  --line: #251f4d;
-  --line2: #352c69;
-  --brand: #a78bfa;
-  --brand2: #c4b5fd;
-  --brandDark: #04030f;
-  --soft: #1e1748;
+  --bg: #0b1220;
+  --bg2: #0f172a;
+  --surface: #111a2e;
+  --surface2: #152038;
+  --field: #0f182b;
+  --text: #eef2f9;
+  --text2: #cbd5e1;
+  --muted: #94a3b8;
+  --line: #1e2a44;
+  --line2: #2a3a5c;
+  --brand: #60a5fa;
+  --brand2: #93c5fd;
+  --brandDark: #060b16;
+  --soft: #16233d;
   --gold: #22d3ee;
   --goldText: #67e8f9;
   --successText: #4ee0a6;
   --dangerText: #ff8a9c;
   --gold2: #a5f3fc;
   --goldSoft: #0b2433;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
-  --shadowLg: 0 30px 70px rgba(0, 0, 0, 0.6);
-  --headerBg: rgba(9, 6, 28, 0.72);
-  --ink: #1c1545;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadowLg: 0 24px 56px rgba(0, 0, 0, 0.5);
+  --headerBg: rgba(11, 18, 32, 0.92);
+  --ink: #152038;
   color-scheme: dark;
 }
 * {
@@ -2015,7 +2015,7 @@ body {
   color: #d92d4a !important;
 }
 .n4 {
-  color: #7c3aed !important;
+  color: #2563eb !important;
 }
 .n5 {
   color: #b45309 !important;
@@ -2984,12 +2984,12 @@ body {
   background:
     radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.55), transparent 60%),
     radial-gradient(1px 1px at 30% 80%, rgba(255, 255, 255, 0.4), transparent 60%),
-    radial-gradient(1.5px 1.5px at 55% 35%, rgba(196, 181, 253, 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 55% 35%, rgba(147, 197, 253, 0.7), transparent 60%),
     radial-gradient(1px 1px at 75% 65%, rgba(255, 255, 255, 0.45), transparent 60%),
     radial-gradient(1.5px 1.5px at 90% 15%, rgba(103, 232, 249, 0.6), transparent 60%),
-    radial-gradient(1000px 700px at 85% -10%, rgba(124, 58, 237, 0.28), transparent 60%),
+    radial-gradient(1000px 700px at 85% -10%, rgba(37, 99, 235, 0.28), transparent 60%),
     radial-gradient(800px 600px at -10% 40%, rgba(34, 211, 238, 0.1), transparent 60%),
-    radial-gradient(900px 600px at 50% 110%, rgba(168, 85, 247, 0.16), transparent 60%), var(--bg);
+    radial-gradient(900px 600px at 50% 110%, rgba(14, 165, 233, 0.16), transparent 60%), var(--bg);
   background-size:
     420px 420px,
     380px 380px,
@@ -3005,8 +3005,8 @@ body {
 
 /* ===== contrast fixes for the violet theme ===== */
 .toggleBtn.active {
-  background: #6d28d9;
-  border-color: #6d28d9;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
   color: #fff;
 }
 .notice {
@@ -3018,22 +3018,22 @@ body {
   color: #111827;
 }
 :root[data-theme='dark'] .btnPrimary {
-  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  background: linear-gradient(135deg, #2563eb, #1e40af);
   color: #fff;
-  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
 }
 .proGo {
-  background: linear-gradient(100deg, #2563eb, #7c3aed 60%, #0e7490) !important;
+  background: linear-gradient(100deg, #2563eb, #2563eb 60%, #0e7490) !important;
 }
 .lightPaper {
   --text: #10131a;
   --text2: #2f3550;
   --muted: #4b5563;
-  --brand: #4c1d95;
+  --brand: #1e3a8a;
   color: #10131a;
 }
 .reactBox {
-  background: #6d28d9;
+  background: #1d4ed8;
 }
 .reactBox.waiting {
   background: #c2410c;

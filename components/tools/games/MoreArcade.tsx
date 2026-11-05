@@ -92,7 +92,7 @@ const SHAPES: number[][][] = [
     [1, 1, 0],
   ],
 ];
-const COLORS = ['#22d3ee', '#facc15', '#a855f7', '#3b82f6', '#f97316', '#ef4444', '#22c55e'];
+const COLORS = ['#22d3ee', '#facc15', '#0ea5e9', '#3b82f6', '#f97316', '#ef4444', '#22c55e'];
 type Piece = { s: number[][]; x: number; y: number; c: number };
 const rotate = (s: number[][]) => s[0].map((_, i) => s.map(r => r[i]).reverse());
 const newPiece = (): Piece => {
@@ -308,7 +308,7 @@ export function BrickBreaker() {
 
   const reset = () => {
     const bricks = [];
-    const colors = ['#f472b6', '#a78bfa', '#60a5fa', '#34d399', '#facc15', '#fb923c'];
+    const colors = ['#f472b6', '#60a5fa', '#60a5fa', '#34d399', '#facc15', '#fb923c'];
     for (let r = 0; r < 6; r++)
       for (let c = 0; c < 8; c++) bricks.push({ x: 12 + c * 57, y: 60 + r * 26, alive: true, c: colors[r] });
     g.current = { px: CW / 2, bx: CW / 2, by: CH - 60, vx: 3, vy: -4, bricks, keys: { l: false, r: false } };
@@ -329,7 +329,7 @@ export function BrickBreaker() {
       ctx.roundRect(b.x, b.y, 51, 20, 5);
       ctx.fill();
     });
-    ctx.fillStyle = cssVar('--brand', '#8b5cf6');
+    ctx.fillStyle = cssVar('--brand', '#3b82f6');
     ctx.beginPath();
     ctx.roundRect(s.px - 45, CH - 30, 90, 12, 6);
     ctx.fill();

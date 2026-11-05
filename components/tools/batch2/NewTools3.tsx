@@ -856,3 +856,74 @@ export function WebsiteSpeedChecker() {
     </ToolShell>
   );
 }
+
+/* ---------- Domain age checker (RDAP) ---------- */
+type DomainInfo = {
+  domain: string;
+  created: string | null;
+  updated: string | null;
+  expires: string | null;
+  registrar: string | null;
+};
+export function DomainAgeChecker() {
+  const [domain, setDomain] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [info, setInfo] = useState<DomainInfo | null>(null);
+  const [error, setError] = useState('');
+  const [age, setAge] = useState('—');
+  const run = async () => {
+    setBusy(true);
+    setError('');
+    setInfo(null);
+    try {
+      const r = await fetch(`/api/domain-age?domain=${encodeURIComponent(domain)}`);
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Lookup failed');
+      setInfo(d);
+      if (d.created) {
+        const ms = Date.now() - new Date(d.created).getTime();
+        const y = Math.floor(ms / (365.25 * 864e5));
+        const m = Math.floor((ms % (365.25 * 864e5)) / (30.44 * 864e5));
+        setAge(`${y} years, ${m} months`);
+      } else setAge('—');
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const day = (s: string | null) =>
+    s ? new Date(s).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : '—';
+  return (
+    <ToolShell
+      title="Domain age checker"
+      description="See when a domain was first registered, when it expires and its registrar, from the official RDAP registry data."
+      faq={[
+        {
+          q: 'Where does the data come from?',
+          a: 'From RDAP, the official replacement for WHOIS run by domain registries. Some country domains do not publish RDAP data yet.',
+        },
+        {
+          q: 'Does domain age affect SEO?',
+          a: 'Google has said domain age by itself is not a ranking factor; the content and links built over time matter more.',
+        },
+      ]}
+    >
+      <Text label="Domain name" value={domain} set={setDomain} placeholder="example.com" />
+      <button className="btn btnPrimary" disabled={!domain.trim() || busy} onClick={run}>
+        {busy ? 'Looking up…' : 'Check domain age'}
+      </button>
+      {error && <Note error>{error}</Note>}
+      {info && (
+        <Stats cols={3}>
+          <Stat label="Domain age" value={age} />
+          <Stat label="Registered on" value={day(info.created)} />
+          <Stat label="Expires on" value={day(info.expires)} />
+          <Stat label="Last updated" value={day(info.updated)} />
+          <Stat label="Registrar" value={info.registrar || '—'} />
+        </Stats>
+      )}
+    </ToolShell>
+  );
+}
