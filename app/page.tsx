@@ -19,6 +19,11 @@ import {
   Bot,
   ArrowRight,
   Gamepad2,
+  Youtube,
+  Briefcase,
+  GraduationCap,
+  Code2,
+  Store,
 } from 'lucide-react';
 import GamePoster from '@/components/shared/GamePoster';
 import { tools, categories, benefits } from '@/data/tools';
@@ -265,6 +270,87 @@ export default function Home() {
             </span>
           </div>
         </div>
+
+        <section className="catBlock" aria-labelledby="kits">
+          <div className="catBlockHead">
+            <div>
+              <h2 id="kits">Tool kits for your work</h2>
+              <p>Hand-picked tools for what you do every day.</p>
+            </div>
+            <Link className="seeAll" href="/workspace">
+              Open the file workspace
+            </Link>
+          </div>
+          <div className="kitGrid">
+            {[
+              {
+                name: 'YouTube creator kit',
+                icon: Youtube,
+                slugs: [
+                  'image-studio',
+                  'video-thumbnail-grabber',
+                  'ai-writing-studio',
+                  'screen-recorder',
+                  'hashtag-generator',
+                ],
+              },
+              {
+                name: 'Freelancer kit',
+                icon: Briefcase,
+                slugs: [
+                  'invoice-generator',
+                  'freelance-rate-calculator',
+                  'payment-reminder-generator',
+                  'whatsapp-link-generator',
+                  'pdf-merge',
+                ],
+              },
+              {
+                name: 'Student kit',
+                icon: GraduationCap,
+                slugs: [
+                  'citation-generator',
+                  'gpa-calculator',
+                  'word-counter',
+                  'pomodoro-timer',
+                  'speech-to-text',
+                ],
+              },
+              {
+                name: 'Developer kit',
+                icon: Code2,
+                slugs: ['json-formatter', 'regex-tester', 'sql-formatter', 'jwt-decoder', 'api-tester'],
+              },
+              {
+                name: 'Small business kit',
+                icon: Store,
+                slugs: [
+                  'google-review-qr-generator',
+                  'smart-qr-generator',
+                  'profit-margin-calculator',
+                  'receipt-maker',
+                  'open-graph-generator',
+                ],
+              },
+            ].map(k => (
+              <div className="kitCard" key={k.name}>
+                <h3>
+                  <k.icon size={20} aria-hidden="true" /> {k.name}
+                </h3>
+                <ul>
+                  {k.slugs.map(s => {
+                    const t = tools.find(x => x.slug === s);
+                    return t ? (
+                      <li key={s}>
+                        <Link href={`/tools/${s}`}>{t.name}</Link>
+                      </li>
+                    ) : null;
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <AiShowcase />
 

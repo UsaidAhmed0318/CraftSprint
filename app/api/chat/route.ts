@@ -83,7 +83,9 @@ type GeminiResult = { status: 200; text: string } | { status: 403 | 429 | 502; d
 
 async function askGemini(key: string, messages: Msg[]): Promise<GeminiResult> {
   const tried = new Set<string>();
-  const queue = [process.env.GEMINI_MODEL, workingModel, discoveredModel, ...FALLBACK_MODELS].filter(Boolean) as string[];
+  const queue = [process.env.GEMINI_MODEL, workingModel, discoveredModel, ...FALLBACK_MODELS].filter(
+    Boolean,
+  ) as string[];
   let lastDetail = '';
   let looked = false;
   while (queue.length) {

@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/tools',
     '/ai',
     '/prompts',
+    '/workspace',
     '/privacy',
     '/terms',
     '/blog',

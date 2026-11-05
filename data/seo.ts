@@ -815,4 +815,44 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Test your webcam and microphone online before a call: live video, resolution and a sound level meter. Nothing is recorded.',
   },
+  'image-studio': {
+    title: 'Batch Image Resizer & Compressor \u2013 Presets',
+    description:
+      'Resize, convert and compress up to 50 images at once with Instagram, YouTube, passport and store presets. Download all as a ZIP.',
+  },
+  'ai-writing-studio': {
+    title: 'AI Writing Studio \u2013 Free AI Writer',
+    description:
+      'Free AI writer for emails, replies, rewriting, grammar fixes, summaries, captions, cover letters and more — in any language.',
+  },
+  'smart-qr-generator': {
+    title: 'Wi-Fi, Contact & WhatsApp QR Code Maker',
+    description:
+      'Create QR codes that join Wi-Fi, save a contact (vCard), send an email, open WhatsApp or an SMS. Free, made on your device.',
+  },
+  'coin-flip-dice-roller': {
+    title: 'Coin Flip & Dice Roller \u2013 Fair & Random',
+    description:
+      'Flip a coin or roll one to six dice online with truly random, fair results. Great for games and quick decisions.',
+  },
+  'citation-generator': {
+    title: 'Citation Generator \u2013 APA, MLA & Chicago',
+    description:
+      'Generate APA 7, MLA 9 and Chicago citations for websites and books for essays and research. Free, fast and easy to copy.',
+  },
+  'hijri-date-converter': {
+    title: 'Hijri Date Converter \u2013 Gregorian to Islamic',
+    description:
+      'Convert any Gregorian date to the Hijri (Islamic) calendar with Umm al-Qura and civil calculations, plus the date in Arabic.',
+  },
+  'freelance-rate-calculator': {
+    title: 'Freelance Hourly Rate Calculator',
+    description:
+      'Calculate the hourly and day rate you need as a freelancer to reach your income goal after expenses, platform fees and tax.',
+  },
+  'reading-time-calculator': {
+    title: 'Reading Time Calculator \u2013 Words to Minutes',
+    description:
+      'Paste text to see how long it takes to read and to speak aloud. Useful for blog posts, speeches and video scripts.',
+  },
 };

@@ -8,6 +8,26 @@ import type { ComponentType } from 'react';
  * Each tool loads on its own, so a page only downloads the code it needs.
  */
 const toolComponents: Record<string, ComponentType> = {
+  'image-studio': dynamic(() => import('@/components/tools/batch2/ImageStudio').then(m => m.ImageStudio)),
+  'ai-writing-studio': dynamic(() =>
+    import('@/components/tools/batch2/AiWritingStudio').then(m => m.AiWritingStudio),
+  ),
+  'smart-qr-generator': dynamic(() => import('@/components/tools/batch2/EverydayPlus').then(m => m.SmartQr)),
+  'coin-flip-dice-roller': dynamic(() =>
+    import('@/components/tools/batch2/EverydayPlus').then(m => m.CoinDice),
+  ),
+  'citation-generator': dynamic(() =>
+    import('@/components/tools/batch2/EverydayPlus').then(m => m.CitationGenerator),
+  ),
+  'hijri-date-converter': dynamic(() =>
+    import('@/components/tools/batch2/EverydayPlus').then(m => m.HijriConverter),
+  ),
+  'freelance-rate-calculator': dynamic(() =>
+    import('@/components/tools/batch2/EverydayPlus').then(m => m.FreelanceRate),
+  ),
+  'reading-time-calculator': dynamic(() =>
+    import('@/components/tools/batch2/EverydayPlus').then(m => m.ReadingTime),
+  ),
   'screen-recorder': dynamic(() =>
     import('@/components/tools/batch2/MediaRecorders').then(m => m.ScreenRecorder),
   ),

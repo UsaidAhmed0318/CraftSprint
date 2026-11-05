@@ -5455,10 +5455,265 @@ body {
   font-size: 12px;
   overflow-wrap: anywhere;
 }
-.recBar { display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
-.btnDanger { background: #dc2626 !important; color: #fff !important; border: 0; }
-.recDot { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: #dc2626; }
-.recDot::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #dc2626; animation: twinkle2 1s infinite; }
-.recPreview { display: block; width: 100%; max-height: 420px; margin: 12px 0; border-radius: 14px; background: #000; }
-.micMeter { height: 14px; border-radius: 999px; background: var(--soft); overflow: hidden; margin: 8px 0; }
-.micMeter span { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); transition: width 0.08s; }
+.recBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.btnDanger {
+  background: #dc2626 !important;
+  color: #fff !important;
+  border: 0;
+}
+.recDot {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  color: #dc2626;
+}
+.recDot::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+  animation: twinkle2 1s infinite;
+}
+.recPreview {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  margin: 12px 0;
+  border-radius: 14px;
+  background: #000;
+}
+.micMeter {
+  height: 14px;
+  border-radius: 999px;
+  background: var(--soft);
+  overflow: hidden;
+  margin: 8px 0;
+}
+.micMeter span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  transition: width 0.08s;
+}
+.workspace {
+  margin-top: 20px;
+  display: grid;
+  gap: 18px;
+}
+.wsDrop {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 48px 20px !important;
+}
+.wsResult {
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.wsInfo {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+.wsInfo span {
+  color: var(--muted);
+  font-size: 14px;
+}
+.wsResult h2 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+.wsActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.wsAction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line2);
+  background: var(--surface2);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+}
+.wsAction:hover {
+  border-color: var(--brand);
+  transform: translateY(-2px);
+}
+.wsAction svg:first-child {
+  color: var(--brand);
+  flex-shrink: 0;
+}
+.wsAction span {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+.wsAction small {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.wsBatch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--brand);
+  font-weight: 800;
+}
+.wsNote {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+.isList {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0;
+  display: grid;
+  gap: 8px;
+}
+.isList li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface2);
+}
+.isList li span {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+  font-size: 14px;
+}
+.isList li small {
+  color: var(--muted);
+}
+@media (max-width: 600px) {
+  .isList li {
+    grid-template-columns: 1fr;
+  }
+}
+.cdShow {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  min-height: 120px;
+  align-items: center;
+  margin: 14px 0;
+  flex-wrap: wrap;
+}
+.cdShow .coin {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #3b2300;
+  background: radial-gradient(circle at 35% 30%, #fde68a, #f59e0b 70%, #b45309);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  animation: flip 0.6s ease;
+}
+.cdShow .die {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  font-weight: 800;
+  background: var(--surface);
+  border: 2px solid var(--line2);
+  color: var(--text);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  animation: roll 0.5s ease;
+}
+.cdHint {
+  color: var(--muted);
+}
+@keyframes flip {
+  from {
+    transform: rotateY(720deg) scale(0.6);
+  }
+}
+@keyframes roll {
+  from {
+    transform: rotate(-200deg) scale(0.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cdShow .coin,
+  .cdShow .die {
+    animation: none;
+  }
+}
+.wsBatch {
+  border: 0;
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.kitGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.kitCard {
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.kitCard h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+.kitCard h3 svg {
+  color: var(--brand);
+}
+.kitCard ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.kitCard a {
+  color: var(--text2);
+  font-weight: 600;
+  font-size: 14px;
+}
+.kitCard a:hover {
+  color: var(--brand);
+}

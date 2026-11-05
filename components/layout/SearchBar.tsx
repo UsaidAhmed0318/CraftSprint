@@ -12,6 +12,26 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
   const [active, setActive] = useState(0);
   const boxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Keyboard shortcut: "/" or Ctrl/⌘+K jumps to the search box (the first visible one on the page).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement;
+      const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+      const combo = (e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey);
+      if ((e.key === '/' && !typing) || combo) {
+        const el = inputRef.current;
+        if (!el || el.offsetParent === null) return;
+        const first = Array.from(document.querySelectorAll<HTMLInputElement>('input[data-site-search]')).find(
+          i => i.offsetParent !== null,
+        );
+        if (first !== el) return;
+        e.preventDefault();
+        el.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   const router = useRouter();
 
   const results = useMemo(() => {
@@ -77,6 +97,7 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
     <div className={`searchBox ${compact ? 'compact' : ''}`} ref={boxRef}>
       <Search size={16} />
       <input
+        data-site-search
         ref={inputRef}
         type="text"
         placeholder={

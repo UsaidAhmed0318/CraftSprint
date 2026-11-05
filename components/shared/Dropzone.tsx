@@ -1,4 +1,5 @@
 'use client';
+import { takeHandedOffFile } from '@/lib/utils/fileHandoff';
 /**
  * File picker used by every file tool. Files never leave the browser.
  * - "Try with a sample" lets a visitor see the tool work without a file of their own.
@@ -6,7 +7,7 @@
  * - Rejects files that don't match `accept` (also on drag-and-drop).
  * - Shows which file is currently loaded.
  */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { UploadCloud, FileCheck2, Sparkles } from 'lucide-react';
 import { formatBytes } from '@/lib/utils/image';
 import { makeSampleFile, sampleKind } from '@/lib/utils/samples';
@@ -55,6 +56,16 @@ export default function Dropzone({
   const [error, setError] = useState('');
   const [making, setMaking] = useState(false);
   const kind = sampleKind(accept);
+  // A file chosen in the File Workspace opens here automatically.
+  useEffect(() => {
+    const f = takeHandedOffFile(file => matches(file, accept));
+    if (f) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- show the handed-over file once
+      setPicked(f);
+      onFile(f);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const take = (f?: File | null, skipCheck = false) => {
     if (!f) return;

@@ -17,6 +17,7 @@ import {
   Info,
   Mail,
   MessageCircle,
+  FolderOpen,
 } from 'lucide-react';
 import ThemeToggle from '@/components/layout/ThemeToggle';
 import { categoryInfo } from '@/lib/categories';
@@ -170,6 +171,9 @@ export default function Header() {
                 ))}
               </div>
             )}
+            <Link href="/workspace" onClick={() => setOpen(false)}>
+              <FolderOpen size={19} /> File workspace
+            </Link>
             <Link href="/my-tools" onClick={() => setOpen(false)}>
               <Heart size={19} /> Favourites &amp; history
             </Link>
