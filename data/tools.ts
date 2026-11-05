@@ -137,6 +137,8 @@ import {
   MoonStar,
   BadgeDollarSign,
   Clock3,
+  ImageDown,
+  FileType2,
 } from 'lucide-react';
 
 export const categories = [
@@ -1264,6 +1266,41 @@ export const tools: {
     description: 'See how long a text takes to read and to speak aloud.',
     icon: Clock3,
     category: 'Writing & Text',
+  },
+  {
+    slug: 'heic-to-jpg',
+    name: "HEIC to JPG Converter",
+    description: "Convert iPhone HEIC photos to JPG or PNG.",
+    icon: ImageDown,
+    category: 'Image Tools',
+  },
+  {
+    slug: 'image-upscaler',
+    name: "Image Upscaler",
+    description: "Enlarge images 2×, 3× or 4× with sharpening.",
+    icon: Maximize2,
+    category: 'Image Tools',
+  },
+  {
+    slug: 'pdf-to-word',
+    name: "PDF to Word Converter",
+    description: "Turn PDF text into an editable Word (.docx) file.",
+    icon: FileType2,
+    category: 'PDF Tools',
+  },
+  {
+    slug: 'video-compressor',
+    name: "Video Compressor",
+    description: "Shrink videos by lowering resolution and bitrate.",
+    icon: Film,
+    category: 'Video & Audio',
+  },
+  {
+    slug: 'pakistan-salary-tax-calculator',
+    name: "Pakistan Salary Tax Calculator",
+    description: "Salary income tax for 2026-27 with FBR slabs.",
+    icon: Landmark,
+    category: 'Finance Calculators',
   },
   {
     slug: 'game-2048',

@@ -25,6 +25,7 @@ import {
   Code2,
   Store,
 } from 'lucide-react';
+import { HeroHeadline, HeroSub, HeroButtons } from '@/components/home/HeroText';
 import GamePoster from '@/components/shared/GamePoster';
 import { tools, categories, benefits } from '@/data/tools';
 import { categoryInfo, categoryIcon } from '@/lib/categories';
@@ -92,10 +93,8 @@ export default function Home() {
               <i className="eyebrowDot" />
               {tools.length} free tools · no signup · files stay on your device
             </span>
-            <h1>
-              Your ultimate <span className="violetText">online tools hub</span>
-            </h1>
-            <p className="heroSub">Work smarter, create better, play more.</p>
+            <HeroHeadline />
+            <HeroSub />
             <p>
               Image editing, PDF tools, text and SEO helpers, developer utilities, calculators, media tools
               and quick games — plus <b>CraftSprint AI</b> to find the right tool for you.
@@ -104,13 +103,7 @@ export default function Home() {
               <SearchBar />
             </div>
             <div className="heroCtas">
-              <Link href="#cats" className="btn btnPrimary heroCta">
-                <LayoutGrid size={18} />
-                Explore all {tools.length} tools
-              </Link>
-              <Link href={`/category/${categoryInfo['Games'].slug}`} className="btn btnGhost heroCta">
-                <Gamepad2 size={18} /> Play games
-              </Link>
+              <HeroButtons gamesHref={`/category/${categoryInfo['Games'].slug}`} />
               <AskAiButton />
             </div>
             <div className="heroMini" aria-label="CraftSprint in numbers">

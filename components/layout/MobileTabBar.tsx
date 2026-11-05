@@ -4,24 +4,26 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Wrench, Gamepad2, Sparkles, Menu } from 'lucide-react';
 import { tools } from '@/data/tools';
+import { useT } from '@/lib/i18n';
 
 export const OPEN_MENU_EVENT = 'cs-open-menu';
 
 export default function MobileTabBar() {
   const path = usePathname() || '/';
+  const { t } = useT();
   const slug = path.startsWith('/tools/') ? path.split('/')[2] : '';
   const isGame =
     path === '/category/online-games' || tools.some(t => t.slug === slug && t.category === 'Games');
   const tabs = [
-    { href: '/', label: 'Home', icon: Home, on: path === '/' },
+    { href: '/', label: t('home'), icon: Home, on: path === '/' },
     {
       href: '/tools',
-      label: 'Tools',
+      label: t('tools'),
       icon: Wrench,
       on: !isGame && (path.startsWith('/tools') || path.startsWith('/category')),
     },
-    { href: '/category/online-games', label: 'Games', icon: Gamepad2, on: isGame },
-    { href: '/ai', label: 'AI', icon: Sparkles, on: path === '/ai' },
+    { href: '/category/online-games', label: t('games'), icon: Gamepad2, on: isGame },
+    { href: '/ai', label: t('ai'), icon: Sparkles, on: path === '/ai' },
   ];
   return (
     <nav className="tabBar" aria-label="App navigation">
@@ -33,7 +35,7 @@ export default function MobileTabBar() {
       ))}
       <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_MENU_EVENT))}>
         <Menu size={22} aria-hidden="true" />
-        <span>More</span>
+        <span>{t('more')}</span>
       </button>
     </nav>
   );

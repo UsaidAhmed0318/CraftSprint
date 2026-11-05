@@ -8,6 +8,11 @@ import type { ComponentType } from 'react';
  * Each tool loads on its own, so a page only downloads the code it needs.
  */
 const toolComponents: Record<string, ComponentType> = {
+  'heic-to-jpg': dynamic(() => import('@/components/tools/batch2/Converters2').then(m => m.HeicToJpg)),
+  'image-upscaler': dynamic(() => import('@/components/tools/batch2/Converters2').then(m => m.ImageUpscaler)),
+  'pdf-to-word': dynamic(() => import('@/components/tools/batch2/Converters2').then(m => m.PdfToWord)),
+  'video-compressor': dynamic(() => import('@/components/tools/batch2/Converters2').then(m => m.VideoCompressor)),
+  'pakistan-salary-tax-calculator': dynamic(() => import('@/components/tools/batch2/Converters2').then(m => m.PakistanSalaryTax)),
   'image-studio': dynamic(() => import('@/components/tools/batch2/ImageStudio').then(m => m.ImageStudio)),
   'ai-writing-studio': dynamic(() =>
     import('@/components/tools/batch2/AiWritingStudio').then(m => m.AiWritingStudio),

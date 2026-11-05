@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Dropzone from '@/components/shared/Dropzone';
 import ToolShell from '@/components/shared/ToolShell';
 
-async function loadPdfjs() {
+export async function loadPdfjs() {
   installPolyfills();
   const pdfjs = await import('pdfjs-dist');
   pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.polyfilled.mjs';

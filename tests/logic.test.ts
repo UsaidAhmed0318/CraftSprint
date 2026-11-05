@@ -40,3 +40,14 @@ describe('scientific calculator engine', () => {
   it('uses degrees when asked', () => expect(evaluate('sin(90)', true)).toBeCloseTo(1));
   it('throws on bad input', () => expect(() => evaluate('2+*', true)).toThrow());
 });
+
+import { salaryTax } from '@/components/tools/batch2/Converters2';
+describe('Pakistan salary tax', () => {
+  it('matches the published FY 2026-27 and FY 2025-26 examples', () => {
+    expect(salaryTax(600000, '2026-27')).toBe(0);
+    expect(salaryTax(1800000, '2026-27')).toBeCloseTo(72000);
+    expect(salaryTax(3600000, '2026-27')).toBeCloseTo(416000);
+    expect(salaryTax(3600000, '2025-26')).toBeCloseTo(466000);
+    expect(salaryTax(15000000, '2026-27')).toBeCloseTo(4224000);
+  });
+});

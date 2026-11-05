@@ -10,10 +10,12 @@ import { tools } from '@/data/tools';
 import { formatBytes } from '@/lib/utils/image';
 import { handOffFile, handOffFiles } from '@/lib/utils/fileHandoff';
 
-type Kind = 'image' | 'svg' | 'pdf' | 'video' | 'audio' | 'subtitle' | 'other';
+type Kind = 'image' | 'heic' | 'svg' | 'pdf' | 'video' | 'audio' | 'subtitle' | 'other';
 const ACTIONS: Record<Kind, string[]> = {
   image: [
+    'image-studio',
     'image-compressor',
+    'image-upscaler',
     'image-resizer',
     'image-converter',
     'image-cropper',
@@ -26,8 +28,10 @@ const ACTIONS: Record<Kind, string[]> = {
     'qr-code-scanner',
     'mockup-generator',
   ],
+  heic: ['heic-to-jpg'],
   svg: ['svg-to-png-converter', 'image-to-base64'],
   pdf: [
+    'pdf-to-word',
     'pdf-compressor',
     'pdf-merge',
     'pdf-split',
@@ -37,13 +41,14 @@ const ACTIONS: Record<Kind, string[]> = {
     'pdf-password-protector',
     'pdf-password-unlocker',
   ],
-  video: ['video-to-gif-converter', 'video-thumbnail-grabber'],
+  video: ['video-compressor', 'video-to-gif-converter', 'video-thumbnail-grabber'],
   audio: ['audio-trimmer', 'audio-speed-changer'],
   subtitle: ['srt-subtitle-formatter'],
   other: [],
 };
 const LABEL: Record<Kind, string> = {
   image: 'Image',
+  heic: 'iPhone photo (HEIC)',
   svg: 'SVG image',
   pdf: 'PDF document',
   video: 'Video',
@@ -54,6 +59,7 @@ const LABEL: Record<Kind, string> = {
 
 function detect(f: File): Kind {
   const n = f.name.toLowerCase();
+  if (/\.(heic|heif)$/.test(n) || /image\/hei[cf]/.test(f.type)) return 'heic';
   if (f.type === 'image/svg+xml' || n.endsWith('.svg')) return 'svg';
   if (f.type.startsWith('image/')) return 'image';
   if (f.type === 'application/pdf' || n.endsWith('.pdf')) return 'pdf';

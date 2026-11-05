@@ -23,6 +23,8 @@ import ThemeToggle from '@/components/layout/ThemeToggle';
 import { categoryInfo } from '@/lib/categories';
 import SearchBar from '@/components/layout/SearchBar';
 import { openInstall } from '@/lib/utils/pwa';
+import { useT } from '@/lib/i18n';
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 import { site } from '@/lib/site';
 import { OPEN_MENU_EVENT } from '@/components/layout/MobileTabBar';
 import { usePathname } from 'next/navigation';
@@ -33,6 +35,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileCat, setMobileCat] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const { t } = useT();
   const pathname = usePathname();
   // "More" in the bottom tab bar opens this menu.
   useEffect(() => {
@@ -79,7 +82,7 @@ export default function Header() {
         <nav className="navLinks">
           <div className="megaWrap" ref={menuRef}>
             <button className="megaTrigger" onClick={() => setMenuOpen(v => !v)}>
-              All tools <ChevronDown size={15} />
+              {t('allTools')} <ChevronDown size={15} />
             </button>
             {menuOpen && (
               <div className="megaPanel">
@@ -107,9 +110,9 @@ export default function Header() {
               </div>
             )}
           </div>
-          <Link href="/category/online-games">Games</Link>
-          <Link href="/prompts">Prompts</Link>
-          <Link href="/blog">Guides</Link>
+          <Link href="/category/online-games">{t('games')}</Link>
+          <Link href="/prompts">{t('prompts')}</Link>
+          <Link href="/blog">{t('guides')}</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/ai" className="navAi">
@@ -119,9 +122,10 @@ export default function Header() {
         </nav>
         <div className="navRight">
           <SearchBar compact />
+          <LanguageSwitcher compact />
           <ThemeToggle />
           <button type="button" className="navInstall" onClick={() => openInstall()}>
-            <Download size={16} aria-hidden="true" /> Install App
+            <Download size={16} aria-hidden="true" /> {t('installApp')}
           </button>
         </div>
         <div className="mobileOnly">
@@ -136,18 +140,19 @@ export default function Header() {
           <div className="drawerSearch">
             <SearchBar />
           </div>
+          <LanguageSwitcher />
           <nav className="drawerList" aria-label="Menu">
             <Link href="/" onClick={() => setOpen(false)}>
-              <Home size={19} /> Home
+              <Home size={19} /> {t('home')}
             </Link>
             <Link href="/tools" onClick={() => setOpen(false)}>
-              <LayoutGrid size={19} /> All tools
+              <LayoutGrid size={19} /> {t('allTools')}
             </Link>
             <Link href="/category/online-games" onClick={() => setOpen(false)}>
-              <Gamepad2 size={19} /> Games
+              <Gamepad2 size={19} /> {t('games')}
             </Link>
             <Link href="/ai" onClick={() => setOpen(false)}>
-              <Sparkles size={19} /> AI assistant
+              <Sparkles size={19} /> {t('aiAssistant')}
             </Link>
             <button
               type="button"
@@ -155,7 +160,7 @@ export default function Header() {
               onClick={() => setMobileCat(c => (c ? null : 'all'))}
               aria-expanded={!!mobileCat}
             >
-              <Shapes size={19} /> Categories{' '}
+              <Shapes size={19} /> {t('categories')}{' '}
               <ChevronDown
                 size={15}
                 style={{ marginLeft: 'auto', transform: mobileCat ? 'rotate(180deg)' : 'none' }}
@@ -172,10 +177,10 @@ export default function Header() {
               </div>
             )}
             <Link href="/workspace" onClick={() => setOpen(false)}>
-              <FolderOpen size={19} /> File workspace
+              <FolderOpen size={19} /> {t('workspace')}
             </Link>
             <Link href="/my-tools" onClick={() => setOpen(false)}>
-              <Heart size={19} /> Favourites &amp; history
+              <Heart size={19} /> {t('favourites')}
             </Link>
             <button
               type="button"
@@ -184,22 +189,22 @@ export default function Header() {
                 openInstall();
               }}
             >
-              <Download size={19} /> Install app <span className="drawerNew">New</span>
+              <Download size={19} /> {t('installApp')} <span className="drawerNew">New</span>
             </button>
             <Link href="/prompts" onClick={() => setOpen(false)}>
-              <Sparkles size={19} /> AI prompt library
+              <Sparkles size={19} /> {t('promptLibrary')}
             </Link>
             <Link href="/blog" onClick={() => setOpen(false)}>
-              <BookOpen size={19} /> Guides
+              <BookOpen size={19} /> {t('guides')}
             </Link>
             <Link href="/about" onClick={() => setOpen(false)}>
-              <Info size={19} /> About us
+              <Info size={19} /> {t('about')}
             </Link>
             <Link href="/contact" onClick={() => setOpen(false)}>
-              <Mail size={19} /> Contact us
+              <Mail size={19} /> {t('contact')}
             </Link>
             <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer">
-              <MessageCircle size={19} /> WhatsApp us
+              <MessageCircle size={19} /> {t('whatsapp')}
             </a>
           </nav>
           <div className="drawerBrand">

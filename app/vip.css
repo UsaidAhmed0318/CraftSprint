@@ -5717,3 +5717,61 @@ body {
 .kitCard a:hover {
   color: var(--brand);
 }
+.langSwitch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--line2);
+  background: var(--surface);
+  color: var(--text);
+}
+.langSwitch select {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+.langSwitch.compact select {
+  max-width: 92px;
+}
+.drawerInner > .langSwitch {
+  align-self: flex-start;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .navActions .langSwitch.compact,
+  .siteHeader .langSwitch.compact {
+    display: none;
+  }
+}
+/* Right-to-left (Urdu, Arabic) */
+html[dir='rtl'] body {
+  font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', 'Manrope Variable', system-ui, sans-serif;
+}
+html[dir='rtl'] .drawerList > a,
+html[dir='rtl'] .drawerList > button {
+  text-align: right;
+}
+html[dir='rtl'] .tbChips,
+html[dir='rtl'] .heroCtas {
+  direction: rtl;
+}
+/* RTL: decorative and off-screen layers must never create sideways scrolling */
+/* Skip link hidden without a far-off position (works in left-to-right and right-to-left) */
+.skipLink { left: 8px !important; inset-inline-start: 8px; transform: translateY(-300%); }
+.skipLink:focus { transform: none; }
+.siteHeader button { white-space: nowrap; }
