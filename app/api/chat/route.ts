@@ -5,7 +5,7 @@ import { readJsonBody, BodyError } from '@/lib/http';
 
 /**
  * CraftSprint AI — general chat (answers questions, writes, explains, writes code) in the visitor's language.
- * Needs ANTHROPIC_API_KEY. Every message costs API credit, so limits are strict.
+ * Uses GEMINI_API_KEY (Google, free tier) if set, otherwise ANTHROPIC_API_KEY (paid). Limits are strict either way.
  * Conversations are not stored or logged.
  */
 type Msg = { role: 'user' | 'assistant'; content: string };
@@ -20,9 +20,42 @@ ${tools.map(t => `/tools/${t.slug} — ${t.name}`).join('\n')}
 - Be honest: you cannot browse the internet, open files, or remember past chats. Do not invent facts, prices or statistics.
 - Refuse harmful, illegal or adult requests politely.`;
 
+/** Google Gemini (has a free tier). Model is configurable; the "latest Flash" alias follows Google's current free model. */
+async function askGemini(key: string, messages: Msg[]) {
+  const model = process.env.GEMINI_MODEL || 'gemini-flash-latest';
+  const r = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM }] },
+        contents: messages.map(m => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }],
+        })),
+        generationConfig: { maxOutputTokens: 4096, temperature: 0.7 },
+      }),
+      signal: AbortSignal.timeout(45000),
+    },
+  );
+  if (r.status === 429) return { status: 429 as const };
+  if (!r.ok) {
+    console.error('[chat] Gemini error', r.status);
+    return { status: 502 as const };
+  }
+  const data = await r.json();
+  const text: string = (data.candidates?.[0]?.content?.parts || [])
+    .map((p: { text?: string }) => p.text || '')
+    .join('')
+    .trim();
+  return { status: 200 as const, text };
+}
+
 export async function POST(req: Request) {
+  const gemini = process.env.GEMINI_API_KEY;
   const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) {
+  if (!gemini && !key) {
     return NextResponse.json(
       { error: 'CraftSprint AI chat is not switched on yet. You can still use “Find a tool”.' },
       { status: 503 },
@@ -56,10 +89,31 @@ export async function POST(req: Request) {
     const err = e instanceof BodyError ? e : new BodyError(400, 'Invalid request.');
     return NextResponse.json({ error: err.message }, { status: err.status });
   }
+  if (gemini) {
+    try {
+      const g = await askGemini(gemini, messages);
+      if (g.status === 429)
+        return NextResponse.json(
+          { error: 'The free AI limit for today has been reached. Please try again later.' },
+          { status: 429 },
+        );
+      if (g.status !== 200)
+        return NextResponse.json(
+          { error: 'The AI service is busy. Please try again in a moment.' },
+          { status: 502 },
+        );
+      return NextResponse.json({ reply: g.text || 'Sorry, I could not answer that. Please rephrase.' });
+    } catch {
+      return NextResponse.json(
+        { error: 'The AI service did not respond in time. Please try again.' },
+        { status: 504 },
+      );
+    }
+  }
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      headers: { 'content-type': 'application/json', 'x-api-key': key!, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({
         model: process.env.ANTHROPIC_CHAT_MODEL || process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5',
         max_tokens: 3500,

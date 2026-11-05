@@ -5275,29 +5275,176 @@ body {
   padding-left: 20px;
   color: var(--text2);
 }
-.blogCover { position: relative; display: grid; place-items: center; height: 150px; margin: -6px -6px 14px; border-radius: 14px; overflow: hidden; color: #fff; }
-.blogCover.large { height: 260px; margin: 0 0 22px; }
-.bcGrid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 26px 26px; }
-.bcIcon { position: relative; width: 92px; height: 92px; border-radius: 26px; display: grid; place-items: center; background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25); }
-.blogCover.large .bcIcon { width: 130px; height: 130px; border-radius: 34px; }
-.bcTopic { position: absolute; left: 12px; bottom: 10px; padding: 4px 10px; border-radius: 999px; background: rgba(0, 0, 0, 0.3); font-size: 12px; font-weight: 800; }
-.wgGrid { display: grid; gap: 6px; }
-.wgRow { display: grid; grid-template-columns: repeat(5, 56px); gap: 6px; }
-.wgTile { width: 56px; height: 56px; display: grid; place-items: center; border: 2px solid var(--line2); border-radius: 10px; font-family: 'Sora Variable', 'Sora', system-ui, sans-serif; font-weight: 800; font-size: 24px; color: var(--text); background: var(--surface); }
-.wgTile.typed { border-color: var(--muted); }
-.wgTile.hit, .wgKeys .hit { background: #16a34a !important; border-color: #16a34a; color: #fff !important; }
-.wgTile.near, .wgKeys .near { background: #d97706 !important; border-color: #d97706; color: #fff !important; }
-.wgTile.miss, .wgKeys .miss { background: #64748b !important; border-color: #64748b; color: #fff !important; }
-.wgMsg { min-height: 22px; margin: 0; font-weight: 800; }
-.wgKeys { display: grid; gap: 6px; width: min(100%, 500px); }
-.wgKeyRow { display: flex; gap: 5px; justify-content: center; }
-.wgKeyRow button { flex: 1; min-height: 50px; max-width: 44px; border: 0; border-radius: 8px; background: var(--soft); color: var(--text); font: inherit; font-weight: 800; cursor: pointer; display: grid; place-items: center; }
-.wgKeyRow button.wide { max-width: 66px; flex: 1.5; }
-@media (max-width: 380px) { .wgRow { grid-template-columns: repeat(5, 48px); } .wgTile { width: 48px; height: 48px; } }
-.slideBoard { display: grid; gap: 6px; width: min(100%, 380px); aspect-ratio: 1; padding: 8px; border-radius: 16px; background: #0f1d3a; }
-.slideTile { border: 0; border-radius: 10px; background: linear-gradient(145deg, #3b82f6, #1d4ed8); color: #fff; font: inherit; font-weight: 800; font-size: clamp(16px, 5vw, 26px); cursor: pointer; box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3); }
-.slideTile.empty { background: transparent; box-shadow: none; cursor: default; }
+.blogCover {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 150px;
+  margin: -6px -6px 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  color: #fff;
+}
+.blogCover.large {
+  height: 260px;
+  margin: 0 0 22px;
+}
+.bcGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+.bcIcon {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 26px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25);
+}
+.blogCover.large .bcIcon {
+  width: 130px;
+  height: 130px;
+  border-radius: 34px;
+}
+.bcTopic {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+  font-weight: 800;
+}
+.wgGrid {
+  display: grid;
+  gap: 6px;
+}
+.wgRow {
+  display: grid;
+  grid-template-columns: repeat(5, 56px);
+  gap: 6px;
+}
+.wgTile {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line2);
+  border-radius: 10px;
+  font-family: 'Sora Variable', 'Sora', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--text);
+  background: var(--surface);
+}
+.wgTile.typed {
+  border-color: var(--muted);
+}
+.wgTile.hit,
+.wgKeys .hit {
+  background: #16a34a !important;
+  border-color: #16a34a;
+  color: #fff !important;
+}
+.wgTile.near,
+.wgKeys .near {
+  background: #d97706 !important;
+  border-color: #d97706;
+  color: #fff !important;
+}
+.wgTile.miss,
+.wgKeys .miss {
+  background: #64748b !important;
+  border-color: #64748b;
+  color: #fff !important;
+}
+.wgMsg {
+  min-height: 22px;
+  margin: 0;
+  font-weight: 800;
+}
+.wgKeys {
+  display: grid;
+  gap: 6px;
+  width: min(100%, 500px);
+}
+.wgKeyRow {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.wgKeyRow button {
+  flex: 1;
+  min-height: 50px;
+  max-width: 44px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--soft);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.wgKeyRow button.wide {
+  max-width: 66px;
+  flex: 1.5;
+}
+@media (max-width: 380px) {
+  .wgRow {
+    grid-template-columns: repeat(5, 48px);
+  }
+  .wgTile {
+    width: 48px;
+    height: 48px;
+  }
+}
+.slideBoard {
+  display: grid;
+  gap: 6px;
+  width: min(100%, 380px);
+  aspect-ratio: 1;
+  padding: 8px;
+  border-radius: 16px;
+  background: #0f1d3a;
+}
+.slideTile {
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  font-size: clamp(16px, 5vw, 26px);
+  cursor: pointer;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+.slideTile.empty {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+}
 /* Desktop header: keep every item on one line; About/Contact stay in the menu and footer */
-.siteHeader a, .navAi, .navInstall { white-space: nowrap; }
-.siteHeader a[href='/about']:not(.drawerList *), .siteHeader a[href='/contact']:not(.drawerList *) { display: none; }
-@media (max-width: 1360px) { .navAi { display: none !important; } }
+.siteHeader a,
+.navAi,
+.navInstall {
+  white-space: nowrap;
+}
+.siteHeader a[href='/about']:not(.drawerList *),
+.siteHeader a[href='/contact']:not(.drawerList *) {
+  display: none;
+}
+@media (max-width: 1360px) {
+  .navAi {
+    display: none !important;
+  }
+}

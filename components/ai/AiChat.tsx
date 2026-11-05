@@ -212,7 +212,11 @@ export default function AiChat() {
                 <RotateCcw size={14} /> New chat
               </button>
             ) : (
-              <span className="aiNote">Chats are not saved</span>
+              <span className="aiNote">
+                {mode === 'chat'
+                  ? 'Messages are sent to an AI service to answer — please don’t share private details'
+                  : 'Chats are not saved'}
+              </span>
             )}
             <button type="submit" className="aiSend" disabled={!text.trim() || busy} aria-label="Send">
               <ArrowUp size={18} />

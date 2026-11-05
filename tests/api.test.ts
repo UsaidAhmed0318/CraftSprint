@@ -118,3 +118,29 @@ describe('SQL formatter', () => {
     expect(out).toContain('ORDER BY');
   });
 });
+
+describe('AI chat with Gemini (free tier)', () => {
+  it('returns the Gemini answer and a friendly message when the free limit is reached', async () => {
+    process.env.GEMINI_API_KEY = 'test';
+    const real = global.fetch;
+    global.fetch = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            candidates: [{ content: { parts: [{ text: 'Salaam! Main madad kar sakta hoon.' }] } }],
+          }),
+          { status: 200 },
+        ),
+      ) as unknown as typeof fetch;
+    const ok = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Salaam' }] }));
+    expect((await ok.json()).reply).toContain('madad');
+    global.fetch = vi
+      .fn()
+      .mockResolvedValueOnce(new Response('{}', { status: 429 })) as unknown as typeof fetch;
+    const limited = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Hi' }] }));
+    expect(limited.status).toBe(429);
+    global.fetch = real;
+    delete process.env.GEMINI_API_KEY;
+  });
+});
