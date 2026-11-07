@@ -1,11 +1,19 @@
 import type { NextConfig } from 'next';
 
-// Canonical URL: NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is used automatically.
+// The real public address of CraftSprint. Used for canonical URLs, the sitemap and share links.
+const PRODUCTION_URL = 'https://www.craftsprint.io';
+// Canonical URL: NEXT_PUBLIC_SITE_URL wins (spaces and a trailing slash are ignored); production builds on
+// Vercel fall back to the real domain, preview builds to their own Vercel address.
+const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, '');
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : 'http://localhost:3000');
+  process.env.VERCEL_ENV === 'production'
+    ? envUrl && !envUrl.includes('vercel.app')
+      ? envUrl
+      : PRODUCTION_URL
+    : envUrl ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : 'http://localhost:3000');
 
 if (process.env.NODE_ENV === 'production' && siteUrl.includes('localhost')) {
   console.warn(
@@ -47,7 +55,8 @@ const securityHeaders = [
   // Tools may use the camera (QR scanner) or microphone; nothing else is allowed.
   {
     key: 'Permissions-Policy',
-    value: 'camera=(self), microphone=(self), display-capture=(self), geolocation=(), payment=(), usb=(), interest-cohort=()',
+    value:
+      'camera=(self), microphone=(self), display-capture=(self), geolocation=(), payment=(), usb=(), interest-cohort=()',
   },
 ];
 
@@ -59,6 +68,19 @@ const nextConfig: NextConfig = {
   // Old category addresses keep working (permanent redirect) after the categories were split up.
   async redirects() {
     return [
+      // One address for Google: the old Vercel address and the bare domain go to www.craftsprint.io.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'craft-sprint-six.vercel.app' }],
+        destination: `${PRODUCTION_URL}/:path*`,
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'craftsprint.io' }],
+        destination: `${PRODUCTION_URL}/:path*`,
+        permanent: true,
+      },
       { source: '/category/image-design-tools', destination: '/category/image-tools', permanent: true },
       { source: '/category/pdf-document-tools', destination: '/category/pdf-tools', permanent: true },
       { source: '/category/content-seo-tools', destination: '/category/writing-tools', permanent: true },
