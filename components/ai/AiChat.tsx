@@ -19,6 +19,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { tools } from '@/data/tools';
+import { track } from '@/lib/analytics';
 
 type Msg = { role: 'user' | 'assistant'; content: string; tools?: string[]; detail?: string };
 
@@ -67,6 +68,7 @@ export default function AiChat() {
     setMsgs(next);
     setText('');
     setBusy(true);
+    track('ai_message', { ai_mode: mode });
     try {
       const r = await fetch(mode === 'chat' ? '/api/chat' : '/api/assistant', {
         method: 'POST',

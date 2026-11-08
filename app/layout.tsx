@@ -12,6 +12,7 @@ import ToolAssistant from '@/components/shared/ToolAssistant';
 import SplashLoader from '@/components/layout/SplashLoader';
 import MobileTabBar from '@/components/layout/MobileTabBar';
 import PwaManager from '@/components/pwa/PwaManager';
+import AnalyticsEvents from '@/components/layout/AnalyticsEvents';
 import { themeInitScript, splashInitScript } from '@/lib/initScripts';
 import { site } from '@/lib/site';
 import { IS_PRODUCTION } from '@/lib/deployEnv';
@@ -98,11 +99,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <WhatsAppButton />
         {gaOn && (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA}`} strategy="afterInteractive" />
+            <AnalyticsEvents />
+            {/* Consent defaults run first: visitors in the EEA, UK and Switzerland are asked before any cookies (AdSense privacy message). */}
             <Script
               id="ga"
               strategy="afterInteractive"
-            >{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA}');`}</Script>
+            >{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500,region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LI','LT','LU','MT','NL','NO','PL','PT','RO','SK','SI','ES','SE','GB','CH']});gtag('js',new Date());gtag('config','${GA}');`}</Script>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA}`} strategy="afterInteractive" />
           </>
         )}
       </body>

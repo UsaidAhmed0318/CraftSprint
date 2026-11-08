@@ -20,6 +20,7 @@ import {
   OPEN_INSTALL_EVENT,
   RETURN_ROUTE_KEY,
 } from '@/lib/utils/pwa';
+import { track } from '@/lib/analytics';
 
 type Mode = 'prompt' | 'ios' | 'ios-other' | 'manual' | 'installed';
 
@@ -93,6 +94,7 @@ export default function PwaManager() {
     rememberReturnRoute(pathname);
     try {
       const r = await promptInstall();
+      track('app_install_prompt', { outcome: r, app: appName || 'CraftSprint' });
       if (r === 'accepted') setMode('installed');
       else if (r === 'dismissed') setNote('No problem — you can install CraftSprint any time from the menu.');
       else setMode('manual');

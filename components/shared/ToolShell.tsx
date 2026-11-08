@@ -7,6 +7,7 @@ import ToolCard from '@/components/shared/ToolCard';
 import AdSlot from '@/components/shared/AdSlot';
 import ResultBanner from '@/components/shared/ResultBanner';
 import InstallButton from '@/components/pwa/InstallButton';
+import { track } from '@/lib/analytics';
 import { tools } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
 import { categories } from '@/data/tools';
@@ -58,6 +59,9 @@ export default function ToolShell({
   const steps = tool ? toolContent[tool.slug]?.steps : undefined;
   const showSide = !wide && !!tool;
 
+  useEffect(() => {
+    if (tool) track('tool_view', { tool_slug: tool.slug, tool_category: tool.category });
+  }, [tool]);
   const ld: Record<string, unknown>[] = [];
   if (tool && cat)
     ld.push({

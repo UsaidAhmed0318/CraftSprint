@@ -1,4 +1,5 @@
 'use client';
+import { track } from '@/lib/analytics';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -67,6 +68,8 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
   }
 
   const go = (slug: string) => {
+    // GA4 recommended "search" event: the words typed in the site search and the tool chosen.
+    track('search', { search_term: q.trim().slice(0, 80), tool_slug: slug });
     router.push(`/tools/${slug}`);
     setOpen(false);
     setQ('');

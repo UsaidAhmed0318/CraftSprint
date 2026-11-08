@@ -1,4 +1,5 @@
 'use client';
+import { track, currentToolSlug } from '@/lib/analytics';
 /**
  * Small building blocks shared by every tool.
  * Use these instead of writing the same markup again — change the look here once and it updates everywhere.
@@ -123,6 +124,7 @@ export function CopyButton({ text, label = 'Copy result' }: { text: string; labe
           ?.writeText(text)
           .then(() => {
             setDone(true);
+            track('copy_result', { tool_slug: currentToolSlug() });
             setTimeout(() => setDone(false), 1400);
           })
           .catch(() => {})
