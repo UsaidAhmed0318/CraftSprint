@@ -2,7 +2,8 @@
 import { useEffect, useRef } from 'react';
 const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 const slot = process.env.NEXT_PUBLIC_ADSENSE_SLOT;
-const enabled = !!client && !client.includes('XXXX') && !!slot;
+const enabled =
+  process.env.NEXT_PUBLIC_DEPLOY_ENV === 'production' && !!client && !client.includes('XXXX') && !!slot;
 declare global {
   interface Window {
     adsbygoogle?: unknown[];

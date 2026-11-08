@@ -14,11 +14,13 @@ import MobileTabBar from '@/components/layout/MobileTabBar';
 import PwaManager from '@/components/pwa/PwaManager';
 import { themeInitScript, splashInitScript } from '@/lib/initScripts';
 import { site } from '@/lib/site';
+import { IS_PRODUCTION } from '@/lib/deployEnv';
 
 const GA = process.env.NEXT_PUBLIC_GA_ID;
-const gaOn = !!GA && !GA.includes('XXXX');
+// Analytics and ads run only on the live site, never on staging/preview builds.
+const gaOn = IS_PRODUCTION && !!GA && !GA.includes('XXXX');
 const ADS = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
-const adsOn = !!ADS && !ADS.includes('XXXX');
+const adsOn = IS_PRODUCTION && !!ADS && !ADS.includes('XXXX');
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -41,7 +43,7 @@ export const metadata: Metadata = {
     title: 'CraftSprint — Free Online Tools',
     description: site.description,
   },
-  robots: { index: true, follow: true },
+  robots: IS_PRODUCTION ? { index: true, follow: true } : { index: false, follow: false },
 };
 export const viewport: Viewport = {
   width: 'device-width',
@@ -64,6 +66,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body>
+        {!IS_PRODUCTION && (
+          <div className="stagingBadge" role="note">
+            Staging — not the live site
+          </div>
+        )}
         <SplashLoader />
         <JsonLd
           data={{

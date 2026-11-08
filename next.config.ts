@@ -22,6 +22,9 @@ if (process.env.NODE_ENV === 'production' && siteUrl.includes('localhost')) {
 }
 
 const isDev = process.env.NODE_ENV !== 'production';
+// production on Vercel's Production environment (main); preview for staging/other branches; local builds count as production.
+const deployEnv = process.env.VERCEL_ENV || (isDev ? 'development' : 'production');
+const isPreviewDeploy = deployEnv !== 'production';
 
 // Ads and analytics hosts that AdSense / Google Analytics need.
 const google =
@@ -64,7 +67,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
   reactStrictMode: true,
-  env: { NEXT_PUBLIC_SITE_URL: siteUrl },
+  env: { NEXT_PUBLIC_SITE_URL: siteUrl, NEXT_PUBLIC_DEPLOY_ENV: deployEnv },
   // Old category addresses keep working (permanent redirect) after the categories were split up.
   async redirects() {
     return [
@@ -89,6 +92,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },
+      // Staging and other preview builds must never appear in search results.
+      ...(isPreviewDeploy
+        ? [{ source: '/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }] }]
+        : []),
       // API answers are always fresh; never stored by the browser or CDN.
       { source: '/api/:path*', headers: [{ key: 'Cache-Control', value: 'no-store, max-age=0' }] },
       // The service worker must always be re-checked so updates reach installed apps quickly.

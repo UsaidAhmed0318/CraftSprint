@@ -5772,6 +5772,29 @@ html[dir='rtl'] .heroCtas {
 }
 /* RTL: decorative and off-screen layers must never create sideways scrolling */
 /* Skip link hidden without a far-off position (works in left-to-right and right-to-left) */
-.skipLink { left: 8px !important; inset-inline-start: 8px; transform: translateY(-300%); }
-.skipLink:focus { transform: none; }
-.siteHeader button { white-space: nowrap; }
+.skipLink {
+  left: 8px !important;
+  inset-inline-start: 8px;
+  transform: translateY(-300%);
+}
+.skipLink:focus {
+  transform: none;
+}
+.siteHeader button {
+  white-space: nowrap;
+}
+.stagingBadge {
+  position: fixed;
+  left: 50%;
+  top: 6px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #f59e0b;
+  color: #1f1300;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}

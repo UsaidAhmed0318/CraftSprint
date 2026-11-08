@@ -51,3 +51,19 @@ describe('Pakistan salary tax', () => {
     expect(salaryTax(15000000, '2026-27')).toBeCloseTo(4224000);
   });
 });
+
+describe('staging / preview builds stay out of Google', () => {
+  it('robots.txt blocks everything on preview and allows the site on production', async () => {
+    const { vi } = await import('vitest');
+    vi.resetModules();
+    process.env.NEXT_PUBLIC_DEPLOY_ENV = 'preview';
+    const preview = (await import('@/app/robots')).default();
+    expect(preview.rules).toEqual({ userAgent: '*', disallow: '/' });
+    expect(preview.sitemap).toBeUndefined();
+    vi.resetModules();
+    process.env.NEXT_PUBLIC_DEPLOY_ENV = 'production';
+    const prod = (await import('@/app/robots')).default();
+    expect(prod.sitemap).toContain('/sitemap.xml');
+    delete process.env.NEXT_PUBLIC_DEPLOY_ENV;
+  });
+});
