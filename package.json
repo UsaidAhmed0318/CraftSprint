@@ -10,7 +10,8 @@
     "test": "vitest run",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run lint && npm test"
+    "check": "npm run typecheck && npm run lint && npm test",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.11.0",
