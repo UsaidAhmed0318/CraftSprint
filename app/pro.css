@@ -1,0 +1,155 @@
+/*
+ * pro.css — loaded LAST (after globals.css and vip.css), so it wins over older rules.
+ * Laptop / desktop polish: header, "All tools" dropdown, AI link, hero, wide screens.
+ * Phones (≤900px) are not touched here — they use the existing mobile layout.
+ */
+
+/* ---------- Wider, calmer content area on laptops and big screens ---------- */
+@media (min-width: 1100px) {
+  .container {
+    width: min(1240px, calc(100% - 64px));
+  }
+}
+@media (min-width: 1700px) {
+  .container {
+    width: min(1360px, calc(100% - 96px));
+  }
+}
+
+/* ---------- Header (desktop) ---------- */
+@media (min-width: 901px) {
+  .siteHeader {
+    z-index: 1000; /* always above the 3D hero and page content */
+  }
+  .siteHeader .nav {
+    gap: clamp(12px, 2vw, 28px);
+  }
+  .navLinks {
+    gap: clamp(12px, 1.5vw, 22px);
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+  }
+  .navRight {
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  /* The AI link used to disappear below 1360px — keep it visible on every laptop. */
+  .navAi {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    flex: 0 0 auto;
+  }
+  @media (max-width: 1100px) {
+    .navAi {
+      padding: 7px 10px;
+      font-size: 13px;
+    }
+  }
+
+  /* "All tools" dropdown: it was centred on its button, so on laptops the left half
+     was cut off by the screen edge. Anchor it to the header and centre it on the screen. */
+  .megaWrap {
+    position: static;
+  }
+  .megaPanel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(1100px, calc(100vw - 32px));
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    z-index: 1001;
+    animation: proPanelIn 0.16s ease-out;
+  }
+  @media (max-width: 1100px) {
+    .megaPanel {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .megaTrigger {
+    white-space: nowrap;
+  }
+}
+@keyframes proPanelIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ---------- Hero on laptops (901–1440px) ---------- */
+@media (min-width: 901px) {
+  .heroVip {
+    padding: clamp(36px, 6vh, 70px) 0 28px;
+  }
+  .heroVipGrid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: clamp(20px, 3vw, 48px);
+  }
+  .heroVipText h1 {
+    font-size: clamp(38px, 4.3vw, 66px);
+    letter-spacing: -0.04em;
+    overflow-wrap: break-word;
+  }
+  .hero3d {
+    height: clamp(380px, 52vh, 500px);
+    overflow: visible;
+  }
+}
+@media (min-width: 901px) and (max-width: 1280px) {
+  .hero3d.v2 .hero3dScene {
+    transform: scale(0.82) rotateX(calc(12deg + var(--rx))) rotateY(calc(-16deg + var(--ry)));
+  }
+}
+@media (min-width: 901px) and (max-width: 1050px) {
+  .hero3d.v2 .hero3dScene {
+    transform: scale(0.68) rotateX(calc(12deg + var(--rx))) rotateY(calc(-16deg + var(--ry)));
+  }
+  .hero3d.v2 .hero3dCard,
+  .hero3d.v2 .hero3dAi {
+    display: none;
+  }
+  .heroMini {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* Short laptop screens (e.g. 1366×768): keep search and buttons visible without hunting for them. */
+@media (min-width: 901px) and (max-height: 800px) {
+  .heroVipText h1 {
+    margin-bottom: 14px;
+  }
+  .heroVipText .heroSearch {
+    margin-top: 18px;
+  }
+  .heroMini {
+    margin-top: 14px;
+  }
+}
+
+/* ---------- Global safety nets ---------- */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip; /* no accidental sideways scroll on any device */
+}
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .megaPanel {
+    animation: none;
+  }
+}

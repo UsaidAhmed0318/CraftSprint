@@ -4,6 +4,7 @@ import '@fontsource-variable/manrope';
 import '@fontsource-variable/sora';
 import './globals.css';
 import './vip.css';
+import './pro.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import JsonLd from '@/components/shared/JsonLd';
@@ -17,9 +18,12 @@ import { themeInitScript, splashInitScript } from '@/lib/initScripts';
 import { site } from '@/lib/site';
 import { IS_PRODUCTION } from '@/lib/deployEnv';
 
-const GA = process.env.NEXT_PUBLIC_GA_ID;
+// Google Tag Manager container. Set NEXT_PUBLIC_GA_ID in Vercel to override (G-XXXX or GTM-XXXX).
+const GA = process.env.NEXT_PUBLIC_GA_ID || 'GTM-NN65653V';
 // Analytics and ads run only on the live site, never on staging/preview builds.
 const gaOn = IS_PRODUCTION && !!GA && !GA.includes('XXXX');
+// Accepts a GA4 Measurement ID (G-XXXX) or a Google Tag Manager container ID (GTM-XXXX).
+const isGtm = !!GA && GA.startsWith('GTM-');
 const ADS = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 const adsOn = IS_PRODUCTION && !!ADS && !ADS.includes('XXXX');
 
@@ -67,6 +71,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body>
+        {gaOn && isGtm && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GA}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+              title="Google Tag Manager"
+            />
+          </noscript>
+        )}
         {!IS_PRODUCTION && (
           <div className="stagingBadge" role="note">
             Staging — not the live site
@@ -104,8 +119,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Script
               id="ga"
               strategy="afterInteractive"
-            >{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500,region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LI','LT','LU','MT','NL','NO','PL','PT','RO','SK','SI','ES','SE','GB','CH']});gtag('js',new Date());gtag('config','${GA}');`}</Script>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA}`} strategy="afterInteractive" />
+            >{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500,region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LI','LT','LU','MT','NL','NO','PL','PT','RO','SK','SI','ES','SE','GB','CH']});${isGtm ? `dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});` : `gtag('js',new Date());gtag('config','${GA}');`}`}</Script>
+            <Script
+              src={
+                isGtm
+                  ? `https://www.googletagmanager.com/gtm.js?id=${GA}`
+                  : `https://www.googletagmanager.com/gtag/js?id=${GA}`
+              }
+              strategy="afterInteractive"
+            />
           </>
         )}
       </body>

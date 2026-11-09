@@ -233,3 +233,38 @@ describe('Gemini fallbacks', () => {
     delete process.env.GEMINI_API_KEY;
   });
 });
+
+describe('Multi-provider AI', () => {
+  const groqReply = (text: string) =>
+    new Response(JSON.stringify({ choices: [{ message: { content: text } }] }), { status: 200 });
+  it('answers with Groq alone, and combines Gemini + Groq drafts into one reply', async () => {
+    const real = global.fetch;
+    process.env.GROQ_API_KEY = 'g';
+    global.fetch = vi.fn(async () => groqReply('From Groq')) as unknown as typeof fetch;
+    const one = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hello' }] }));
+    expect((await one.json()).reply).toBe('From Groq');
+
+    process.env.GEMINI_API_KEY = 'k';
+    global.fetch = vi.fn(async (url: string, init?: RequestInit) => {
+      const merging = String(init?.body).includes('Draft answer 1');
+      const text = merging ? 'Merged answer' : 'Gemini draft';
+      return String(url).includes('googleapis')
+        ? new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }), { status: 200 })
+        : groqReply(merging ? 'Merged answer' : 'Groq draft');
+    }) as unknown as typeof fetch;
+    const both = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hello again' }] }));
+    expect((await both.json()).reply).toBe('Merged answer');
+
+    // One provider failing must not break the chat: the other one still answers.
+    global.fetch = vi.fn(async (url: string) =>
+      String(url).includes('googleapis')
+        ? new Response(JSON.stringify({ error: { message: 'down' } }), { status: 500 })
+        : groqReply('Groq still works'),
+    ) as unknown as typeof fetch;
+    const failover = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'still there?' }] }));
+    expect((await failover.json()).reply).toBe('Groq still works');
+    global.fetch = real;
+    delete process.env.GROQ_API_KEY;
+    delete process.env.GEMINI_API_KEY;
+  });
+});

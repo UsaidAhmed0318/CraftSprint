@@ -3,6 +3,7 @@ import { tools } from '@/data/tools';
 import { matchTools } from '@/lib/toolMatch';
 import { isRateLimited, clientIp } from '@/lib/rateLimit';
 import { readJsonBody, BodyError } from '@/lib/http';
+import { askAi, anyAiConfigured } from '@/lib/aiProviders';
 
 type Msg = { role: 'user' | 'assistant'; content: string };
 
@@ -42,36 +43,17 @@ export async function POST(req: Request) {
   const last = [...messages].reverse().find(m => m.role === 'user');
   if (!last) return NextResponse.json({ error: 'No question' }, { status: 400 });
 
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (key) {
-    try {
-      while (messages.length && messages[0].role !== 'user') messages.shift();
-      const r = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({
-          model: process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5',
-          max_tokens: 350,
-          system: SYSTEM,
-          messages,
-        }),
-        signal: AbortSignal.timeout(20000),
-      });
-      if (r.ok) {
-        const data = await r.json();
-        const text: string = (data.content || [])
-          .filter((b: { type: string }) => b.type === 'text')
-          .map((b: { text: string }) => b.text)
-          .join('\n')
-          .trim();
-        const found = [...new Set([...text.matchAll(/\/tools\/([a-z0-9-]+)/g)].map(m => m[1]))]
-          .filter(s => tools.some(t => t.slug === s))
-          .slice(0, 5);
-        if (text) return NextResponse.json({ reply: text, tools: found, ai: true });
-      }
-    } catch {
-      /* fall back to local matching */
+  if (anyAiConfigured()) {
+    while (messages.length && messages[0].role !== 'user') messages.shift();
+    // Quick tool suggestions: first provider that answers wins (no merging, to stay fast and cheap).
+    const ai = await askAi(SYSTEM, messages, { maxTokens: 350, timeoutMs: 20000, ensemble: false });
+    if (ai.ok) {
+      const found = [...new Set([...ai.text.matchAll(/\/tools\/([a-z0-9-]+)/g)].map(m => m[1]))]
+        .filter(s => tools.some(t => t.slug === s))
+        .slice(0, 5);
+      return NextResponse.json({ reply: ai.text, tools: found, ai: true });
     }
+    // otherwise fall back to local matching
   }
   const found = matchTools(last.content);
   const reply = found.length
@@ -82,5 +64,5 @@ export async function POST(req: Request) {
 
 /** Tells the chat window whether real AI answers are switched on (an API key is set). */
 export function GET() {
-  return NextResponse.json({ ai: !!process.env.ANTHROPIC_API_KEY });
+  return NextResponse.json({ ai: anyAiConfigured() });
 }
