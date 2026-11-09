@@ -19,7 +19,7 @@ import { site } from '@/lib/site';
 import { IS_PRODUCTION } from '@/lib/deployEnv';
 
 // Google Tag Manager container. Set NEXT_PUBLIC_GA_ID in Vercel to override (G-XXXX or GTM-XXXX).
-const GA = process.env.NEXT_PUBLIC_GA_ID || 'GTM-PLDP3K78';
+const GA = process.env.NEXT_PUBLIC_GA_ID || 'GTM-TX339JKX';
 // Analytics and ads run only on the live site, never on staging/preview builds.
 const gaOn = IS_PRODUCTION && !!GA && !GA.includes('XXXX');
 // Accepts a GA4 Measurement ID (G-XXXX) or a Google Tag Manager container ID (GTM-XXXX).
