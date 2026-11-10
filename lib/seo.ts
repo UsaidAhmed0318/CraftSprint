@@ -2,6 +2,17 @@ import type { Metadata } from 'next';
 import { site } from '@/lib/site';
 
 /**
+ * The default share image (WhatsApp, Facebook, X, LinkedIn): public/images/og.png, 1200×630.
+ * Change the ?v= number whenever you replace the picture — chat apps remember the old one by its address.
+ */
+export const OG_IMAGE = {
+  url: '/images/og.png?v=2',
+  width: 1200,
+  height: 630,
+  alt: 'CraftSprint — 175+ free online tools and games',
+};
+
+/**
  * Adds a self-referencing canonical plus page-specific Open Graph / Twitter tags.
  * Tool pages replace the default share image with their own (app/tools/[slug]/opengraph-image.tsx).
  */
@@ -19,9 +30,14 @@ export function withSeo(path: string, meta: Metadata): Metadata {
       url: path,
       title: fullTitle,
       description,
-      ...(path.startsWith('/tools/') ? {} : { images: ['/images/og.png'] }),
+      ...(path.startsWith('/tools/') ? {} : { images: [OG_IMAGE] }),
     },
-    twitter: { card: 'summary_large_image', title: fullTitle, description },
+    twitter: {
+      card: 'summary_large_image',
+      title: fullTitle,
+      description,
+      ...(path.startsWith('/tools/') ? {} : { images: [OG_IMAGE.url] }),
+    },
   };
 }
 

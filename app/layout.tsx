@@ -16,6 +16,7 @@ import PwaManager from '@/components/pwa/PwaManager';
 import AnalyticsEvents from '@/components/layout/AnalyticsEvents';
 import { themeInitScript, splashInitScript } from '@/lib/initScripts';
 import { site } from '@/lib/site';
+import { OG_IMAGE } from '@/lib/seo';
 import { IS_PRODUCTION } from '@/lib/deployEnv';
 
 // Google Analytics 4 Measurement ID. Set NEXT_PUBLIC_GA_ID in Vercel to override.
@@ -40,11 +41,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: 'CraftSprint — Free Online Tools',
     description: site.description,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'CraftSprint — Free Online Tools',
     description: site.description,
+    images: [OG_IMAGE.url],
   },
   robots: IS_PRODUCTION ? { index: true, follow: true } : { index: false, follow: false },
 };
