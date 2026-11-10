@@ -70,10 +70,10 @@ export default function Privacy() {
         <p>We may update this policy. The date at the top shows when it last changed.</p>
         <h2>CraftSprint AI</h2>
         <p>
-          When you use “Chat with AI”, your messages are sent to an AI provider (Google Gemini, or Anthropic
-          Claude) to create the answer. Google’s free Gemini service may use these messages to improve its
-          products. CraftSprint does not store or log your chats. Please don’t share private or sensitive
-          information in the chat.
+          CraftSprint AI is our own assistant. It answers only from CraftSprint’s own list of tools and pages.
+          Your messages are sent only to CraftSprint’s server to find the answer; they are not sent to any
+          other AI company, and CraftSprint does not store or log your chats. Please still avoid typing
+          private or sensitive information in the chat.
         </p>
         <h2>Contact</h2>
         <p>Questions about this policy: {site.email}</p>

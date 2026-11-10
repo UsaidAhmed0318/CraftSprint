@@ -76,6 +76,11 @@ const SYN: Record<string, string[]> = {
 };
 
 export function matchTools(query: string, limit = 5) {
+  return matchToolsScored(query, limit).map(x => x.t);
+}
+
+/** Same as matchTools but with the score: 3 per word found in the tool name, 1 per word found elsewhere. */
+export function matchToolsScored(query: string, limit = 5) {
   const words = query
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, ' ')
@@ -94,9 +99,10 @@ export function matchTools(query: string, limit = 5) {
       let s = 0;
       terms.forEach(term => {
         if (term.length < 3 && !['ip', 'kb', 'cv'].includes(term)) return;
-        const re = term.length < 4 ? new RegExp(`\\b${term}\\b`) : null;
-        const inName = re ? re.test(name) : name.includes(term);
-        const inHay = re ? re.test(hay) : hay.includes(term);
+        // Whole word for short terms, start-of-word for longer ones (so “script” does not match “TypeScript”).
+        const re = new RegExp(term.length < 4 ? `\\b${term}\\b` : `\\b${term}`);
+        const inName = re.test(name);
+        const inHay = re.test(hay);
         if (inName) s += 3;
         else if (inHay) s += 1;
       });
@@ -104,5 +110,5 @@ export function matchTools(query: string, limit = 5) {
     })
     .filter(x => x.s > 0)
     .sort((a, b) => b.s - a.s);
-  return scored.slice(0, limit).map(x => x.t);
+  return scored.slice(0, limit);
 }

@@ -820,11 +820,6 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Resize, convert and compress up to 50 images at once with Instagram, YouTube, passport and store presets. Download all as a ZIP.',
   },
-  'ai-writing-studio': {
-    title: 'AI Writing Studio \u2013 Free AI Writer',
-    description:
-      'Free AI writer for emails, replies, rewriting, grammar fixes, summaries, captions, cover letters and more — in any language.',
-  },
   'smart-qr-generator': {
     title: 'Wi-Fi, Contact & WhatsApp QR Code Maker',
     description:

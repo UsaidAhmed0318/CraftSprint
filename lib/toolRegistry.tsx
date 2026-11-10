@@ -18,9 +18,6 @@ const toolComponents: Record<string, ComponentType> = {
     import('@/components/tools/batch2/Converters2').then(m => m.PakistanSalaryTax),
   ),
   'image-studio': dynamic(() => import('@/components/tools/batch2/ImageStudio').then(m => m.ImageStudio)),
-  'ai-writing-studio': dynamic(() =>
-    import('@/components/tools/batch2/AiWritingStudio').then(m => m.AiWritingStudio),
-  ),
   'smart-qr-generator': dynamic(() => import('@/components/tools/batch2/EverydayPlus').then(m => m.SmartQr)),
   'coin-flip-dice-roller': dynamic(() =>
     import('@/components/tools/batch2/EverydayPlus').then(m => m.CoinDice),

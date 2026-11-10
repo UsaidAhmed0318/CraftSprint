@@ -1,6 +1,7 @@
 'use client';
 /**
- * Full-page CraftSprint AI chat (/ai). Same server API as the floating assistant.
+ * Full-page CraftSprint AI (/ai). Same server API as the floating assistant (/api/assistant).
+ * It helps visitors with everything on CraftSprint: finding the right tool, how to use it, games, contact.
  * Shows "AI" only when the server reports a real API key; otherwise it is smart search.
  */
 import { useEffect, useRef, useState } from 'react';
@@ -21,7 +22,12 @@ import {
 import { tools } from '@/data/tools';
 import { track } from '@/lib/analytics';
 
-type Msg = { role: 'user' | 'assistant'; content: string; tools?: string[]; detail?: string };
+type Msg = {
+  role: 'user' | 'assistant';
+  content: string;
+  tools?: string[];
+  links?: { href: string; label: string }[];
+};
 
 const SUGGEST = [
   { t: 'Make my photo under 100 KB', i: ImageIcon },
@@ -38,24 +44,13 @@ export default function AiChat() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
-  const [aiOn, setAiOn] = useState<boolean | null>(null);
-  const [mode, setMode] = useState<'tools' | 'chat'>('tools');
   const end = useRef<HTMLDivElement>(null);
 
-  // Opened from the prompt library (/ai?prompt=...): switch to chat and pre-fill the message.
+  // Opened from a link with ?prompt=...: pre-fill the message (trimmed to the input limit).
   useEffect(() => {
     const p = new URLSearchParams(window.location.search).get('prompt');
-    if (p) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- read the URL once in the browser
-      setMode('chat');
-      setText(p.slice(0, 4000));
-    }
-  }, []);
-  useEffect(() => {
-    fetch('/api/assistant')
-      .then(r => r.json())
-      .then(d => setAiOn(!!d.ai))
-      .catch(() => setAiOn(false));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read the URL once in the browser
+    if (p) setText(p.slice(0, 500));
   }, []);
   useEffect(() => {
     end.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -68,9 +63,9 @@ export default function AiChat() {
     setMsgs(next);
     setText('');
     setBusy(true);
-    track('ai_message', { ai_mode: mode });
+    track('ai_message', { ai_mode: 'tools' });
     try {
-      const r = await fetch(mode === 'chat' ? '/api/chat' : '/api/assistant', {
+      const r = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })) }),
@@ -82,6 +77,7 @@ export default function AiChat() {
           role: 'assistant',
           content: d.reply || d.error || 'Something went wrong. Please try again.',
           tools: d.tools || [],
+          links: d.links || [],
         },
       ]);
     } catch {
@@ -108,10 +104,8 @@ export default function AiChat() {
               <span>What can I help you with?</span>
             </h1>
             <p>
-              Describe what you want to do and CraftSprint AI will point you to the right tool.{' '}
-              <span className="aiMode">
-                {aiOn === null ? '' : aiOn ? 'AI answers on' : 'Smart search mode'}
-              </span>
+              Describe what you want to do and CraftSprint AI will point you to the right tool, explain how it
+              works, or list tools and pages. <span className="aiMode">Answers only about CraftSprint</span>
             </p>
           </div>
         ) : (
@@ -120,22 +114,20 @@ export default function AiChat() {
               <div key={i} className={`aiMsg ${m.role}`}>
                 {m.role === 'assistant' && <Image src="/images/favicon.png" alt="" width={30} height={30} />}
                 <div>
-                  {m.role === 'assistant' && mode === 'chat' ? (
-                    <div className="aiMd">
-                      <Markdown text={m.content} />
-                    </div>
-                  ) : (
-                    <p>
-                      {m.content
-                        .replace(/\(?\/tools\/[a-z0-9-]+\)?/g, '')
-                        .replace(/\s{2,}/g, ' ')
-                        .trim()}
-                    </p>
-                  )}
-                  {m.detail && <small className="aiDetail">Details for the site owner: {m.detail}</small>}
-                  {!!m.tools?.length && (
+                  <p>
+                    {m.content
+                      .replace(/\(?\/tools\/[a-z0-9-]+\)?/g, '')
+                      .replace(/\s{2,}/g, ' ')
+                      .trim()}
+                  </p>
+                  {(!!m.tools?.length || !!m.links?.length) && (
                     <div className="assistTools">
-                      {m.tools.map(s => {
+                      {(m.links || []).map(l => (
+                        <Link key={l.href} href={l.href}>
+                          {l.label}
+                        </Link>
+                      ))}
+                      {(m.tools || []).map(s => {
                         const t = tools.find(x => x.slug === s);
                         if (!t) return null;
                         const Icon = t.icon;
@@ -164,30 +156,6 @@ export default function AiChat() {
           </div>
         )}
 
-        <div className="aiModes" role="group" aria-label="Chat mode">
-          <button
-            type="button"
-            className={mode === 'tools' ? 'on' : ''}
-            aria-pressed={mode === 'tools'}
-            onClick={() => {
-              setMode('tools');
-              setMsgs([]);
-            }}
-          >
-            Find a tool
-          </button>
-          <button
-            type="button"
-            className={mode === 'chat' ? 'on' : ''}
-            aria-pressed={mode === 'chat'}
-            onClick={() => {
-              setMode('chat');
-              setMsgs([]);
-            }}
-          >
-            Chat with AI
-          </button>
-        </div>
         <form
           className="aiComposer"
           onSubmit={e => {
@@ -206,7 +174,7 @@ export default function AiChat() {
                 void send(text);
               }
             }}
-            placeholder="Ask a question or describe what you need…"
+            placeholder="Ask which tool you need, or how to use one…"
             aria-label="Your question"
           />
           <div className="aiComposerBar">
@@ -215,11 +183,7 @@ export default function AiChat() {
                 <RotateCcw size={14} /> New chat
               </button>
             ) : (
-              <span className="aiNote">
-                {mode === 'chat'
-                  ? 'Messages are sent to an AI service to answer — please don’t share private details'
-                  : 'Chats are not saved'}
-              </span>
+              <span className="aiNote">Chats are not saved</span>
             )}
             <button type="submit" className="aiSend" disabled={!text.trim() || busy} aria-label="Send">
               <ArrowUp size={18} />
@@ -240,158 +204,6 @@ export default function AiChat() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-/** Small, safe Markdown renderer (no HTML injection): code blocks, lists, headings, bold, inline code, tool links. */
-function Inline({ text }: { text: string }) {
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\/tools\/[a-z0-9-]+)/g);
-  return (
-    <>
-      {parts.map((p, i) => {
-        if (p.startsWith('`') && p.endsWith('`') && p.length > 1)
-          return <code key={i}>{p.slice(1, -1)}</code>;
-        if (p.startsWith('**') && p.endsWith('**') && p.length > 3) return <b key={i}>{p.slice(2, -2)}</b>;
-        const tool = /^\/tools\/[a-z0-9-]+$/.test(p) ? tools.find(t => `/tools/${t.slug}` === p) : undefined;
-        if (tool)
-          return (
-            <Link key={i} href={p}>
-              {tool.name}
-            </Link>
-          );
-        return <span key={i}>{p}</span>;
-      })}
-    </>
-  );
-}
-function Markdown({ text }: { text: string }) {
-  const blocks = text.split('```');
-  return (
-    <>
-      {blocks.map((b, i) => {
-        if (i % 2 === 1) {
-          const nl = b.indexOf('\n');
-          const lang = (nl >= 0 ? b.slice(0, nl) : '').trim().toLowerCase();
-          const code = (nl >= 0 ? b.slice(nl + 1) : b).replace(/\n$/, '');
-          return <CodeBlock key={i} lang={lang} code={code} />;
-        }
-        return b
-          .split(/\n{2,}/)
-          .filter(x => x.trim())
-          .map((para, j) => {
-            const lines = para.split('\n').filter(l => l.trim());
-            if (lines.length && lines.every(l => /^\s*([-*]|\d+\.)\s+/.test(l)))
-              return (
-                <ul key={`${i}-${j}`}>
-                  {lines.map((l, k) => (
-                    <li key={k}>
-                      <Inline text={l.replace(/^\s*([-*]|\d+\.)\s+/, '')} />
-                    </li>
-                  ))}
-                </ul>
-              );
-            if (/^#{1,4}\s/.test(para))
-              return (
-                <h3 key={`${i}-${j}`}>
-                  <Inline text={para.replace(/^#{1,4}\s/, '')} />
-                </h3>
-              );
-            return (
-              <p key={`${i}-${j}`}>
-                {lines.map((l, k) => (
-                  <span key={k}>
-                    <Inline text={l} />
-                    {k < lines.length - 1 && <br />}
-                  </span>
-                ))}
-              </p>
-            );
-          });
-      })}
-    </>
-  );
-}
-
-const EXT: Record<string, string> = {
-  html: 'html',
-  css: 'css',
-  javascript: 'js',
-  js: 'js',
-  typescript: 'ts',
-  ts: 'ts',
-  tsx: 'tsx',
-  jsx: 'jsx',
-  python: 'py',
-  py: 'py',
-  json: 'json',
-  sql: 'sql',
-  java: 'java',
-  php: 'php',
-  c: 'c',
-  cpp: 'cpp',
-  csharp: 'cs',
-  go: 'go',
-  bash: 'sh',
-  sh: 'sh',
-};
-
-/** Code from CraftSprint AI: copy, download as a file, and — for HTML — a live, sandboxed preview. */
-function CodeBlock({ lang, code }: { lang: string; code: string }) {
-  const [preview, setPreview] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const isHtml = lang === 'html' || /^\s*<!doctype html|^\s*<html/i.test(code);
-  const ext = EXT[lang] || (isHtml ? 'html' : 'txt');
-  const download = () => {
-    const url = URL.createObjectURL(new Blob([code], { type: 'text/plain;charset=utf-8' }));
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `craftsprint-ai.${ext}`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1500);
-  };
-  return (
-    <div className="aiCode">
-      <div className="aiCodeBar">
-        <span>{lang || 'code'}</span>
-        <div>
-          {isHtml && (
-            <button type="button" onClick={() => setPreview(p => !p)} aria-pressed={preview}>
-              {preview ? 'Code' : 'Preview'}
-            </button>
-          )}
-          <button type="button" onClick={download}>
-            Download
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              navigator.clipboard
-                ?.writeText(code)
-                .then(() => {
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 1200);
-                })
-                .catch(() => {})
-            }
-          >
-            {copied ? 'Copied' : 'Copy'}
-          </button>
-        </div>
-      </div>
-      {preview && isHtml ? (
-        // Sandboxed: scripts may run, but the page cannot touch CraftSprint, cookies or storage.
-        <iframe
-          className="aiPreview"
-          title="Preview of the generated page"
-          sandbox="allow-scripts"
-          srcDoc={code}
-        />
-      ) : (
-        <pre>
-          <code>{code}</code>
-        </pre>
-      )}
     </div>
   );
 }

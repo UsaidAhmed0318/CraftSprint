@@ -2,7 +2,7 @@
 /**
  * CraftSprint AI — our own floating tool assistant (bottom-right, above WhatsApp).
  * Opens from this button, from the search bar, from the header, or from the homepage.
- * With ANTHROPIC_API_KEY set it answers with real AI; otherwise it uses smart keyword matching.
+ * Answers come from CraftSprint's own data only (lib/siteAssistant.ts); no outside AI service is used.
  * Styles: app/vip.css → "CraftSprint AI chat".
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,7 +23,12 @@ import {
 import { tools } from '@/data/tools';
 import { OPEN_ASSISTANT_EVENT } from '@/lib/utils/assistant';
 
-type Msg = { role: 'user' | 'assistant'; content: string; tools?: string[] };
+type Msg = {
+  role: 'user' | 'assistant';
+  content: string;
+  tools?: string[];
+  links?: { href: string; label: string }[];
+};
 
 const START: Msg = {
   role: 'assistant',
@@ -43,7 +48,6 @@ export default function ToolAssistant() {
   const [msgs, setMsgs] = useState<Msg[]>([START]);
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
-  const [aiOn, setAiOn] = useState(false);
   const [peek, setPeek] = useState(false);
   const list = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -57,15 +61,6 @@ export default function ToolAssistant() {
   }, [msgs, busy]);
   useEffect(() => {
     if (open) input.current?.focus();
-  }, [open]);
-
-  // Ask the server once whether real AI is switched on, so the badge is always honest.
-  useEffect(() => {
-    if (!open) return;
-    fetch('/api/assistant')
-      .then(r => r.json())
-      .then(d => setAiOn(!!d.ai))
-      .catch(() => {});
   }, [open]);
 
   // A small "Need a tool?" bubble, once per visit, a few seconds after the page opens.
@@ -116,6 +111,7 @@ export default function ToolAssistant() {
           role: 'assistant',
           content: d.reply || 'Something went wrong. Please try again.',
           tools: d.tools || [],
+          links: d.links || [],
         },
       ]);
     } catch {
@@ -190,12 +186,12 @@ export default function ToolAssistant() {
               <b>
                 CraftSprint AI{' '}
                 <span className="assistBadge">
-                  <Sparkles size={11} aria-hidden="true" /> {aiOn ? 'AI' : 'Smart'}
+                  <Sparkles size={11} aria-hidden="true" /> Smart
                 </span>
               </b>
               <small>
                 <i className="assistOnline" />
-                Online · our own tool assistant
+                Online · answers only about CraftSprint
               </small>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close">
@@ -211,7 +207,8 @@ export default function ToolAssistant() {
                 </span>
                 <b>CraftSprint AI</b>
                 <small>
-                  Tell me what you want to do — like “make my photo under 100 KB” or “combine two PDFs”.
+                  Ask me to find a tool, how a tool works, or where a page is — like “make my photo under 100
+                  KB” or “list PDF tools”.
                 </small>
               </div>
             )}
@@ -227,9 +224,14 @@ export default function ToolAssistant() {
                       .replace(/\s{2,}/g, ' ')
                       .trim()}
                   </p>
-                  {m.tools && m.tools.length > 0 && (
+                  {((m.tools && m.tools.length > 0) || (m.links && m.links.length > 0)) && (
                     <div className="assistTools">
-                      {m.tools.map(s => {
+                      {(m.links || []).map(l => (
+                        <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
+                          {l.label}
+                        </Link>
+                      ))}
+                      {(m.tools || []).map(s => {
                         const t = tools.find(x => x.slug === s);
                         if (!t) return null;
                         const Icon = t.icon;

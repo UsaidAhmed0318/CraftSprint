@@ -1,68 +1,38 @@
 import { NextResponse } from 'next/server';
-import { tools } from '@/data/tools';
-import { matchTools } from '@/lib/toolMatch';
 import { isRateLimited, clientIp } from '@/lib/rateLimit';
 import { readJsonBody, BodyError } from '@/lib/http';
-import { askAi, anyAiConfigured } from '@/lib/aiProviders';
+import { answerFromSite, type Msg } from '@/lib/siteAssistant';
 
-type Msg = { role: 'user' | 'assistant'; content: string };
-
-const catalog = tools.map(t => `- ${t.name} (/tools/${t.slug}) [${t.category}]: ${t.description}`).join('\n');
-const SYSTEM = `You are the CraftSprint Tool Assistant on a website of free browser-based tools.
-Your only job: help visitors find the right CraftSprint tool and explain briefly how to use it.
-Rules:
-- Recommend tools ONLY from the catalog below, and always include their path exactly, like /tools/image-compressor.
-- Keep answers short: 1–4 sentences, plain language. Reply in the same language the visitor writes in (English, Urdu, Roman Urdu, Hindi, Arabic, Spanish and so on).
-- If no tool fits, say so honestly and suggest the closest one or the contact page (/contact).
-- Politely decline anything unrelated to CraftSprint tools (homework answers, medical, legal or financial advice, personal topics, writing long content). Never ask for personal data, passwords or files.
-- Never claim a tool can do something its description does not say.
-- Be friendly, professional and globally neutral: do not assume the visitor's religion, country, gender or culture.
-Catalog:
-${catalog}`;
-
+/**
+ * CraftSprint AI — answers only about this website, using only CraftSprint's own data.
+ * No outside AI service is called, nothing is stored or logged, and the visitor's text is never repeated back.
+ */
 export async function POST(req: Request) {
-  if (await isRateLimited('assistant', clientIp(req), 30, 10 * 60e3))
+  if (await isRateLimited('assistant', clientIp(req), 60, 10 * 60e3))
     return NextResponse.json(
-      { reply: 'You have sent a lot of messages. Please wait a few minutes and try again.', tools: [] },
+      {
+        reply: 'You have sent a lot of messages. Please wait a few minutes and try again.',
+        tools: [],
+        links: [],
+      },
       { status: 429 },
     );
   let messages: Msg[] = [];
   try {
-    // At most 16 KB, JSON only, at most 20 messages; only the last 6 (600 characters each) are used.
+    // At most 16 KB, JSON only, at most 20 messages; only the last 8 (500 characters each) are used.
     const body = (await readJsonBody(req, 16 * 1024)) as { messages?: unknown };
     if (!Array.isArray(body?.messages) || body.messages.length > 20)
       throw new BodyError(400, 'Invalid request.');
     messages = (body.messages as Msg[])
       .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-      .slice(-6)
-      .map(m => ({ role: m.role, content: m.content.slice(0, 600) }));
+      .slice(-8)
+      .map(m => ({ role: m.role, content: m.content.slice(0, 500) }));
   } catch (e) {
     const err = e instanceof BodyError ? e : new BodyError(400, 'Invalid request.');
     return NextResponse.json({ error: err.message }, { status: err.status });
   }
-  const last = [...messages].reverse().find(m => m.role === 'user');
-  if (!last) return NextResponse.json({ error: 'No question' }, { status: 400 });
+  if (!messages.some(m => m.role === 'user'))
+    return NextResponse.json({ error: 'No question' }, { status: 400 });
 
-  if (anyAiConfigured()) {
-    while (messages.length && messages[0].role !== 'user') messages.shift();
-    // Quick tool suggestions: first provider that answers wins (no merging, to stay fast and cheap).
-    const ai = await askAi(SYSTEM, messages, { maxTokens: 350, timeoutMs: 20000, ensemble: false });
-    if (ai.ok) {
-      const found = [...new Set([...ai.text.matchAll(/\/tools\/([a-z0-9-]+)/g)].map(m => m[1]))]
-        .filter(s => tools.some(t => t.slug === s))
-        .slice(0, 5);
-      return NextResponse.json({ reply: ai.text, tools: found, ai: true });
-    }
-    // otherwise fall back to local matching
-  }
-  const found = matchTools(last.content);
-  const reply = found.length
-    ? `Here ${found.length === 1 ? 'is the tool' : 'are the tools'} that best match “${last.content.slice(0, 80)}”:`
-    : 'I couldn’t find a matching tool. Try different words — for example “compress photo”, “merge pdf”, “loan” or “json” — or tell us what you need on the contact page.';
-  return NextResponse.json({ reply, tools: found.map(t => t.slug), ai: false });
-}
-
-/** Tells the chat window whether real AI answers are switched on (an API key is set). */
-export function GET() {
-  return NextResponse.json({ ai: anyAiConfigured() });
+  return NextResponse.json(answerFromSite(messages), { headers: { 'Cache-Control': 'no-store' } });
 }

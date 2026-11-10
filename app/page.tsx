@@ -279,13 +279,7 @@ export default function Home() {
               {
                 name: 'YouTube creator kit',
                 icon: Youtube,
-                slugs: [
-                  'image-studio',
-                  'video-thumbnail-grabber',
-                  'ai-writing-studio',
-                  'screen-recorder',
-                  'hashtag-generator',
-                ],
+                slugs: ['image-studio', 'video-thumbnail-grabber', 'screen-recorder', 'hashtag-generator'],
               },
               {
                 name: 'Freelancer kit',

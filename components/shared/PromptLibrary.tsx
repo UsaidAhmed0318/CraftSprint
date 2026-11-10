@@ -1,7 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
-import { Search, Copy, Check, Sparkles } from 'lucide-react';
+import { Search, Copy, Check } from 'lucide-react';
 import { promptGroups } from '@/data/prompts';
 
 export default function PromptLibrary() {
@@ -76,9 +75,6 @@ export default function PromptLibrary() {
                       {copied === key ? <Check size={15} /> : <Copy size={15} />}{' '}
                       {copied === key ? 'Copied' : 'Copy'}
                     </button>
-                    <Link className="btn btnPrimary" href={`/ai?prompt=${encodeURIComponent(p.text)}`}>
-                      <Sparkles size={15} /> Use in CraftSprint AI
-                    </Link>
                   </div>
                 </article>
               );

@@ -132,7 +132,6 @@ import {
   Mic,
   AudioLines,
   Webcam,
-  PenSquare,
   Quote,
   MoonStar,
   BadgeDollarSign,
@@ -1217,13 +1216,6 @@ export const tools: {
     description: 'Resize, convert and compress up to 50 images at once with presets.',
     icon: Layers,
     category: 'Image Tools',
-  },
-  {
-    slug: 'ai-writing-studio',
-    name: 'AI Writing Studio',
-    description: 'Emails, rewrites, summaries, captions and more with AI, in any language.',
-    icon: PenSquare,
-    category: 'Writing & Text',
   },
   {
     slug: 'smart-qr-generator',

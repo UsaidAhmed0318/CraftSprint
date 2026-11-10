@@ -77,8 +77,7 @@ describe('contact form API', () => {
 });
 
 describe('assistant API', () => {
-  it('answers with tool suggestions without an AI key', async () => {
-    delete process.env.ANTHROPIC_API_KEY;
+  it('answers with tool suggestions from the site’s own data', async () => {
     const r = await assistant(
       req('/api/assistant', { messages: [{ role: 'user', content: 'compress image' }] }),
     );
@@ -99,16 +98,7 @@ describe('assistant API', () => {
   });
 });
 
-import { POST as chat } from '@/app/api/chat/route';
 import { formatSql } from '@/components/tools/batch2/NewTools3';
-
-describe('AI chat API', () => {
-  it('is honest when the AI key is missing (503)', async () => {
-    delete process.env.ANTHROPIC_API_KEY;
-    const r = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Hello' }] }));
-    expect(r.status).toBe(503);
-  });
-});
 
 describe('SQL formatter', () => {
   it('puts clauses on their own lines and keeps quoted text', () => {
@@ -116,155 +106,5 @@ describe('SQL formatter', () => {
     expect(out).toContain('SELECT\n  id,\n  name\nFROM\n  users\nWHERE');
     expect(out).toContain("'select from'");
     expect(out).toContain('ORDER BY');
-  });
-});
-
-describe('AI chat with Gemini (free tier)', () => {
-  it('returns the Gemini answer and a friendly message when the free limit is reached', async () => {
-    process.env.GEMINI_API_KEY = 'test';
-    const real = global.fetch;
-    global.fetch = vi.fn().mockResolvedValueOnce(
-      new Response(
-        JSON.stringify({
-          candidates: [{ content: { parts: [{ text: 'Salaam! Main madad kar sakta hoon.' }] } }],
-        }),
-        { status: 200 },
-      ),
-    ) as unknown as typeof fetch;
-    const ok = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Salaam' }] }));
-    expect((await ok.json()).reply).toContain('madad');
-    global.fetch = vi
-      .fn()
-      .mockResolvedValueOnce(new Response('{}', { status: 429 })) as unknown as typeof fetch;
-    const limited = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'Hi' }] }));
-    expect(limited.status).toBe(429);
-    global.fetch = real;
-    delete process.env.GEMINI_API_KEY;
-  });
-});
-
-describe('Gemini model discovery', () => {
-  it('finds an available Flash model when the default name is unknown, then answers', async () => {
-    process.env.GEMINI_API_KEY = 'test';
-    const real = global.fetch;
-    const calls: string[] = [];
-    global.fetch = vi.fn(async (url: string) => {
-      calls.push(String(url));
-      if (String(url).includes('gemini-flash-latest'))
-        return new Response(JSON.stringify({ error: { message: 'model not found' } }), { status: 404 });
-      if (String(url).endsWith('/models?pageSize=200'))
-        return new Response(
-          JSON.stringify({
-            models: [
-              { name: 'models/gemini-9-flash-preview', supportedGenerationMethods: ['generateContent'] },
-              { name: 'models/gemini-9-flash', supportedGenerationMethods: ['generateContent'] },
-              { name: 'models/gemini-9-flash-image', supportedGenerationMethods: ['generateContent'] },
-              { name: 'models/text-embedding', supportedGenerationMethods: ['embedContent'] },
-            ],
-          }),
-          { status: 200 },
-        );
-      return new Response(
-        JSON.stringify({ candidates: [{ content: { parts: [{ text: 'Use the Image Compressor.' }] } }] }),
-        { status: 200 },
-      );
-    }) as unknown as typeof fetch;
-    const r = await chat(
-      req('/api/chat', { messages: [{ role: 'user', content: 'Make my photo under 100 KB' }] }),
-    );
-    expect((await r.json()).reply).toContain('Image Compressor');
-    expect(calls.some(c => c.includes('/models/gemini-9-flash:generateContent'))).toBe(true);
-    global.fetch = real;
-    delete process.env.GEMINI_API_KEY;
-  });
-  it('reports a rejected key clearly and still suggests tools', async () => {
-    process.env.GEMINI_API_KEY = 'bad';
-    process.env.GEMINI_MODEL = 'gemini-x';
-    const real = global.fetch;
-    global.fetch = vi.fn(
-      async () =>
-        new Response(
-          JSON.stringify({ error: { message: 'API key not valid. Please pass a valid API key.' } }),
-          { status: 400 },
-        ),
-    ) as unknown as typeof fetch;
-    const r = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'compress image' }] }));
-    const body = await r.json();
-    expect(body.reply).toContain('not accepted');
-    expect(body.detail).toContain('API key');
-    expect(body.tools).toContain('image-compressor');
-    global.fetch = real;
-    delete process.env.GEMINI_API_KEY;
-    delete process.env.GEMINI_MODEL;
-  });
-});
-
-describe('Gemini fallbacks', () => {
-  it('tries the next model when one has no free quota, and falls back to tool suggestions if none work', async () => {
-    process.env.GEMINI_API_KEY = 'k';
-    const real = global.fetch;
-    const tried: string[] = [];
-    global.fetch = vi.fn(async (url: string) => {
-      const u = String(url);
-      if (u.includes(':generateContent')) {
-        tried.push(u.split('/models/')[1].split(':')[0]);
-        if (u.includes('gemini-2.0-flash:'))
-          return new Response(
-            JSON.stringify({ candidates: [{ content: { parts: [{ text: 'Hello!' }] } }] }),
-            { status: 200 },
-          );
-        return new Response(JSON.stringify({ error: { message: 'Quota exceeded, limit: 0' } }), {
-          status: 429,
-        });
-      }
-      return new Response(JSON.stringify({ models: [] }), { status: 200 });
-    }) as unknown as typeof fetch;
-    const ok = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hi' }] }));
-    expect((await ok.json()).reply).toBe('Hello!');
-    expect(tried.length).toBeGreaterThan(1);
-    global.fetch = vi.fn(
-      async () => new Response(JSON.stringify({ error: { message: 'Internal error' } }), { status: 500 }),
-    ) as unknown as typeof fetch;
-    const down = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'merge pdf' }] }));
-    const body = await down.json();
-    expect(body.tools).toContain('pdf-merge');
-    expect(body.detail).toContain('500');
-    global.fetch = real;
-    delete process.env.GEMINI_API_KEY;
-  });
-});
-
-describe('Multi-provider AI', () => {
-  const groqReply = (text: string) =>
-    new Response(JSON.stringify({ choices: [{ message: { content: text } }] }), { status: 200 });
-  it('answers with Groq alone, and combines Gemini + Groq drafts into one reply', async () => {
-    const real = global.fetch;
-    process.env.GROQ_API_KEY = 'g';
-    global.fetch = vi.fn(async () => groqReply('From Groq')) as unknown as typeof fetch;
-    const one = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hello' }] }));
-    expect((await one.json()).reply).toBe('From Groq');
-
-    process.env.GEMINI_API_KEY = 'k';
-    global.fetch = vi.fn(async (url: string, init?: RequestInit) => {
-      const merging = String(init?.body).includes('Draft answer 1');
-      const text = merging ? 'Merged answer' : 'Gemini draft';
-      return String(url).includes('googleapis')
-        ? new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }), { status: 200 })
-        : groqReply(merging ? 'Merged answer' : 'Groq draft');
-    }) as unknown as typeof fetch;
-    const both = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'hello again' }] }));
-    expect((await both.json()).reply).toBe('Merged answer');
-
-    // One provider failing must not break the chat: the other one still answers.
-    global.fetch = vi.fn(async (url: string) =>
-      String(url).includes('googleapis')
-        ? new Response(JSON.stringify({ error: { message: 'down' } }), { status: 500 })
-        : groqReply('Groq still works'),
-    ) as unknown as typeof fetch;
-    const failover = await chat(req('/api/chat', { messages: [{ role: 'user', content: 'still there?' }] }));
-    expect((await failover.json()).reply).toBe('Groq still works');
-    global.fetch = real;
-    delete process.env.GROQ_API_KEY;
-    delete process.env.GEMINI_API_KEY;
   });
 });

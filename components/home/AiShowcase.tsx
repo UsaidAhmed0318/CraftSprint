@@ -53,7 +53,7 @@ export default function AiShowcase() {
           </li>
         </ul>
         <div className="aiActions">
-          <AskAiButton label="Chat with CraftSprint AI" />
+          <AskAiButton label="Ask CraftSprint AI" />
         </div>
         <div className="aiPrompts">
           {PROMPTS.map(p => (

@@ -9,7 +9,7 @@ const total = promptGroups.reduce((n, g) => n + g.prompts.length, 0);
 
 export const metadata = withSeo('/prompts', {
   title: 'Free AI Prompt Library – Copy & Use',
-  description: `${total} free, ready-to-use AI prompts for writing, business, coding, careers, study, images and SEO. Copy one or open it in CraftSprint AI.`,
+  description: `${total} free, ready-to-use AI prompts for writing, business, coding, careers, study, images and SEO. Copy one and paste it into any AI you like.`,
 });
 
 export default function PromptsPage() {
@@ -35,7 +35,7 @@ export default function PromptsPage() {
         </h1>
         <p className="lead">
           {total} ready-to-use prompts in {promptGroups.length} categories. Replace the [BRACKETS] with your
-          details, then copy the prompt or open it straight in CraftSprint AI.
+          details, then copy the prompt and paste it into the AI you use.
         </p>
         <PromptLibrary />
         <section className="catBlock" aria-labelledby="tips">
