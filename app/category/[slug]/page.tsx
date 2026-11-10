@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ToolCard from '@/components/shared/ToolCard';
 import GamesBrowser from '@/components/shared/GamesBrowser';
+import AdSlot from '@/components/shared/AdSlot';
 import JsonLd from '@/components/shared/JsonLd';
 import { tools, categories } from '@/data/tools';
 import { categoryInfo, categoryBySlug } from '@/lib/categories';
@@ -113,11 +114,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       {cat === 'Games' ? (
         <GamesBrowser />
       ) : (
-        <div className="toolGrid" style={{ marginTop: 36 }}>
-          {list.map(t => (
-            <ToolCard key={t.slug} tool={t} />
-          ))}
-        </div>
+        <>
+          <div className="toolGrid" style={{ marginTop: 36 }}>
+            {list.map(t => (
+              <ToolCard key={t.slug} tool={t} />
+            ))}
+          </div>
+          <AdSlot />
+        </>
       )}
     </main>
   );

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import JsonLd from '@/components/shared/JsonLd';
 import ToolCard from '@/components/shared/ToolCard';
+import AdSlot from '@/components/shared/AdSlot';
 import { posts } from '@/data/posts';
 import { tools } from '@/data/tools';
 import { withSeo, fitTitle } from '@/lib/seo';
@@ -64,6 +65,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             ))}
           </section>
         ))}
+        <AdSlot />
         <h2>Tools from this guide</h2>
       </article>
       <div className="container" style={{ maxWidth: 980 }}>
