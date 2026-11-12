@@ -18,17 +18,20 @@ import { themeInitScript, splashInitScript } from '@/lib/initScripts';
 import { site } from '@/lib/site';
 import { OG_IMAGE } from '@/lib/seo';
 import { IS_PRODUCTION } from '@/lib/deployEnv';
+import { ADSENSE_CLIENT } from '@/lib/adsense';
 
 // Google Analytics 4 Measurement ID. Set NEXT_PUBLIC_GA_ID in Vercel to override.
 const GA = process.env.NEXT_PUBLIC_GA_ID || 'G-4N6T8DLQ7B';
 // Analytics and ads run only on the live site, never on staging/preview builds.
 const gaOn = IS_PRODUCTION && !!GA && !GA.includes('XXXX');
-const ADS = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const ADS = ADSENSE_CLIENT;
 const adsOn = IS_PRODUCTION && !!ADS && !ADS.includes('XXXX');
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   // iPhone/iPad: 'Add to Home Screen' opens CraftSprint full-screen with its own name
+  // AdSense site ownership (live site only)
+  ...(IS_PRODUCTION ? { other: { 'google-adsense-account': ADSENSE_CLIENT } } : {}),
   appleWebApp: { capable: true, title: 'CraftSprint', statusBarStyle: 'black-translucent' },
   title: {
     default: 'CraftSprint — Free Online Tools for Images, PDFs & Code',

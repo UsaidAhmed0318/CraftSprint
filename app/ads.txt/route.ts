@@ -1,6 +1,7 @@
+import { ADSENSE_CLIENT } from '@/lib/adsense';
 /** Serves /ads.txt from NEXT_PUBLIC_ADSENSE_CLIENT (e.g. ca-pub-1234567890123456). */
 export function GET() {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || '';
+  const client = ADSENSE_CLIENT;
   const pub = client.replace(/^ca-/, '');
   const body =
     pub && !pub.includes('XXXX')

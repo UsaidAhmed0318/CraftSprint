@@ -20,16 +20,35 @@ function pdfBlob(bytes: Uint8Array): Blob {
 export function ImageToPdfConverter() {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
   const addFile = (f: File) => setFiles(prev => [...prev, f]);
   const build = async () => {
     if (files.length === 0) return;
     setBusy(true);
+    setError('');
     try {
       const { PDFDocument } = await import('@cantoo/pdf-lib');
       const pdf = await PDFDocument.create();
       for (const file of files) {
-        const bytes = await file.arrayBuffer();
-        const isPng = file.type === 'image/png';
+        // JPG and PNG embed directly; any other image (WebP, GIF, BMP…) is converted to JPG first.
+        let bytes = await file.arrayBuffer();
+        let isPng = file.type === 'image/png';
+        if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+          const bmp = await createImageBitmap(file);
+          const c = document.createElement('canvas');
+          c.width = bmp.width;
+          c.height = bmp.height;
+          const ctx = c.getContext('2d')!;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(bmp, 0, 0);
+          bmp.close();
+          const jpg = await new Promise<Blob>((res, rej) =>
+            c.toBlob(b => (b ? res(b) : rej(new Error('encode'))), 'image/jpeg', 0.92),
+          );
+          bytes = await jpg.arrayBuffer();
+          isPng = false;
+        }
         const img = isPng ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes);
         const page = pdf.addPage([img.width, img.height]);
         page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
@@ -38,7 +57,7 @@ export function ImageToPdfConverter() {
       download(pdfBlob(bytes), 'images.pdf');
     } catch (e) {
       console.error('[CraftSprint PDF]', e);
-      alert('Could not build the PDF. Make sure all files are JPG or PNG images.');
+      setError('Could not build the PDF. One of the images may be damaged — remove it and try again.');
     } finally {
       setBusy(false);
     }
@@ -54,13 +73,32 @@ export function ImageToPdfConverter() {
         },
       ]}
     >
-      <Dropzone onFile={addFile} />
+      <Dropzone multiple onFile={addFile} />
       {files.length > 0 && (
-        <div className="stats">
+        <ol className="mergeList" aria-label="Images, in page order">
           {files.map((f, i) => (
-            <span key={i}>{f.name}</span>
+            <li key={`${f.name}-${i}`}>
+              <span className="mergeNum">{i + 1}</span>
+              <span className="mergeName">
+                <b>{f.name}</b>
+              </span>
+              <span className="mergeBtns">
+                <button
+                  type="button"
+                  onClick={() => setFiles(l => l.filter((_, j) => j !== i))}
+                  aria-label={`Remove ${f.name}`}
+                >
+                  ✕
+                </button>
+              </span>
+            </li>
           ))}
-        </div>
+        </ol>
+      )}
+      {error && (
+        <p className="notice error" role="alert">
+          {error}
+        </p>
       )}
       {files.length > 0 && (
         <div className="heroActions" style={{ justifyContent: 'flex-start', marginTop: 14 }}>
@@ -134,60 +172,160 @@ export function PdfToImageConverter() {
   );
 }
 
+type MergeItem = { id: number; file: File; pages: number | null; error: string };
+let mergeId = 0;
+
+/** PDF merge: add many PDFs, see page counts, reorder or remove them, then merge in that order. */
 export function PdfMergeTool() {
-  const [files, setFiles] = useState<File[]>([]);
+  const [items, setItems] = useState<MergeItem[]>([]);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [done, setDone] = useState('');
+  const add = async (file: File) => {
+    const id = ++mergeId;
+    setDone('');
+    setItems(list => [...list, { id, file, pages: null, error: '' }]);
+    try {
+      const { PDFDocument } = await import('@cantoo/pdf-lib');
+      const doc = await PDFDocument.load(await file.arrayBuffer(), { ignoreEncryption: true });
+      const pages = doc.getPageCount();
+      const locked = doc.isEncrypted;
+      setItems(list =>
+        list.map(x =>
+          x.id === id
+            ? { ...x, pages, error: locked ? 'Password-protected — unlock it first with PDF Unlocker.' : '' }
+            : x,
+        ),
+      );
+    } catch {
+      setItems(list =>
+        list.map(x => (x.id === id ? { ...x, error: 'This file is not a readable PDF.' } : x)),
+      );
+    }
+  };
+  const move = (i: number, d: -1 | 1) =>
+    setItems(list => {
+      const j = i + d;
+      if (j < 0 || j >= list.length) return list;
+      const next = [...list];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
+  const usable = items.filter(x => !x.error && x.pages);
   const merge = async () => {
-    if (files.length < 2) return;
+    if (usable.length < 2) return;
     setBusy(true);
+    setError('');
+    setDone('');
     try {
       const { PDFDocument } = await import('@cantoo/pdf-lib');
       const merged = await PDFDocument.create();
-      for (const file of files) {
-        const bytes = await file.arrayBuffer();
-        const src = await PDFDocument.load(bytes);
+      for (const it of usable) {
+        const src = await PDFDocument.load(await it.file.arrayBuffer());
         const pages = await merged.copyPages(src, src.getPageIndices());
         pages.forEach(p => merged.addPage(p));
       }
       const bytes = await merged.save();
       download(pdfBlob(bytes), 'merged.pdf');
+      setDone(
+        `Merged ${usable.length} files into one PDF with ${merged.getPageCount()} pages. Your download has started.`,
+      );
     } catch (e) {
       console.error('[CraftSprint PDF]', e);
-      alert('Could not merge these PDF files.');
+      setError('These PDFs could not be merged. If one is damaged or protected, remove it and try again.');
     } finally {
       setBusy(false);
     }
   };
+  const total = usable.reduce((n, x) => n + (x.pages || 0), 0);
   return (
     <ToolShell
       title="PDF merge tool"
-      description="Combine multiple PDF files into one document, in the order you add them, entirely in your browser."
+      description="Combine several PDF files into one document. Add them all at once, put them in the order you want, then merge — entirely in your browser."
       faq={[
         {
+          q: 'Can I choose the order?',
+          a: 'Yes. Use the up and down arrows next to each file. The merged PDF follows the list from top to bottom.',
+        },
+        {
           q: 'Is there a file limit?',
-          a: 'No hard limit, but very large PDFs may be slow to process depending on your device.',
+          a: 'No hard limit. Very large PDFs can be slow on older phones, because everything runs on your device.',
+        },
+        {
+          q: 'What about password-protected PDFs?',
+          a: 'They are marked in the list. Unlock them first with the PDF Unlocker (you need the password), then add them again.',
         },
       ]}
     >
-      <Dropzone onFile={f => setFiles(prev => [...prev, f])} accept=".pdf,application/pdf" />
-      {files.length > 0 && (
-        <div className="stats">
-          {files.map((f, i) => (
-            <span key={i}>
-              {i + 1}. {f.name}
-            </span>
+      <Dropzone multiple onFile={add} accept=".pdf,application/pdf" />
+      {items.length > 0 && (
+        <ol className="mergeList" aria-label="Files to merge, in order">
+          {items.map((it, i) => (
+            <li key={it.id} className={it.error ? 'bad' : ''}>
+              <span className="mergeNum">{i + 1}</span>
+              <span className="mergeName">
+                <b>{it.file.name}</b>
+                <small>
+                  {it.error ||
+                    (it.pages === null ? 'Reading…' : `${it.pages} page${it.pages === 1 ? '' : 's'}`)}
+                </small>
+              </span>
+              <span className="mergeBtns">
+                <button
+                  type="button"
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  aria-label={`Move ${it.file.name} up`}
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(i, 1)}
+                  disabled={i === items.length - 1}
+                  aria-label={`Move ${it.file.name} down`}
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setItems(l => l.filter(x => x.id !== it.id))}
+                  aria-label={`Remove ${it.file.name}`}
+                >
+                  ✕
+                </button>
+              </span>
+            </li>
           ))}
+        </ol>
+      )}
+      {items.length === 1 && <p className="notice">Add at least one more PDF to merge.</p>}
+      {items.length > 0 && (
+        <div className="heroActions" style={{ justifyContent: 'flex-start', marginTop: 14 }}>
+          <button className="btn btnPrimary" disabled={busy || usable.length < 2} onClick={merge}>
+            {busy ? 'Merging…' : `Merge ${usable.length} PDFs${total ? ` (${total} pages)` : ''}`}
+          </button>
+          <button
+            className="btn btnGhost"
+            onClick={() => {
+              setItems([]);
+              setDone('');
+              setError('');
+            }}
+          >
+            Clear all
+          </button>
         </div>
       )}
-      {files.length > 1 && (
-        <div className="heroActions" style={{ justifyContent: 'flex-start', marginTop: 14 }}>
-          <button className="btn btnPrimary" disabled={busy} onClick={merge}>
-            {busy ? 'Merging…' : 'Merge PDFs'}
-          </button>
-          <button className="btn btnGhost" onClick={() => setFiles([])}>
-            Clear
-          </button>
-        </div>
+      {error && (
+        <p className="notice error" role="alert">
+          {error}
+        </p>
+      )}
+      {done && (
+        <p className="notice" role="status">
+          {done}
+        </p>
       )}
     </ToolShell>
   );

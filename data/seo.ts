@@ -31,9 +31,14 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
       'Trim an audio file to a start and end point and download it as WAV. Free, no sign-up, runs in your browser.',
   },
   'background-remover': {
-    title: 'Background Remover Online — Free',
+    title: 'AI Background Remover — Free, No Upload',
     description:
-      'Remove a plain or near-solid background from a photo and export a transparent PNG. Free, no sign-up, runs in your browser.',
+      'Remove the background from photos of people, products and pets with AI. Transparent PNG or white background, free and private — runs in your browser.',
+  },
+  'solid-background-remover': {
+    title: 'Remove Solid Colour Background — Free',
+    description:
+      'Remove a flat, single-colour background from a logo, icon or graphic and export a transparent PNG with crisp edges. Free and runs in your browser.',
   },
   'barcode-generator': {
     title: 'Barcode Generator Online — Free',
@@ -850,9 +855,29 @@ export const toolSeo: Record<string, { title: string; description: string }> = {
     description:
       'Paste text to see how long it takes to read and to speak aloud. Useful for blog posts, speeches and video scripts.',
   },
-  "heic-to-jpg": { title: "HEIC to JPG Converter – iPhone Photos", description: "Convert iPhone HEIC and HEIF photos to JPG or PNG online for free. Works in your browser — your photos are never uploaded." },
-  "image-upscaler": { title: "Image Upscaler – Enlarge Photos 2×, 3×, 4×", description: "Make small images bigger online with high-quality scaling and sharpening. Free, private and no signup — up to 4× larger." },
-  "pdf-to-word": { title: "PDF to Word Converter – Free, No Upload", description: "Convert PDF text into an editable Word .docx document with paragraphs and pages, right in your browser. No signup or upload." },
-  "video-compressor": { title: "Video Compressor Online – Free, No Upload", description: "Compress videos in your browser by lowering resolution and bitrate. Choose 480p, 720p or 1080p and download a smaller WebM." },
-  "pakistan-salary-tax-calculator": { title: "Pakistan Salary Tax Calculator 2026-27", description: "Calculate salary income tax in Pakistan for 2026-27 with the latest FBR slabs: monthly tax, yearly tax and take-home pay." },
+  'heic-to-jpg': {
+    title: 'HEIC to JPG Converter – iPhone Photos',
+    description:
+      'Convert iPhone HEIC and HEIF photos to JPG or PNG online for free. Works in your browser — your photos are never uploaded.',
+  },
+  'image-upscaler': {
+    title: 'Image Upscaler – Enlarge Photos 2×, 3×, 4×',
+    description:
+      'Make small images bigger online with high-quality scaling and sharpening. Free, private and no signup — up to 4× larger.',
+  },
+  'pdf-to-word': {
+    title: 'PDF to Word Converter – Free, No Upload',
+    description:
+      'Convert PDF text into an editable Word .docx document with paragraphs and pages, right in your browser. No signup or upload.',
+  },
+  'video-compressor': {
+    title: 'Video Compressor Online – Free, No Upload',
+    description:
+      'Compress videos in your browser by lowering resolution and bitrate. Choose 480p, 720p or 1080p and download a smaller WebM.',
+  },
+  'pakistan-salary-tax-calculator': {
+    title: 'Pakistan Salary Tax Calculator 2026-27',
+    description:
+      'Calculate salary income tax in Pakistan for 2026-27 with the latest FBR slabs: monthly tax, yearly tax and take-home pay.',
+  },
 };

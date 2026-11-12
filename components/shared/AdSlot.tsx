@@ -1,4 +1,5 @@
 'use client';
+import { ADSENSE_CLIENT } from '@/lib/adsense';
 /**
  * Advertisement slot (Google AdSense).
  *  - Live site only, and only when real IDs are set in Vercel (NEXT_PUBLIC_ADSENSE_CLIENT + _SLOT).
@@ -14,7 +15,7 @@
  */
 import { useEffect, useRef } from 'react';
 
-const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const client = ADSENSE_CLIENT;
 const defaultSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT;
 const live = process.env.NEXT_PUBLIC_DEPLOY_ENV === 'production' && !!client && !client.includes('XXXX');
 const preview = process.env.NODE_ENV === 'development';

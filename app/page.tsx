@@ -146,6 +146,39 @@ export default function Home() {
 
       <div className="container">
         <QuickStrip />
+        <section className="quickTools" aria-labelledby="quick-h">
+          <h2 id="quick-h">Popular right now</h2>
+          <div className="quickRow">
+            {[
+              'image-compressor',
+              'background-remover',
+              'pdf-merge',
+              'pdf-to-word',
+              'image-to-pdf-converter',
+              'qr-code-generator',
+              'audio-trimmer',
+              'video-compressor',
+              'heic-to-jpg',
+              'word-counter',
+              'pakistan-salary-tax-calculator',
+              'game-2048',
+            ]
+              .map(s => tools.find(t => t.slug === s))
+              .filter(Boolean)
+              .map(t => {
+                const Icon = t!.icon;
+                return (
+                  <Link key={t!.slug} href={`/tools/${t!.slug}`} className="quickTile">
+                    <span aria-hidden="true">
+                      <Icon size={22} />
+                    </span>
+                    {t!.name}
+                  </Link>
+                );
+              })}
+          </div>
+        </section>
+
         <section className="panelBox" aria-labelledby="cats" style={{ marginTop: 26 }}>
           <div className="panelHead">
             <div>

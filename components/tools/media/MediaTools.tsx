@@ -188,42 +188,107 @@ export function VideoToGifConverter() {
   );
 }
 
+/** Decodes any audio the browser understands without opening a sound device (no limit on how many times it runs). */
+async function decodeAudio(f: File): Promise<AudioBuffer> {
+  const ctx = new OfflineAudioContext(1, 1, 44100);
+  return ctx.decodeAudioData(await f.arrayBuffer());
+}
+
+/** MP3 encoder (LAME) — loaded only when someone exports an MP3. */
+async function encodeMp3(buffer: AudioBuffer, kbps = 192): Promise<Blob> {
+  const { Mp3Encoder } = await import('@breezystack/lamejs');
+  const channels = Math.min(2, buffer.numberOfChannels);
+  const enc = new Mp3Encoder(channels, buffer.sampleRate, kbps);
+  const toInt16 = (f: Float32Array) => {
+    const out = new Int16Array(f.length);
+    for (let i = 0; i < f.length; i++) {
+      const v = Math.max(-1, Math.min(1, f[i]));
+      out[i] = v < 0 ? v * 0x8000 : v * 0x7fff;
+    }
+    return out;
+  };
+  const left = toInt16(buffer.getChannelData(0));
+  const right = channels > 1 ? toInt16(buffer.getChannelData(1)) : undefined;
+  const parts: BlobPart[] = [];
+  const block = 1152;
+  for (let i = 0; i < left.length; i += block) {
+    const l = left.subarray(i, i + block);
+    const chunk = right ? enc.encodeBuffer(l, right.subarray(i, i + block)) : enc.encodeBuffer(l);
+    if (chunk.length) parts.push(new Uint8Array(chunk));
+  }
+  const end = enc.flush();
+  if (end.length) parts.push(new Uint8Array(end));
+  return new Blob(parts, { type: 'audio/mpeg' });
+}
+
+type AudioFmt = 'mp3' | 'wav';
+const fmtTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`;
+const baseName = (f: File | null) => (f ? f.name.replace(/\.[^.]+$/, '') : 'audio');
+
+function AudioFormatChoice({ fmt, set }: { fmt: AudioFmt; set: (f: AudioFmt) => void }) {
+  return (
+    <div className="field">
+      <label htmlFor="audio-fmt">Save as</label>
+      <select id="audio-fmt" value={fmt} onChange={e => set(e.target.value as AudioFmt)}>
+        <option value="mp3">MP3 (small, plays everywhere)</option>
+        <option value="wav">WAV (lossless, large)</option>
+      </select>
+    </div>
+  );
+}
+
 export function AudioTrimmer() {
   const [file, setFile] = useState<File | null>(null);
   const [duration, setDuration] = useState(0);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(0);
+  const [fmt, setFmt] = useState<AudioFmt>('mp3');
   const [out, setOut] = useState('');
+  const [outBlob, setOutBlob] = useState<Blob | null>(null);
   useRevokeObjectUrl(out);
+  const [src, setSrc] = useState('');
+  useRevokeObjectUrl(src);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
   const bufferRef = useRef<AudioBuffer | null>(null);
 
   const onFile = async (f: File) => {
     setFile(f);
     setOut('');
-    const ctx = new AudioContext();
-    const arr = await f.arrayBuffer();
-    const buffer = await ctx.decodeAudioData(arr);
-    bufferRef.current = buffer;
-    setDuration(buffer.duration);
-    setStart(0);
-    setEnd(buffer.duration);
-  };
-
-  const trim = () => {
-    const buffer = bufferRef.current;
-    if (!buffer) return;
-    setBusy(true);
+    setOutBlob(null);
+    setError('');
+    setDuration(0);
+    setSrc(URL.createObjectURL(f));
     try {
-      const ctx = new AudioContext();
+      const buffer = await decodeAudio(f);
+      bufferRef.current = buffer;
+      setDuration(buffer.duration);
+      setStart(0);
+      setEnd(Math.round(buffer.duration * 10) / 10);
+    } catch {
+      bufferRef.current = null;
+      setError('This file could not be read. Try an MP3, WAV, M4A or OGG file.');
+    }
+  };
+  const valid = end - start >= 0.1;
+  const trim = async () => {
+    const buffer = bufferRef.current;
+    if (!buffer || !valid) return;
+    setBusy(true);
+    setError('');
+    try {
       const startSample = Math.floor(start * buffer.sampleRate);
       const endSample = Math.min(buffer.length, Math.floor(end * buffer.sampleRate));
       const length = Math.max(1, endSample - startSample);
-      const out = ctx.createBuffer(buffer.numberOfChannels, length, buffer.sampleRate);
+      const ctx = new OfflineAudioContext(buffer.numberOfChannels, length, buffer.sampleRate);
+      const piece = ctx.createBuffer(buffer.numberOfChannels, length, buffer.sampleRate);
       for (let ch = 0; ch < buffer.numberOfChannels; ch++)
-        out.getChannelData(ch).set(buffer.getChannelData(ch).subarray(startSample, endSample));
-      const blob = encodeWav(out);
+        piece.getChannelData(ch).set(buffer.getChannelData(ch).subarray(startSample, endSample));
+      const blob = fmt === 'mp3' ? await encodeMp3(piece) : encodeWav(piece);
+      setOutBlob(blob);
       setOut(URL.createObjectURL(blob));
+    } catch {
+      setError('Trimming failed. Please try again with a shorter part or another file.');
     } finally {
       setBusy(false);
     }
@@ -232,62 +297,91 @@ export function AudioTrimmer() {
   return (
     <ToolShell
       title="Audio trimmer / cutter"
-      description="Upload an audio file, set a start and end point, and download the trimmed clip as a WAV file."
+      description="Cut a part of a song, voice note or recording: choose start and end, listen, and download as MP3 or WAV — in your browser."
       faq={[
         {
           q: 'What formats can I upload?',
-          a: 'Most common formats your browser can decode, including MP3, WAV and M4A.',
+          a: 'MP3, WAV, M4A/AAC, OGG and most other formats your browser can play.',
         },
         {
-          q: 'Why is the output WAV instead of MP3?',
-          a: 'Browsers can decode MP3 but cannot encode it without an extra library; WAV export needs no extra dependencies and has no quality loss.',
+          q: 'MP3 or WAV?',
+          a: 'MP3 is small and plays everywhere (192 kbps). WAV keeps every detail but is about 10× larger.',
         },
+        { q: 'Is my audio uploaded?', a: 'No. Cutting and encoding happen on your device.' },
       ]}
     >
       <Dropzone accept="audio/*" onFile={onFile} />
+      {src && (
+        <audio className="audioPreview" src={src} controls preload="metadata" aria-label="Original audio">
+          Your browser cannot play this file.
+        </audio>
+      )}
       {file && duration > 0 && (
         <>
-          <div className="controls">
+          <div className="trimBox">
             <div className="field">
-              <label>Start (s)</label>
+              <label htmlFor="trim-s">
+                Start: <b>{fmtTime(start)}</b>
+              </label>
               <input
-                aria-label="Start (s)"
-                type="number"
+                id="trim-s"
+                type="range"
                 min="0"
                 max={duration}
                 step="0.1"
                 value={start}
-                onChange={e => setStart(Number(e.target.value))}
+                onChange={e => setStart(Math.min(Number(e.target.value), end - 0.1))}
               />
             </div>
             <div className="field">
-              <label>End (s)</label>
+              <label htmlFor="trim-e">
+                End: <b>{fmtTime(end)}</b>
+              </label>
               <input
-                aria-label="End (s)"
-                type="number"
+                id="trim-e"
+                type="range"
                 min="0"
                 max={duration}
                 step="0.1"
                 value={end}
-                onChange={e => setEnd(Number(e.target.value))}
+                onChange={e => setEnd(Math.max(Number(e.target.value), start + 0.1))}
               />
             </div>
+            <div className="trimBar" aria-hidden="true">
+              <span
+                style={{
+                  left: `${(start / duration) * 100}%`,
+                  width: `${((end - start) / duration) * 100}%`,
+                }}
+              />
+            </div>
+            <p className="stats">
+              <span>Clip length: {fmtTime(Math.max(0, end - start))}</span>
+              <span>Total: {fmtTime(duration)}</span>
+            </p>
           </div>
-          <div className="stats">
-            <span>Total duration: {duration.toFixed(1)}s</span>
-          </div>
-          <div style={{ marginTop: 16 }}>
-            <button className="btn btnPrimary" disabled={busy} onClick={trim}>
-              {busy ? 'Trimming…' : 'Trim & export WAV'}
-            </button>
-          </div>
+          <AudioFormatChoice
+            fmt={fmt}
+            set={f => {
+              setFmt(f);
+              setOut('');
+            }}
+          />
+          <button className="btn btnPrimary" disabled={busy || !valid} onClick={trim}>
+            {busy ? 'Cutting…' : `Cut & export ${fmt.toUpperCase()}`}
+          </button>
         </>
       )}
-      {out && (
+      {error && (
+        <p className="notice error" role="alert">
+          {error}
+        </p>
+      )}
+      {out && outBlob && (
         <div className="result">
-          <audio src={out} controls />
-          <a className="btn btnDark" href={out} download="trimmed.wav">
-            Download
+          <audio src={out} controls aria-label="Trimmed audio" />
+          <a className="btn btnDark" href={out} download={`${baseName(file)}-trimmed.${fmt}`}>
+            Download {fmt.toUpperCase()}
           </a>
         </div>
       )}
@@ -297,36 +391,44 @@ export function AudioTrimmer() {
 
 export function AudioSpeedChanger() {
   const [file, setFile] = useState<File | null>(null);
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(1.25);
+  const [fmt, setFmt] = useState<AudioFmt>('mp3');
   const [out, setOut] = useState('');
   useRevokeObjectUrl(out);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
   const bufferRef = useRef<AudioBuffer | null>(null);
 
   const onFile = async (f: File) => {
     setFile(f);
     setOut('');
-    const ctx = new AudioContext();
-    const arr = await f.arrayBuffer();
-    bufferRef.current = await ctx.decodeAudioData(arr);
+    setError('');
+    try {
+      bufferRef.current = await decodeAudio(f);
+    } catch {
+      bufferRef.current = null;
+      setError('This file could not be read. Try an MP3, WAV, M4A or OGG file.');
+    }
   };
 
   const apply = async () => {
     const buffer = bufferRef.current;
     if (!buffer) return;
     setBusy(true);
+    setError('');
     try {
       const newLength = Math.max(1, Math.floor(buffer.length / speed));
       const offline = new OfflineAudioContext(buffer.numberOfChannels, newLength, buffer.sampleRate);
-      const src = offline.createBufferSource();
-      src.buffer = buffer;
-      src.playbackRate.value = speed;
-      src.connect(offline.destination);
-      src.start();
+      const node = offline.createBufferSource();
+      node.buffer = buffer;
+      node.playbackRate.value = speed;
+      node.connect(offline.destination);
+      node.start();
       const rendered = await offline.startRendering();
-      setOut(URL.createObjectURL(encodeWav(rendered)));
+      const blob = fmt === 'mp3' ? await encodeMp3(rendered) : encodeWav(rendered);
+      setOut(URL.createObjectURL(blob));
     } catch {
-      alert('Could not process this audio file.');
+      setError('Could not process this audio file. Please try another file.');
     } finally {
       setBusy(false);
     }
@@ -335,41 +437,73 @@ export function AudioSpeedChanger() {
   return (
     <ToolShell
       title="Audio speed changer"
-      description="Speed up or slow down an audio file and download the result as a WAV file. Pitch changes naturally with speed, just like a variable-speed tape or turntable."
+      description="Speed up or slow down any audio (0.5× to 2×) and download it as MP3 or WAV. Pitch moves with speed, like a turntable."
       faq={[
         {
-          q: 'Can I change pitch without changing speed?',
-          a: 'Not with this tool — it links speed and pitch together, matching how audio speed changes naturally work.',
+          q: 'Does the pitch change?',
+          a: 'Yes — faster sounds higher and slower sounds deeper, like changing a record’s speed. To keep the voice natural, stay between 0.8× and 1.25×.',
         },
+        { q: 'Is my audio uploaded?', a: 'No. Everything is processed on your device.' },
       ]}
     >
       <Dropzone accept="audio/*" onFile={onFile} />
-      {file && (
+      {file && !error && (
         <>
           <div className="field" style={{ marginTop: 14 }}>
-            <label>Speed: {speed.toFixed(2)}×</label>
+            <label htmlFor="spd">
+              Speed: <b>{speed.toFixed(2)}×</b>
+            </label>
             <input
-              aria-label="Speed"
+              id="spd"
               type="range"
               min="0.5"
               max="2"
               step="0.05"
               value={speed}
-              onChange={e => setSpeed(Number(e.target.value))}
+              onChange={e => {
+                setSpeed(Number(e.target.value));
+                setOut('');
+              }}
             />
           </div>
-          <div style={{ marginTop: 16 }}>
-            <button className="btn btnPrimary" disabled={busy} onClick={apply}>
-              {busy ? 'Processing…' : 'Apply & export WAV'}
-            </button>
+          <div className="tbChips" role="group" aria-label="Quick speeds">
+            {[0.75, 1.25, 1.5, 2].map(v => (
+              <button
+                key={v}
+                type="button"
+                className={speed === v ? 'on' : ''}
+                aria-pressed={speed === v}
+                onClick={() => {
+                  setSpeed(v);
+                  setOut('');
+                }}
+              >
+                {v}×
+              </button>
+            ))}
           </div>
+          <AudioFormatChoice
+            fmt={fmt}
+            set={f => {
+              setFmt(f);
+              setOut('');
+            }}
+          />
+          <button className="btn btnPrimary" disabled={busy} onClick={apply}>
+            {busy ? 'Processing…' : `Change speed & export ${fmt.toUpperCase()}`}
+          </button>
         </>
+      )}
+      {error && (
+        <p className="notice error" role="alert">
+          {error}
+        </p>
       )}
       {out && (
         <div className="result">
-          <audio src={out} controls />
-          <a className="btn btnDark" href={out} download="speed-changed.wav">
-            Download
+          <audio src={out} controls aria-label="Result" />
+          <a className="btn btnDark" href={out} download={`${baseName(file)}-${speed}x.${fmt}`}>
+            Download {fmt.toUpperCase()}
           </a>
         </div>
       )}

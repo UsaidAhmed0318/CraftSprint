@@ -100,6 +100,9 @@ const toolComponents: Record<string, ComponentType> = {
   ),
   'audio-trimmer': dynamic(() => import('@/components/tools/media/MediaTools').then(m => m.AudioTrimmer)),
   'background-remover': dynamic(() =>
+    import('@/components/tools/images/BackgroundRemoverAI').then(m => m.BackgroundRemoverAI),
+  ),
+  'solid-background-remover': dynamic(() =>
     import('@/components/tools/images/BackgroundRemover').then(m => m.BackgroundRemover),
   ),
   'barcode-generator': dynamic(() =>

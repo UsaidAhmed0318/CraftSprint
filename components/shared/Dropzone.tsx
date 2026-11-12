@@ -46,9 +46,13 @@ function matches(file: File, accept: string) {
 export default function Dropzone({
   onFile,
   accept = 'image/*',
+  multiple = false,
 }: {
+  /** Called once per file (several times when `multiple` is on and several files are chosen). */
   onFile: (f: File) => void;
   accept?: string;
+  /** Let the visitor pick or drop several files at once (e.g. PDF merge, images to PDF). */
+  multiple?: boolean;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const [drag, setDrag] = useState(false);
@@ -66,6 +70,19 @@ export default function Dropzone({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const takeMany = (list?: FileList | File[] | null) => {
+    const all = Array.from(list || []);
+    if (!all.length) return;
+    if (!multiple) return take(all[0]);
+    const ok = all.filter(f => matches(f, accept));
+    const bad = all.length - ok.length;
+    setError(
+      bad ? `${bad} file${bad > 1 ? 's were' : ' was'} skipped — not a supported type for this tool.` : '',
+    );
+    if (ok.length) setPicked(ok[ok.length - 1]);
+    ok.forEach(f => onFile(f));
+  };
 
   const take = (f?: File | null, skipCheck = false) => {
     if (!f) return;
@@ -102,7 +119,7 @@ export default function Dropzone({
       onDrop={e => {
         e.preventDefault();
         setDrag(false);
-        take(e.dataTransfer.files?.[0]);
+        takeMany(e.dataTransfer.files);
       }}
     >
       <span className="dropIcon" aria-hidden="true">
@@ -113,7 +130,7 @@ export default function Dropzone({
           picked.name
         ) : (
           <>
-            Drag &amp; drop your file or{' '}
+            Drag &amp; drop {multiple ? 'your files' : 'your file'} or{' '}
             <button type="button" className="dropLink" onClick={() => ref.current?.click()}>
               click to upload
             </button>
@@ -127,7 +144,13 @@ export default function Dropzone({
       </p>
       <div className="dropActions">
         <button className="btn btnPrimary" type="button" onClick={() => ref.current?.click()}>
-          {picked ? 'Choose another file' : 'Choose file'}
+          {multiple
+            ? picked
+              ? 'Add more files'
+              : 'Choose files'
+            : picked
+              ? 'Choose another file'
+              : 'Choose file'}
         </button>
         {kind && (
           <button className="btn btnGhost" type="button" onClick={useSample} disabled={making}>
@@ -140,9 +163,10 @@ export default function Dropzone({
         className="hidden"
         type="file"
         accept={accept}
-        aria-label="Choose a file"
+        multiple={multiple}
+        aria-label={multiple ? 'Choose files' : 'Choose a file'}
         onChange={e => {
-          take(e.target.files?.[0]);
+          takeMany(e.target.files);
           e.target.value = '';
         }}
       />
