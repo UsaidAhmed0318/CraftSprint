@@ -45,11 +45,18 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
   'pdf-merge': {
     heading: 'Combine several PDFs into one file',
     paragraphs: [
-      'Sending one tidy document is easier than attaching five separate files. The PDF merge tool joins multiple PDFs into a single file in the order you choose — useful for job applications, invoices, scanned pages, assignments and reports.',
-      'Add your PDFs, arrange them in the order they should appear and download the combined document. If you only need some pages from a file, split it first with the PDF split tool, then merge the parts you want. To make the final file smaller for email, run it through the PDF compressor afterwards.',
-      'Merging happens entirely in your browser, so confidential documents are never uploaded to a server. It is free, has no page limit set by us and needs no account.',
+      'Sending one tidy document is easier than attaching five separate files. The PDF merge tool joins PDFs into a single file in the order you choose — useful for job applications, invoices, scanned pages, assignments and reports.',
+      'Select all your PDFs at once (or drag them in), check the page count shown for each file, and use the arrows to put them in order. Password-protected files are flagged so you can unlock them first with the PDF Unlocker. To make the merged file smaller for email, run it through the PDF compressor afterwards.',
+      'Merging happens entirely in your browser, so confidential documents are never uploaded. It is free, needs no account and adds no watermark.',
+    ],
+    steps: [
+      'Choose or drag in two or more PDF files.',
+      'Check the page count of each file and fix the order with the ↑ and ↓ buttons.',
+      'Remove any file you do not need with ✕.',
+      'Press “Merge” — the combined PDF downloads straight away.',
     ],
   },
+
   'json-formatter': {
     steps: [
       'Paste your JSON into the input box.',
@@ -131,11 +138,18 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
   'image-to-pdf-converter': {
     heading: 'Turn photos into one PDF',
     paragraphs: [
-      'Many forms and offices ask for a single PDF, while your documents are photos on your phone. This converter places one or more images into a single PDF, one image per page, so you can send them as one file.',
-      'Add your JPG, PNG or WebP images, check the order and create the PDF. Photograph documents in good light and crop them first with the image cropper for the cleanest result. To combine the new PDF with another one, use the PDF merge tool.',
-      'The PDF is built in your browser, so receipts, certificates and ID cards stay private. It is free with no sign-up and no watermark.',
+      'Many forms and offices ask for a single PDF, while your documents are photos on your phone. This converter places your images into one PDF, one image per page, so you can send them as a single file.',
+      'Select several images at once — JPG, PNG, WebP and most other formats work, because anything that is not JPG or PNG is converted automatically. Photograph documents in good light and crop them first with the image cropper for the cleanest result.',
+      'The PDF is built in your browser, so receipts, certificates and ID cards stay private. Free, with no sign-up and no watermark.',
+    ],
+    steps: [
+      'Choose or drag in your images.',
+      'Remove any picture you do not want with ✕.',
+      'Press “Create PDF”.',
+      'The PDF downloads with one image per page, in the order shown.',
     ],
   },
+
   'pdf-to-image-converter': {
     heading: 'Save PDF pages as images',
     paragraphs: [
@@ -145,13 +159,20 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     ],
   },
   'background-remover': {
-    heading: 'Remove plain backgrounds from product photos',
+    heading: 'Remove photo backgrounds with AI, privately',
     paragraphs: [
-      'Clean product photos on a transparent background look better in online shops, catalogues and presentations. This background remover works best on pictures taken against a plain or near-solid background, such as a white wall or a sheet of card.',
-      'Upload the photo and the tool detects the background colour from the edges and makes it transparent. Adjust the tolerance until the edges look clean, then download a PNG with transparency. Busy backgrounds with many colours, such as a street or a room, will not separate well with this method.',
-      'Everything happens in your browser, so your images stay on your device. It is free, with no sign-up and no watermark.',
+      'Product listings, passport and CV photos, profile pictures and thumbnails all look cleaner without a busy background. This AI background remover separates the person, product or pet from everything behind it and gives you a transparent PNG — or a clean white or coloured background.',
+      'It uses the open MODNet matting model, which runs inside your browser with ONNX Runtime. The model (about 6 MB) is downloaded once and then kept by your browser, so the next photo is processed faster. Your photo itself is never uploaded anywhere.',
+      'Clear photos give the best edges: good light and a subject that stands out from the background. Fine hair against a similar colour can come out soft. For logos or graphics on one flat colour, the Solid Colour Background Remover gives pixel-exact edges.',
+    ],
+    steps: [
+      'Drop or choose a photo (JPG, PNG or WebP).',
+      'Press “Remove background” and wait a few seconds — the first time also downloads the AI model.',
+      'Check the result next to the original.',
+      'Choose Transparent, White or any colour, then download.',
     ],
   },
+
   'image-cropper': {
     heading: 'Crop and rotate images online',
     paragraphs: [
@@ -256,11 +277,18 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
   'audio-trimmer': {
     heading: 'Cut the part of an audio file you need',
     paragraphs: [
-      'Ringtones, voice notes, podcast clips and sound effects often need only a small part of a longer recording. This audio trimmer lets you choose a start and end point and download just that section.',
-      'Load an audio file, set the start and end times and export the trimmed clip as a WAV file. WAV keeps full quality and plays almost everywhere, though it is larger than MP3.',
-      'The audio is decoded and cut in your browser, so your recording stays private. Free, with no sign-up.',
+      'Ringtones, voice notes, podcast clips and sound effects often need only a small part of a longer recording. This audio trimmer lets you listen, choose a start and end point, and download just that section.',
+      'Save the clip as MP3 (small, plays everywhere) or WAV (lossless, larger). MP3, WAV, M4A/AAC and OGG files can be opened — anything your browser can play.',
+      'The audio is decoded, cut and encoded in your browser, so your recording stays private. Free, with no sign-up.',
+    ],
+    steps: [
+      'Choose an audio file and play it to find the part you want.',
+      'Move the Start and End sliders.',
+      'Pick MP3 or WAV.',
+      'Press “Cut & export”, listen to the result and download.',
     ],
   },
+
   'resume-builder': {
     heading: 'Make a clean, printable resume',
     paragraphs: [
@@ -379,6 +407,73 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     paragraphs: [
       'Text copied from a PDF or an email often breaks in the middle of sentences, because each visual line on the page ends with a line break. Pasting that into a document, a form or a chat looks messy.',
       'This tool joins those broken lines back into normal sentences. Keep “Keep paragraphs” on to preserve blank lines between paragraphs, and use “Remove extra spaces” to tidy double spaces. Everything happens in your browser, so nothing you paste is uploaded.',
+    ],
+  },
+  'pdf-to-word': {
+    heading: 'Turn a PDF into an editable Word document',
+    paragraphs: [
+      'When you need to change the text of a PDF — a CV, a letter or a report — copying it by hand loses paragraphs and takes time. This converter reads the text of every page and builds an editable Word (.docx) file with the same paragraphs and page breaks.',
+      'It works with PDFs that contain real text, such as files exported from Word or Google Docs. Scanned documents are pictures of text, so the tool tells you when no text is found. Complex layouts, columns and tables are kept as plain paragraphs that you can format again in Word.',
+      'Everything happens in your browser, so private documents stay on your device.',
+    ],
+    steps: [
+      'Choose a PDF.',
+      'Press “Convert to Word”.',
+      'Open the downloaded .docx in Word, Google Docs or LibreOffice and edit.',
+    ],
+  },
+  'heic-to-jpg': {
+    heading: 'Open iPhone photos anywhere',
+    paragraphs: [
+      'iPhones save photos as HEIC to save space, but many Windows apps, websites and forms do not accept that format. This converter turns HEIC and HEIF photos into JPG or PNG so they open everywhere.',
+      'JPG is saved at 90% quality, which looks the same to the eye and keeps the file small. Choose PNG when you need a lossless copy for editing.',
+      'The conversion runs in your browser — your photos are never uploaded.',
+    ],
+    steps: [
+      'Choose a .heic or .heif photo.',
+      'Pick JPG or PNG.',
+      'Press “Convert” and download the new file.',
+    ],
+  },
+  'video-compressor': {
+    heading: 'Make videos small enough to send',
+    paragraphs: [
+      'Long videos are often too big for email, WhatsApp or upload forms. This compressor re-encodes a video at a lower resolution and bitrate so the file becomes much smaller while staying clear enough to watch.',
+      'Choose 480p for the smallest files, 720p for a good balance or 1080p to keep more detail. The result is a WebM video, which plays in modern browsers and uploads to YouTube and most websites. Because the video is played once while it is re-encoded, a two-minute clip takes about two minutes.',
+      'Your video never leaves your device.',
+    ],
+    steps: [
+      'Choose a video file.',
+      'Pick a resolution and quality.',
+      'Press “Compress video” and keep the tab open until it finishes.',
+      'Download the smaller WebM file.',
+    ],
+  },
+  'image-studio': {
+    heading: 'Resize, convert and compress many images at once',
+    paragraphs: [
+      'Preparing photos for Instagram, YouTube, a passport application or an online shop usually means resizing, converting and compressing each one by hand. Image Studio does all three for up to 50 images in one go.',
+      'Pick a size preset — Instagram post or story, YouTube thumbnail, LinkedIn, Facebook cover, passport photo (35×45 mm at 300 dpi) or online store — choose Fill (crop to size) or Fit (add a background), then WebP, JPG or PNG and the quality. You see the size of every file before and after.',
+      'Images are processed in your browser and the ZIP is created on your device.',
+    ],
+    steps: [
+      'Choose up to 50 images.',
+      'Pick a size preset, Fill or Fit, format and quality.',
+      'Press “Process”.',
+      'Download single files or everything as a ZIP.',
+    ],
+  },
+  'pakistan-salary-tax-calculator': {
+    heading: 'Salary income tax in Pakistan for 2026-27',
+    paragraphs: [
+      'Salaried people in Pakistan pay income tax by slabs set in the yearly Finance Act. This calculator applies the 2026-27 slabs (tax year 2027) to your monthly salary and shows your monthly tax, yearly tax and take-home pay. The 2025-26 slabs are included so you can compare.',
+      'For 2026-27, income up to Rs 600,000 a year is tax-free; above that the rates step up through 1%, 11%, 20%, 25%, 29% and 32% to 35% on income above Rs 7,000,000, with the fixed amounts set in the law.',
+      'The result is an estimate for salaried individuals. Allowances, exemptions and adjustments can change your final tax — confirm with FBR or a tax adviser before filing.',
+    ],
+    steps: [
+      'Choose the tax year.',
+      'Enter your gross monthly salary in rupees.',
+      'Read your monthly tax, take-home pay and effective tax rate.',
     ],
   },
 };

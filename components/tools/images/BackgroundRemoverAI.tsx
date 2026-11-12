@@ -10,6 +10,7 @@ import Dropzone from '@/components/shared/Dropzone';
 import { Choice, Note } from '@/components/shared/ui';
 import { downloadBlob } from '@/lib/utils/download';
 import { useRevokeObjectUrl } from '@/hooks/useObjectUrl';
+import { ScanOverlay, SuccessCard } from '@/components/shared/ProFx';
 
 const MODEL_URL = 'https://huggingface.co/Xenova/modnet/resolve/main/onnx/model_quantized.onnx';
 const MODEL_CACHE = 'cs-models-v1';
@@ -231,7 +232,7 @@ export function BackgroundRemoverAI() {
           {busy ? 'Removing background…' : cut ? 'Run again' : 'Remove background'}
         </button>
       )}
-      {status && (
+      {status && !src && (
         <p className="notice" role="status">
           {status}
         </p>
@@ -242,6 +243,7 @@ export function BackgroundRemoverAI() {
           {src && (
             <figure>
               <img src={src} alt="Original" />
+              {busy && <ScanOverlay label={status || 'Analysing image…'} />}
               <figcaption>Original</figcaption>
             </figure>
           )}
@@ -255,6 +257,7 @@ export function BackgroundRemoverAI() {
       )}
       {cut && (
         <>
+          <SuccessCard title="Background removed" detail="Choose a background below, then download." />
           <Choice
             options={[
               { value: 'transparent' as const, label: 'Transparent' },

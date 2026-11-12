@@ -8,6 +8,7 @@ import AdSlot from '@/components/shared/AdSlot';
 import ResultBanner from '@/components/shared/ResultBanner';
 import InstallButton from '@/components/pwa/InstallButton';
 import { track } from '@/lib/analytics';
+import { PrivacyBadge } from '@/components/shared/ProFx';
 import { tools } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
 import { categories } from '@/data/tools';
@@ -144,6 +145,10 @@ export default function ToolShell({
           <div className="toolPanel">
             {children}
             <ResultBanner />
+            {tool &&
+              ['Image Tools', 'PDF Tools', 'Video & Audio', 'Documents & Business'].includes(
+                tool.category,
+              ) && <PrivacyBadge />}
           </div>
           {tool && (
             <div className="mobileInstall">

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import ToolShell from '@/components/shared/ToolShell';
+import { Confetti } from '@/components/shared/ProFx';
 
 const BEST_EVT = 'cs-best';
 function useBest(key: string) {
@@ -211,7 +212,12 @@ export function Game2048() {
         <button className="btn btnPrimary gameBigBtn" onClick={reset}>
           New game
         </button>
-        {won && !over && <p className="notice">You made 2048! Keep going for a higher score.</p>}
+        {won && !over && (
+          <>
+            <Confetti />
+            <p className="notice winNotice">You made 2048! Keep going for a higher score.</p>
+          </>
+        )}
         {over && <p className="notice error">No moves left. Final score {score}.</p>}
       </div>
     </ToolShell>

@@ -42,14 +42,33 @@ export default function Privacy() {
           and browser type. It does not receive the files or text you use in tools. You can opt out with
           Google&apos;s browser add-on at tools.google.com/dlpage/gaoptout.
         </p>
-        <h2>Advertising</h2>
+        <h2>Advertising and cookies</h2>
         <p>
-          We may show ads served by Google AdSense. Google and its partners use cookies to serve ads based on
-          your prior visits to this and other websites. Google&apos;s use of advertising cookies enables it
-          and its partners to serve ads based on those visits. You can opt out of personalised advertising at
-          adssettings.google.com, and learn more at policies.google.com/technologies/ads. Where the law
-          requires it (for example in the EEA, the UK and Switzerland), we ask for your consent before
-          personalised ads or analytics cookies are used.
+          CraftSprint is free because it shows ads served by Google AdSense. Third-party vendors, including
+          Google, use cookies (and similar technologies such as web beacons) to serve ads based on your prior
+          visits to this website or other websites. Google&apos;s use of advertising cookies enables it and
+          its partners to serve ads to you based on your visits to CraftSprint and/or other sites on the
+          Internet.
+        </p>
+        <p>
+          You can opt out of personalised advertising in{' '}
+          <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">
+            Google Ads Settings
+          </a>
+          , or opt out of some third-party vendors&apos; use of cookies for personalised advertising at{' '}
+          <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer">
+            www.aboutads.info
+          </a>
+          . Learn more in{' '}
+          <a
+            href="https://policies.google.com/technologies/partner-sites"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            How Google uses information from sites that use its services
+          </a>
+          . Where the law requires it (for example in the EEA, the UK and Switzerland), a consent message lets
+          you accept or refuse personalised ads and analytics cookies before they are used.
         </p>
         <h2>Third-party links</h2>
         <p>

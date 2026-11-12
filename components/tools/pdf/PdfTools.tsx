@@ -5,6 +5,7 @@ import { useRevokeObjectUrl } from '@/hooks/useObjectUrl';
 import { useState } from 'react';
 import Dropzone from '@/components/shared/Dropzone';
 import ToolShell from '@/components/shared/ToolShell';
+import { SuccessCard } from '@/components/shared/ProFx';
 
 export async function loadPdfjs() {
   installPolyfills();
@@ -322,11 +323,7 @@ export function PdfMergeTool() {
           {error}
         </p>
       )}
-      {done && (
-        <p className="notice" role="status">
-          {done}
-        </p>
-      )}
+      {done && <SuccessCard title="PDFs merged successfully" detail={done} />}
     </ToolShell>
   );
 }

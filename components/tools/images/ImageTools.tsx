@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Dropzone from '@/components/shared/Dropzone';
 import { canvasBlob, formatBytes } from '@/lib/utils/image';
 import ToolShell from '@/components/shared/ToolShell';
+import { ScanOverlay } from '@/components/shared/ProFx';
 import { useRevokeObjectUrl } from '@/hooks/useObjectUrl';
 import { loadImage } from '@/lib/utils/image';
 /** File name without its extension, for naming downloads (photo.jpg → photo). */
@@ -81,6 +82,7 @@ export function ImageCompressor() {
           />
           {file && (
             <div className="compare" style={{ '--split': `${split}%` } as React.CSSProperties}>
+              {busy && <ScanOverlay label="Compressing…" />}
               <img src={src} alt="Original image" className="compareImg" />
               {out && (
                 <div className="compareAfter">
