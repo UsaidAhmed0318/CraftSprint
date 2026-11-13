@@ -84,3 +84,40 @@ describe('audio speed change keeps pitch', () => {
     expect(Math.abs(freq(mid) - 440)).toBeLessThan(12);
   });
 });
+
+import { detectFlatBackground, keyAlpha, despeckle } from '@/components/tools/images/BackgroundRemoverAI';
+describe('background remover: logos on a flat colour', () => {
+  const W = 64;
+  const H = 64;
+  const logo = () => {
+    const d = new Uint8ClampedArray(W * H * 4);
+    for (let y = 0; y < H; y++)
+      for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4;
+        const inShape = x > 16 && x < 48 && y > 16 && y < 48;
+        const c = inShape ? (x < 32 ? [255, 255, 255] : [37, 99, 235]) : [11, 18, 32];
+        d.set([...c, 255], i);
+      }
+    return d;
+  };
+  it('detects the flat background colour of a logo and removes exactly that colour', () => {
+    const d = logo();
+    const flat = detectFlatBackground(d, W, H)!;
+    expect(flat.bg).toEqual([11, 18, 32]);
+    const a = keyAlpha(d, flat.bg, flat.tol);
+    expect(a[0]).toBe(0); // background corner
+    expect(a[20 * W + 20]).toBe(255); // white part
+    expect(a[20 * W + 40]).toBe(255); // blue part
+    expect([...a].filter(v => v > 0 && v < 255)).toHaveLength(0); // no speckle
+  });
+  it('does not treat a photo as a flat graphic', () => {
+    const d = new Uint8ClampedArray(W * H * 4);
+    for (let i = 0; i < W * H; i++) d.set([(i * 7) % 256, (i * 13) % 256, (i * 29) % 256, 255], i * 4);
+    expect(detectFlatBackground(d, W, H)).toBeNull();
+  });
+  it('removes single-pixel speckles from an AI mask', () => {
+    const a = new Uint8ClampedArray(25).fill(255);
+    a[12] = 0;
+    expect(despeckle(a, 5, 5)[12]).toBe(255);
+  });
+});

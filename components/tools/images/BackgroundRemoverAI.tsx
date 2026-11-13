@@ -18,6 +18,7 @@ import { ScanOverlay, SuccessCard } from '@/components/shared/ProFx';
  * - fast: MODNet (~6 MB) — portraits of people; quick and light for phones.
  */
 type Quality = 'hq' | 'fast';
+type Mode = Quality | 'logo';
 const MODELS: Record<Quality, { url: string; mb: number }> = {
   hq: {
     url: 'https://huggingface.co/onnx-community/ISNet-ONNX/resolve/main/onnx/model_quantized.onnx',
@@ -104,12 +105,145 @@ export function refineMatte(matte: Float32Array, minMax: boolean): Uint8ClampedA
   const out = new Uint8ClampedArray(matte.length);
   for (let i = 0; i < matte.length; i++) {
     let a = (matte[i] - lo) / (hi - lo);
-    // Levels: anything below 6% is background, above 94% is fully solid; smooth in between (keeps soft hair edges).
-    a = (a - 0.06) / 0.88;
+    // Levels: anything below 15% is background, above 85% is fully solid; smooth in between (keeps soft hair edges
+    // but removes the faint speckle a compressed model leaves in flat areas).
+    a = (a - 0.15) / 0.7;
     a = a <= 0 ? 0 : a >= 1 ? 1 : a * a * (3 - 2 * a);
     out[i] = Math.round(a * 255);
   }
   return out;
+}
+
+/**
+ * Logos, icons and graphics on one flat colour are not a job for an AI model (it leaves speckles).
+ * These helpers detect that case and remove the exact background colour with clean, anti-aliased edges.
+ */
+export function detectFlatBackground(
+  data: Uint8ClampedArray,
+  w: number,
+  h: number,
+): { bg: [number, number, number]; tol: number } | null {
+  const border: number[] = [];
+  const push = (x: number, y: number) => border.push((y * w + x) * 4);
+  for (let x = 0; x < w; x++) {
+    push(x, 0);
+    push(x, h - 1);
+  }
+  for (let y = 0; y < h; y++) {
+    push(0, y);
+    push(w - 1, y);
+  }
+  if (border.some(i => data[i + 3] < 250)) return null; // already has transparency
+  const med = (c: number) => {
+    const v = border.map(i => data[i + c]).sort((a, b) => a - b);
+    return v[v.length >> 1];
+  };
+  const bg: [number, number, number] = [med(0), med(1), med(2)];
+  const dist = (i: number) =>
+    Math.max(Math.abs(data[i] - bg[0]), Math.abs(data[i + 1] - bg[1]), Math.abs(data[i + 2] - bg[2]));
+  const d = border.map(dist).sort((a, b) => a - b);
+  // The frame must be one colour: 97% of the border within a small distance of its median colour.
+  if (d[Math.floor(d.length * 0.97)] > 14) return null;
+  // And the picture must be a graphic (few colours), not a photo taken against a plain wall.
+  const buckets = new Map<number, number>();
+  const n = w * h;
+  for (let i = 0; i < n; i++) {
+    const k = ((data[i * 4] >> 4) << 8) | ((data[i * 4 + 1] >> 4) << 4) | (data[i * 4 + 2] >> 4);
+    buckets.set(k, (buckets.get(k) || 0) + 1);
+  }
+  const top = [...buckets.values()]
+    .sort((a, b) => b - a)
+    .slice(0, 10)
+    .reduce((a, b) => a + b, 0);
+  if (top / n < 0.9) return null;
+  return { bg, tol: Math.max(12, d[Math.floor(d.length * 0.97)] + 10) };
+}
+
+/** Alpha for a flat-colour background: 0 at the background colour, 255 away from it, smooth in between. */
+export function keyAlpha(
+  data: Uint8ClampedArray,
+  bg: [number, number, number],
+  tol: number,
+): Uint8ClampedArray {
+  const n = data.length / 4;
+  const out = new Uint8ClampedArray(n);
+  const hi = tol * 2.4;
+  for (let i = 0; i < n; i++) {
+    const d = Math.max(
+      Math.abs(data[i * 4] - bg[0]),
+      Math.abs(data[i * 4 + 1] - bg[1]),
+      Math.abs(data[i * 4 + 2] - bg[2]),
+    );
+    const a = d <= tol ? 0 : d >= hi ? 1 : (d - tol) / (hi - tol);
+    out[i] = Math.round(a * 255);
+  }
+  return out;
+}
+
+/** 3×3 median filter: removes isolated speckles from an AI mask without blurring real edges. */
+export function despeckle(a: Uint8ClampedArray, w: number, h: number): Uint8ClampedArray {
+  const out = new Uint8ClampedArray(a);
+  const v = new Uint8Array(9);
+  for (let y = 1; y < h - 1; y++)
+    for (let x = 1; x < w - 1; x++) {
+      let k = 0;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) v[k++] = a[(y + dy) * w + x + dx];
+      v.sort();
+      out[y * w + x] = v[4];
+    }
+  return out;
+}
+
+/** Exact removal for flat-colour graphics, at the picture's full resolution. */
+function cutOutFlat(
+  img: ImageBitmap,
+  flat: { bg: [number, number, number]; tol: number },
+): HTMLCanvasElement {
+  const out = document.createElement('canvas');
+  out.width = img.width;
+  out.height = img.height;
+  const ctx = out.getContext('2d', { willReadFrequently: true })!;
+  ctx.drawImage(img, 0, 0);
+  const d = ctx.getImageData(0, 0, out.width, out.height);
+  const alpha = keyAlpha(d.data, flat.bg, flat.tol);
+  for (let i = 0; i < alpha.length; i++) {
+    const a = alpha[i];
+    if (a < 255 && a > 0) {
+      // Remove the background tint from edge pixels so no coloured halo is left.
+      const f = a / 255;
+      for (let c = 0; c < 3; c++)
+        d.data[i * 4 + c] = Math.max(
+          0,
+          Math.min(255, Math.round((d.data[i * 4 + c] - flat.bg[c] * (1 - f)) / f)),
+        );
+    }
+    d.data[i * 4 + 3] = a;
+  }
+  ctx.putImageData(d, 0, 0);
+  return out;
+}
+
+/** Colour of the top-left corner (used when the visitor forces Logo mode on a picture that is not flat). */
+function cornerColour(img: ImageBitmap): [number, number, number] {
+  const c = document.createElement('canvas');
+  c.width = 2;
+  c.height = 2;
+  const ctx = c.getContext('2d', { willReadFrequently: true })!;
+  ctx.drawImage(img, 0, 0, 2, 2, 0, 0, 2, 2);
+  const d = ctx.getImageData(0, 0, 1, 1).data;
+  return [d[0], d[1], d[2]];
+}
+
+/** Looks at a small copy of the picture and says whether it is a flat-colour graphic. */
+function analyseFlat(img: ImageBitmap) {
+  const s = Math.min(1, 256 / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.max(8, Math.round(img.width * s));
+  c.height = Math.max(8, Math.round(img.height * s));
+  const ctx = c.getContext('2d', { willReadFrequently: true })!;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  return detectFlatBackground(ctx.getImageData(0, 0, c.width, c.height).data, c.width, c.height);
 }
 
 /** Runs the chosen model and returns a canvas of the original size with the background made transparent. */
@@ -157,7 +291,7 @@ async function cutOut(
     [session.inputNames[0]]: new ort.Tensor('float32', input, [1, 3, h, w]),
   });
   const raw = result[session.outputNames[0]].data as Float32Array;
-  const alpha = refineMatte(raw.length === n ? raw : raw.subarray(0, n), q === 'hq');
+  const alpha = despeckle(refineMatte(raw.length === n ? raw : raw.subarray(0, n), q === 'hq'), w, h);
   const m = sctx.createImageData(w, h);
   for (let i = 0; i < n; i++) m.data[i * 4 + 3] = alpha[i];
   const mask = document.createElement('canvas');
@@ -186,7 +320,9 @@ export function BackgroundRemoverAI() {
   const [preview, setPreview] = useState('');
   useRevokeObjectUrl(preview);
   const [bg, setBg] = useState<Bg>('transparent');
-  const [quality, setQuality] = useState<Quality>('hq');
+  const [quality, setQuality] = useState<Mode>('hq');
+  const [note, setNote] = useState('');
+  const [forceAi, setForceAi] = useState(false);
   const [split, setSplit] = useState(50);
   const [color, setColor] = useState('#2563eb');
   const [status, setStatus] = useState('');
@@ -197,6 +333,8 @@ export function BackgroundRemoverAI() {
 
   const onFile = async (f: File) => {
     setFile(f);
+    setForceAi(false);
+    setNote('');
     setReady(false);
     setCut(null);
     setPreview('');
@@ -229,9 +367,20 @@ export function BackgroundRemoverAI() {
     setError('');
     setStatus('Preparing the AI…');
     try {
-      const c = await cutOut(bitmap.current, quality, pct =>
-        setStatus(`Downloading the AI model (${MODELS[quality].mb} MB, one time only)… ${pct}%`),
-      );
+      // Logos and graphics on one flat colour get exact colour removal (an AI model would leave speckles).
+      const flat = analyseFlat(bitmap.current);
+      let c: HTMLCanvasElement;
+      if (quality === 'logo' || (flat && !forceAi)) {
+        const use = flat || { bg: cornerColour(bitmap.current), tol: 28 };
+        c = cutOutFlat(bitmap.current, use);
+        setNote(quality === 'logo' ? '' : 'flat');
+      } else {
+        setNote('');
+        const q: Quality = quality;
+        c = await cutOut(bitmap.current, q, pct =>
+          setStatus(`Downloading the AI model (${MODELS[q].mb} MB, one time only)… ${pct}%`),
+        );
+      }
       setStatus('');
       setCut(c);
     } catch {
@@ -295,6 +444,10 @@ export function BackgroundRemoverAI() {
           a: 'Clear photos where the person or object stands out — portraits, selfies, products and pets. Very busy scenes or fine hair against a similar colour may leave soft edges.',
         },
         {
+          q: 'Does it work on logos and graphics?',
+          a: 'Yes. When a picture is a logo, icon or graphic on one flat colour, the tool notices and removes that exact colour instead of using the AI, which gives crisp edges with no speckles. You can also choose “Logo / graphic” yourself.',
+        },
+        {
           q: 'Does it work on cars, products, animals and objects?',
           a: 'Yes. Choose “Best quality — any subject”. It is made for any clear main subject: cars, products, furniture, animals and people. The fast mode is tuned for portraits of people.',
         },
@@ -316,6 +469,7 @@ export function BackgroundRemoverAI() {
           options={[
             { value: 'hq' as const, label: 'Best quality — any subject' },
             { value: 'fast' as const, label: 'Fast — people & portraits' },
+            { value: 'logo' as const, label: 'Logo / graphic' },
           ]}
           value={quality}
           set={q => {
@@ -325,9 +479,11 @@ export function BackgroundRemoverAI() {
           }}
         />
         <small className="proHint">
-          {quality === 'hq'
-            ? 'People, products, cars, pets and objects. First use downloads a 44 MB AI model (kept for next time); a photo takes about 5–30 seconds depending on your device.'
-            : 'Small 6 MB model, best for photos of people. Quicker on phones.'}
+          {quality === 'logo'
+            ? 'For logos, icons, signatures and graphics on one flat colour: removes that exact colour with crisp edges. No download needed.'
+            : quality === 'hq'
+              ? 'People, products, cars, pets and objects. First use downloads a 44 MB AI model (kept for next time); a photo takes about 5–30 seconds depending on your device.'
+              : 'Small 6 MB model, best for photos of people. Quicker on phones.'}
         </small>
       </div>
       {file && !error && (
@@ -341,6 +497,24 @@ export function BackgroundRemoverAI() {
         </button>
       )}
       {error && <Note error>{error}</Note>}
+      {note === 'flat' && (
+        <p className="notice" role="status">
+          This looks like a logo or graphic on one flat colour, so that exact colour was removed for crisp,
+          clean edges.{' '}
+          <button
+            type="button"
+            className="dropLink"
+            onClick={() => {
+              setForceAi(true);
+              setCut(null);
+              setPreview('');
+              setNote('');
+            }}
+          >
+            Use the AI instead
+          </button>
+        </p>
+      )}
       {src && !preview && (
         <div className="bgStage">
           <img src={src} alt="Original" />
