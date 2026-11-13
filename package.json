@@ -11,7 +11,9 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint && npm test",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "prebuild": "node scripts/build-faqs.mjs",
+    "pretest": "node scripts/build-faqs.mjs"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",

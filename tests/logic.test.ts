@@ -67,3 +67,20 @@ describe('staging / preview builds stay out of Google', () => {
     delete process.env.NEXT_PUBLIC_DEPLOY_ENV;
   });
 });
+
+import { timeStretch } from '@/components/tools/media/MediaTools';
+describe('audio speed change keeps pitch', () => {
+  const rate = 44100;
+  const tone = new Float32Array(rate * 2).map((_, i) => Math.sin((2 * Math.PI * 440 * i) / rate));
+  const freq = (x: Float32Array) => {
+    let z = 0;
+    for (let i = 1; i < x.length; i++) if (x[i - 1] < 0 && x[i] >= 0) z++;
+    return z / (x.length / rate);
+  };
+  it.each([0.75, 1.5, 2])('speed %s× changes length but keeps 440 Hz', s => {
+    const [out] = timeStretch([tone], s);
+    expect(out.length).toBe(Math.floor(tone.length / s));
+    const mid = out.subarray(4096, out.length - 4096);
+    expect(Math.abs(freq(mid) - 440)).toBeLessThan(12);
+  });
+});

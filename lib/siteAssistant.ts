@@ -5,6 +5,7 @@
  */
 import { tools, categories, type Category } from '@/data/tools';
 import { toolContent } from '@/data/toolContent';
+import { toolFaqs } from '@/data/toolFaqs.generated';
 import { categoryInfo } from '@/lib/categories';
 import { matchTools, matchToolsScored } from '@/lib/toolMatch';
 import { site } from '@/lib/site';
@@ -210,6 +211,12 @@ const FREE_KEYS = [
   'mufat',
   'muft',
 ];
+/** Requests CraftSprint AI must never help with. */
+const HARMFUL =
+  /\b(hack(ing)?|crack(ing)?|phishing|malware|ransomware|keylogger|ddos|steal(ing)? (password|account|data)|carding|bomb|explosive|weapon|gun|drugs?|porn|nude|nudes|sex(ual)?|deepfake|fake (id|passport|document|currency)|forge|counterfeit)\b/i;
+/** Signs that someone may be in crisis — answer with care and point to real help. */
+const CRISIS =
+  /\b(suicide|suicidal|kill myself|end my life|self harm|self-harm|hurt myself|khudkushi|khud kushi|marna chahta|marna chahti|jeena nahi)\b/i;
 const SAFE_GUARD =
   /(ignore (all |any |the )?(previous|prior|above) |system prompt|jailbreak|api key|secret key|your instructions|developer mode)/i;
 
@@ -255,7 +262,8 @@ function describeTool(t: (typeof tools)[number], withSteps: boolean): Answer {
       ? `\n\nHow to use it:\n${steps}`
       : '\n\nHow to use it:\n1) Open the tool.\n2) Add your file or type your values.\n3) Press the main button and use or download the result.'
     : '';
-  const reply = `${t.name} (${categoryInfo[t.category].short}): ${t.description}${how}`;
+  const about = toolContent[t.slug]?.paragraphs?.[0];
+  const reply = `${t.name} (${categoryInfo[t.category].short}): ${t.description}${about ? `\n\n${about}` : ''}${how}`;
   const more = matchTools(`${t.name} ${t.category}`, 6)
     .filter(x => x.slug !== t.slug && x.category === t.category)
     .slice(0, 3)
@@ -291,6 +299,127 @@ const solid = (text: string, limit: number) =>
     .filter(x => x.s >= 2)
     .map(x => x.t);
 
+const INTENTS: { re: RegExp; slug: string; say: string; more?: string[] }[] = [
+  {
+    re: /\b(\d+\s?kb|under \d+|size kam|kam size|chota|chhota|smaller|reduce (the )?size|make (it|my).*(small|smaller|lighter))\b.*\b(photo|image|picture|pic|jpg|png)|\b(photo|image|picture|pic|jpg|png)\b.*\b(\d+\s?kb|under \d+|size kam|kam|chota|chhota|smaller|reduce)\b/,
+    slug: 'image-compressor',
+    say: 'Use the Image Compressor: lower the quality slider until the size is under your limit, and watch the new size update.',
+    more: ['image-resizer', 'image-studio'],
+  },
+  {
+    re: /\b(remove|hata|hatao|erase|delete)\b.*\b(background|bg)\b|\b(background|bg)\b.*\b(remove|hata|hatao|erase|delete|transparent)\b/,
+    slug: 'background-remover',
+    say: 'Use the AI Background Remover: choose “Best quality — any subject”, add your photo and press Remove background.',
+    more: ['solid-background-remover'],
+  },
+  {
+    re: /\b(merge|combine|join|jor|jod)\b.*\bpdfs?\b|\bpdfs?\b.*\b(merge|combine|join|jor|jod)\b/,
+    slug: 'pdf-merge',
+    say: 'Use PDF Merge: select all your PDFs at once, put them in order with the arrows, then press Merge.',
+  },
+  {
+    re: /\bpdfs?\b.*\b(compress|smaller|size|chota|chhota|kam)\b|\b(compress|reduce)\b.*\bpdfs?\b/,
+    slug: 'pdf-compressor',
+    say: 'Use the PDF Compressor to make the file smaller for email or upload forms.',
+  },
+  {
+    re: /\b(youtube|yt)\b.*\bthumbnail\b|\bthumbnail\b.*\b(make|bana|size|resize)\b/,
+    slug: 'image-studio',
+    say: 'Use Image Studio and pick the “YouTube thumbnail 1280×720” preset. To take a frame from a video, use the Video Thumbnail Grabber.',
+    more: ['video-thumbnail-grabber'],
+  },
+  {
+    re: /\b(slow|speed|fast|tez|ahista)\b.*\b(audio|song|voice|mp3|awaz|aawaz)\b|\b(audio|song|voice|mp3|awaz|aawaz)\b.*\b(slow|speed|fast|tez|ahista)\b/,
+    slug: 'audio-speed-changer',
+    say: 'Use the Audio Speed Changer. Keep “Keep the voice natural” on so the voice does not change.',
+  },
+  {
+    re: /^(?!.*\b(kya|kia|what)\b).*(\biphone\b.*\b(photo|pic|heic)\b|\bheic\b)/,
+    slug: 'heic-to-jpg',
+    say: 'Use HEIC to JPG to open iPhone photos anywhere.',
+  },
+];
+
+/** Questions about CraftSprint as a whole (privacy, safety, install, languages…). */
+const SITE_FAQ: { q: string; a: string; link?: Link }[] = [
+  {
+    q: 'Are my files uploaded to a server? Is it safe and private?',
+    a: 'No. Almost every CraftSprint tool runs inside your own browser, so your images, PDFs, audio and video stay on your device. Nothing you type in a tool is stored. Only a few tools that need the internet (live currency rates, website speed, domain age) send the small piece of information they need, and they say so on the page.',
+    link: { href: '/privacy', label: 'Privacy policy' },
+  },
+  {
+    q: 'Is CraftSprint free? Do I need an account or sign up?',
+    a: 'Yes, every tool and game is free, with no sign-up, no watermark and no daily limit. The site is supported by advertising.',
+    link: { href: '/tools', label: 'All tools' },
+  },
+  {
+    q: 'Can I install CraftSprint as an app on my phone or use it offline?',
+    a: 'Yes. Tap “Install App” (or “Add to Home Screen” in your browser menu). You can install the whole site or a single tool, and pages you have opened also work without internet.',
+    link: { href: '/tools', label: 'All tools' },
+  },
+  {
+    q: 'Which languages does CraftSprint support?',
+    a: 'Menus are available in English, Urdu, Arabic, Hindi, Spanish and French (use the language button in the header). Tools work with text in any language.',
+  },
+  {
+    q: 'Does it work on mobile phones, iPhone and Android?',
+    a: 'Yes. Every tool works on phones, tablets and computers in modern browsers such as Chrome, Safari, Edge and Firefox.',
+  },
+  {
+    q: 'How do I report a problem or contact you?',
+    a: 'Use the Contact page or the WhatsApp button. Tell us which tool, what you did and what went wrong, and we will fix it.',
+    link: { href: '/contact', label: 'Contact' },
+  },
+  {
+    q: 'Is there a file size limit?',
+    a: 'CraftSprint sets no fixed limit. Because files are processed on your device, very large files depend on your phone or computer’s memory — big videos and PDFs are fastest on a computer.',
+  },
+  {
+    q: 'Who made CraftSprint?',
+    a: 'CraftSprint is built and maintained by the team behind Over The Stack Solutions, a software development company. Every tool is tested with real files before it goes live.',
+    link: { href: '/about', label: 'About' },
+  },
+];
+
+const contentWords = (text: string) =>
+  norm(text)
+    .split(' ')
+    .filter(w => w.length > 2 && !STOP.has(w));
+
+/** Best FAQ for a question (from one tool, or from all tools and the site), only when clearly related. */
+function bestFaq(q: string, slug?: string): { q: string; a: string; slug?: string; link?: Link } | null {
+  const qw = new Set(contentWords(q));
+  if (!qw.size) return null;
+  const pool: { q: string; a: string; slug?: string; link?: Link }[] = slug
+    ? (toolFaqs[slug] || []).map(f => ({ ...f, slug }))
+    : [...SITE_FAQ, ...Object.entries(toolFaqs).flatMap(([sl, list]) => list.map(f => ({ ...f, slug: sl })))];
+  let best: (typeof pool)[number] | null = null;
+  let bestScore = 0;
+  for (const f of pool) {
+    const fq = new Set(contentWords(f.q));
+    const fa = new Set(contentWords(f.a));
+    let score = 0;
+    for (const w of qw) {
+      if (fq.has(w)) score += 2;
+      else if (fa.has(w)) score += 0.5;
+    }
+    const cover = score / (2 * qw.size);
+    const ok = slug
+      ? score >= 2 && cover >= 0.3
+      : (score >= 4 && cover >= 0.45) || (score >= 2 && cover >= 0.99 && qw.size <= 2);
+    if (score > bestScore && ok) {
+      best = f;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
+function faqAnswer(f: { q: string; a: string; slug?: string; link?: Link }): Answer {
+  const t = f.slug ? tools.find(x => x.slug === f.slug) : undefined;
+  return out(f.a, t ? [t.slug] : [], f.link ? [f.link] : t ? [catLink(t.category)] : []);
+}
+
 /** The whole answer engine. `messages` is the recent conversation; the last user message is answered. */
 export function answerFromSite(messages: Msg[]): Answer {
   const last = [...messages].reverse().find(m => m.role === 'user');
@@ -300,6 +429,15 @@ export function answerFromSite(messages: Msg[]): Answer {
   const words = new Set(q.split(' '));
   const has = (...l: string[]) => hasAny(words, l);
 
+  if (CRISIS.test(raw))
+    return out(
+      'I’m really sorry you’re feeling this way. You don’t have to go through it alone — please talk to someone you trust right now, or contact your local emergency number or a crisis helpline in your country. If you are in immediate danger, call emergency services.',
+    );
+  if (HARMFUL.test(raw))
+    return out(
+      'I can’t help with that. I’m here to help you use CraftSprint’s tools safely — for example compressing images, merging PDFs or making a QR code.',
+      ['image-compressor', 'pdf-merge', 'qr-code-generator'],
+    );
   if (SAFE_GUARD.test(raw))
     return out(
       'I can’t help with that. I never ask for or share private data, keys or passwords. I can help you find and use CraftSprint tools.',
@@ -356,8 +494,30 @@ export function answerFromSite(messages: Msg[]): Answer {
   const howIntent = has(...HOW) || /\b(kaise kare|kese kare|kaise karte)\b/.test(q);
   const listIntent = has(...LIST);
 
-  // A specific tool by name: describe it (with steps if the visitor asked how).
-  if (named) return describeTool(named, howIntent || has('steps', 'step', 'guide'));
+  // A specific tool by name: answer from its own FAQ when the question matches one,
+  // otherwise describe it (with steps if the visitor asked how).
+  if (named) {
+    const rest = q.replace(norm(named.name), ' ').replace(norm(named.slug.replace(/-/g, ' ')), ' ');
+    const f = !howIntent ? bestFaq(rest, named.slug) : null;
+    if (f) return faqAnswer(f);
+    return describeTool(named, howIntent || has('steps', 'step', 'guide'));
+  }
+  // Common wishes that should always open the right tool.
+  const intent = INTENTS.find(x => x.re.test(q));
+  if (intent) {
+    const t = tools.find(x => x.slug === intent.slug)!;
+    if (howIntent) return describeTool(t, true);
+    return out(
+      `${intent.say}\n\n${t.name}: ${t.description}`,
+      [t.slug, ...(intent.more || [])],
+      [catLink(t.category)],
+    );
+  }
+  // A general question that one of the site or tool FAQs answers.
+  const faq = bestFaq(q);
+  const clear = solid(q, 3);
+  if (faq && !howIntent && (!faq.slug || !clear.length || clear.some(t => t.slug === faq.slug)))
+    return faqAnswer(faq);
 
   // "tools of a category" / "list of all tools".
   const cat = categories.find(c => hasAny(words, CAT_WORDS[c]));

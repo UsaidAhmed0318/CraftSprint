@@ -162,7 +162,7 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
     heading: 'Remove photo backgrounds with AI, privately',
     paragraphs: [
       'Product listings, passport and CV photos, profile pictures and thumbnails all look cleaner without a busy background. This AI background remover separates the person, product or pet from everything behind it and gives you a transparent PNG — or a clean white or coloured background.',
-      'It uses the open MODNet matting model, which runs inside your browser with ONNX Runtime. The model (about 6 MB) is downloaded once and then kept by your browser, so the next photo is processed faster. Your photo itself is never uploaded anywhere.',
+      'Best quality uses the open ISNet segmentation model (about 44 MB) that works on any clear subject; Fast uses MODNet (about 6 MB), made for portraits. Both run inside your browser with ONNX Runtime, are downloaded once and then kept by your browser, so the next photo is processed faster. Your photo itself is never uploaded anywhere.',
       'Clear photos give the best edges: good light and a subject that stands out from the background. Fine hair against a similar colour can come out soft. For logos or graphics on one flat colour, the Solid Colour Background Remover gives pixel-exact edges.',
     ],
     steps: [

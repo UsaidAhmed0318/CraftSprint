@@ -389,9 +389,55 @@ export function AudioTrimmer() {
   );
 }
 
+/**
+ * Changes speed WITHOUT changing pitch (WSOLA time-stretching): the audio is cut into short overlapping
+ * windows that are re-spaced, and each window is nudged to line up with the previous one so voices stay natural.
+ */
+export function timeStretch(channels: Float32Array[], speed: number): Float32Array[] {
+  const N = 2048;
+  const Hs = N / 2;
+  const delta = 480;
+  const len = channels[0].length;
+  const outLen = Math.max(1, Math.floor(len / speed));
+  if (len < N * 2) return channels.map(c => c.slice());
+  const mono = new Float32Array(len);
+  for (const c of channels) for (let i = 0; i < len; i++) mono[i] += c[i] / channels.length;
+  const win = new Float32Array(N);
+  for (let i = 0; i < N; i++) win[i] = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / N);
+  const outs = channels.map(() => new Float32Array(outLen + N));
+  let prev = 0;
+  for (let k = 0; k * Hs < outLen; k++) {
+    const ideal = Math.min(len - N, Math.round(k * Hs * speed));
+    let pos = ideal;
+    const target = prev + Hs; // where the previous window would naturally continue
+    if (k > 0 && target + N < len) {
+      let best = -Infinity;
+      const from = Math.max(0, ideal - delta);
+      const to = Math.min(len - N, ideal + delta);
+      for (let cand = from; cand <= to; cand += 4) {
+        let sum = 0;
+        for (let i = 0; i < Hs; i += 4) sum += mono[cand + i] * mono[target + i];
+        if (sum > best) {
+          best = sum;
+          pos = cand;
+        }
+      }
+    }
+    const at = k * Hs;
+    for (let c = 0; c < channels.length; c++) {
+      const src = channels[c];
+      const dst = outs[c];
+      for (let i = 0; i < N; i++) dst[at + i] += src[pos + i] * win[i];
+    }
+    prev = pos;
+  }
+  return outs.map(o => o.subarray(0, outLen));
+}
+
 export function AudioSpeedChanger() {
   const [file, setFile] = useState<File | null>(null);
   const [speed, setSpeed] = useState(1.25);
+  const [keepPitch, setKeepPitch] = useState(true);
   const [fmt, setFmt] = useState<AudioFmt>('mp3');
   const [out, setOut] = useState('');
   useRevokeObjectUrl(out);
@@ -417,14 +463,25 @@ export function AudioSpeedChanger() {
     setBusy(true);
     setError('');
     try {
-      const newLength = Math.max(1, Math.floor(buffer.length / speed));
-      const offline = new OfflineAudioContext(buffer.numberOfChannels, newLength, buffer.sampleRate);
-      const node = offline.createBufferSource();
-      node.buffer = buffer;
-      node.playbackRate.value = speed;
-      node.connect(offline.destination);
-      node.start();
-      const rendered = await offline.startRendering();
+      let rendered: AudioBuffer;
+      if (keepPitch) {
+        // Give the browser a moment to show "Processing…" before the heavy work starts.
+        await new Promise(r => setTimeout(r, 30));
+        const chans = Array.from({ length: buffer.numberOfChannels }, (_, c) => buffer.getChannelData(c));
+        const stretched = timeStretch(chans, speed);
+        const ctx = new OfflineAudioContext(buffer.numberOfChannels, stretched[0].length, buffer.sampleRate);
+        rendered = ctx.createBuffer(buffer.numberOfChannels, stretched[0].length, buffer.sampleRate);
+        stretched.forEach((d, c) => rendered.getChannelData(c).set(d));
+      } else {
+        const newLength = Math.max(1, Math.floor(buffer.length / speed));
+        const offline = new OfflineAudioContext(buffer.numberOfChannels, newLength, buffer.sampleRate);
+        const node = offline.createBufferSource();
+        node.buffer = buffer;
+        node.playbackRate.value = speed;
+        node.connect(offline.destination);
+        node.start();
+        rendered = await offline.startRendering();
+      }
       const blob = fmt === 'mp3' ? await encodeMp3(rendered) : encodeWav(rendered);
       setOut(URL.createObjectURL(blob));
     } catch {
@@ -437,11 +494,15 @@ export function AudioSpeedChanger() {
   return (
     <ToolShell
       title="Audio speed changer"
-      description="Speed up or slow down any audio (0.5× to 2×) and download it as MP3 or WAV. Pitch moves with speed, like a turntable."
+      description="Speed up or slow down any audio (0.5× to 2×) while keeping the voice natural, then download it as MP3 or WAV."
       faq={[
         {
-          q: 'Does the pitch change?',
-          a: 'Yes — faster sounds higher and slower sounds deeper, like changing a record’s speed. To keep the voice natural, stay between 0.8× and 1.25×.',
+          q: 'Does the voice sound different?',
+          a: 'No. “Keep the voice natural” is on by default, so only the speed changes and voices keep their normal pitch. Turn it off for the classic chipmunk or slowed-record effect.',
+        },
+        {
+          q: 'What speed is best for lectures and podcasts?',
+          a: '1.25× to 1.5× is easy to follow for most speech. For learning songs or a language, 0.75× slows it down while keeping it clear.',
         },
         { q: 'Is my audio uploaded?', a: 'No. Everything is processed on your device.' },
       ]}
@@ -482,6 +543,17 @@ export function AudioSpeedChanger() {
               </button>
             ))}
           </div>
+          <label className="checkInline">
+            <input
+              type="checkbox"
+              checked={keepPitch}
+              onChange={e => {
+                setKeepPitch(e.target.checked);
+                setOut('');
+              }}
+            />{' '}
+            Keep the voice natural (same pitch)
+          </label>
           <AudioFormatChoice
             fmt={fmt}
             set={f => {
