@@ -14,18 +14,15 @@ import { ScanOverlay, SuccessCard } from '@/components/shared/ProFx';
 import { cleanMask, smoothBackgroundMask } from '@/lib/utils/matte';
 
 /**
- * Two open models, both run on the visitor's device:
- * - hq:   ISNet general-use (int8, ~44 MB) — any subject: people, products, cars, animals, objects. 1024×1024.
- * - fast: MODNet (~6 MB) — portraits of people; quick and light for phones.
+ * Two open U²-Net models (Apache-2.0), served from CraftSprint itself and run on the visitor's device:
+ * - hq:   "silueta" (44 MB) — any subject: people, products, cars, animals, objects.
+ * - fast: U²-Net-P (5 MB) — quick and light for phones.
  */
 type Quality = 'hq' | 'fast';
 type Mode = Quality | 'logo';
 const MODELS: Record<Quality, { url: string; mb: number }> = {
-  hq: {
-    url: 'https://huggingface.co/onnx-community/ISNet-ONNX/resolve/main/onnx/model_quantized.onnx',
-    mb: 44,
-  },
-  fast: { url: 'https://huggingface.co/Xenova/modnet/resolve/main/onnx/model_quantized.onnx', mb: 6 },
+  hq: { url: '/models/silueta.onnx', mb: 44 },
+  fast: { url: '/models/u2netp.onnx', mb: 5 },
 };
 const MODEL_CACHE = 'cs-models-v1';
 type Session = import('onnxruntime-web').InferenceSession;
@@ -289,17 +286,9 @@ async function cutOut(
 ): Promise<HTMLCanvasElement> {
   const session = await getSession(q, onProgress);
   const ort = await import('onnxruntime-web/wasm');
-  let w: number;
-  let h: number;
-  if (q === 'hq') {
-    w = 1024;
-    h = 1024; // ISNet takes a fixed square; the picture is stretched in and the mask stretched back.
-  } else {
-    // MODNet: shorter side ≈ 512 (as in the reference implementation), sides multiples of 32, long side ≤ 1024.
-    const s = Math.min(512 / Math.min(img.width, img.height), 1024 / Math.max(img.width, img.height));
-    w = Math.max(32, Math.round((img.width * s) / 32) * 32);
-    h = Math.max(32, Math.round((img.height * s) / 32) * 32);
-  }
+  // U²-Net takes a fixed 320×320 picture normalised with the usual ImageNet mean and deviation.
+  const w = 320;
+  const h = 320;
   const small = document.createElement('canvas');
   small.width = w;
   small.height = h;
@@ -309,25 +298,16 @@ async function cutOut(
   const px = sctx.getImageData(0, 0, w, h).data;
   const n = w * h;
   const input = new Float32Array(3 * n);
-  if (q === 'hq') {
-    for (let i = 0; i < n; i++) {
-      input[i] = px[i * 4] / 255 - 0.5;
-      input[n + i] = px[i * 4 + 1] / 255 - 0.5;
-      input[2 * n + i] = px[i * 4 + 2] / 255 - 0.5;
-    }
-  } else {
-    for (let i = 0; i < n; i++) {
-      input[i] = px[i * 4] / 127.5 - 1;
-      input[n + i] = px[i * 4 + 1] / 127.5 - 1;
-      input[2 * n + i] = px[i * 4 + 2] / 127.5 - 1;
-    }
-  }
+  const MEAN = [0.485, 0.456, 0.406];
+  const STD = [0.229, 0.224, 0.225];
+  for (let i = 0; i < n; i++)
+    for (let c = 0; c < 3; c++) input[c * n + i] = (px[i * 4 + c] / 255 - MEAN[c]) / STD[c];
   const result = await session.run({
     [session.inputNames[0]]: new ort.Tensor('float32', input, [1, 3, h, w]),
   });
   const raw = result[session.outputNames[0]].data as Float32Array;
   const alpha = cleanMask(
-    despeckle(refineMatte(raw.length === n ? raw : raw.subarray(0, n), q === 'hq'), w, h),
+    despeckle(refineMatte(raw.length === n ? raw : raw.subarray(0, n), true), w, h),
     w,
     h,
   );
@@ -479,7 +459,7 @@ export function BackgroundRemoverAI() {
       faq={[
         {
           q: 'Is my photo uploaded?',
-          a: 'No. The AI model is downloaded to your browser once (44 MB for best quality, 6 MB for the fast portrait model) and runs on your own device. Your photo stays with you.',
+          a: 'No. The AI model is downloaded to your browser once (44 MB for best quality, 5 MB for the fast model) and runs on your own device. Your photo stays with you.',
         },
         {
           q: 'Which photos work best?',
@@ -491,7 +471,7 @@ export function BackgroundRemoverAI() {
         },
         {
           q: 'Does it work on cars, products, animals and objects?',
-          a: 'Yes. Choose “Best quality — any subject”. It is made for any clear main subject: cars, products, furniture, animals and people. The fast mode is tuned for portraits of people.',
+          a: 'Yes. Both modes work on any clear main subject: cars, products, furniture, animals and people. “Best quality” gives the cleanest edges.',
         },
         {
           q: 'Can I get a white background for passport or product photos?',
@@ -510,7 +490,7 @@ export function BackgroundRemoverAI() {
         <Choice
           options={[
             { value: 'hq' as const, label: 'Best quality — any subject' },
-            { value: 'fast' as const, label: 'Fast — people & portraits' },
+            { value: 'fast' as const, label: 'Fast — lighter for phones' },
             { value: 'logo' as const, label: 'Logo / graphic' },
           ]}
           value={quality}
@@ -524,8 +504,8 @@ export function BackgroundRemoverAI() {
           {quality === 'logo'
             ? 'For logos, icons, signatures and graphics: removes a flat, gradient or glowing background with crisp edges. No download needed.'
             : quality === 'hq'
-              ? 'People, products, cars, pets and objects. First use downloads a 44 MB AI model (kept for next time); a photo takes about 5–30 seconds depending on your device.'
-              : 'Small 6 MB model, best for photos of people. Quicker on phones.'}
+              ? 'People, products, cars, pets and objects. First use downloads a 44 MB AI model (kept for next time); a photo then takes a few seconds.'
+              : 'Small 5 MB model: quick to load on phones and slow connections, with slightly softer edges.'}
         </small>
       </div>
       {file && !error && (

@@ -379,7 +379,7 @@ export const toolFaqs: Record<string, { q: string; a: string }[]> = {
   "background-remover": [
     {
       "q": "Is my photo uploaded?",
-      "a": "No. The AI model is downloaded to your browser once (44 MB for best quality, 6 MB for the fast portrait model) and runs on your own device. Your photo stays with you."
+      "a": "No. The AI model is downloaded to your browser once (44 MB for best quality, 5 MB for the fast model) and runs on your own device. Your photo stays with you."
     },
     {
       "q": "Which photos work best?",
@@ -391,7 +391,7 @@ export const toolFaqs: Record<string, { q: string; a: string }[]> = {
     },
     {
       "q": "Does it work on cars, products, animals and objects?",
-      "a": "Yes. Choose “Best quality — any subject”. It is made for any clear main subject: cars, products, furniture, animals and people. The fast mode is tuned for portraits of people."
+      "a": "Yes. Both modes work on any clear main subject: cars, products, furniture, animals and people. “Best quality” gives the cleanest edges."
     },
     {
       "q": "Can I get a white background for passport or product photos?",
