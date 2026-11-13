@@ -6,7 +6,7 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- theme is set by an inline script before hydration
-    setTheme((document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'light');
+    setTheme((document.documentElement.getAttribute('data-theme') as 'light' | 'dark') || 'dark');
   }, []);
   const flip = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
