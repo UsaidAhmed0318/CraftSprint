@@ -31,7 +31,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   // iPhone/iPad: 'Add to Home Screen' opens CraftSprint full-screen with its own name
   // AdSense site ownership (live site only)
-  ...(IS_PRODUCTION ? { other: { 'google-adsense-account': ADSENSE_CLIENT } } : {}),
+  // Site ownership tags (live site only): Google AdSense and Pinterest.
+  ...(IS_PRODUCTION
+    ? { other: { 'google-adsense-account': ADSENSE_CLIENT, 'p:domain_verify': 'ff6bdd41018a3711aa68ce27dcc79f96' } }
+    : {}),
   appleWebApp: { capable: true, title: 'CraftSprint', statusBarStyle: 'black-translucent' },
   title: {
     default: 'CraftSprint — Free Online Tools for Images, PDFs & Code',
