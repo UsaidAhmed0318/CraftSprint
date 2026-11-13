@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import '@fontsource-variable/manrope';
 import '@fontsource-variable/sora';
 import './globals.css';
@@ -105,6 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PwaManager />
         <ToolAssistant />
         <WhatsAppButton />
+        <SpeedInsights />
         {gaOn && (
           <>
             <AnalyticsEvents />
