@@ -11,6 +11,7 @@ import { Choice, Note } from '@/components/shared/ui';
 import { downloadBlob } from '@/lib/utils/download';
 import { useRevokeObjectUrl } from '@/hooks/useObjectUrl';
 import { ScanOverlay, SuccessCard } from '@/components/shared/ProFx';
+import { cleanMask, smoothBackgroundMask } from '@/lib/utils/matte';
 
 /**
  * Two open models, both run on the visitor's device:
@@ -223,17 +224,6 @@ function cutOutFlat(
   return out;
 }
 
-/** Colour of the top-left corner (used when the visitor forces Logo mode on a picture that is not flat). */
-function cornerColour(img: ImageBitmap): [number, number, number] {
-  const c = document.createElement('canvas');
-  c.width = 2;
-  c.height = 2;
-  const ctx = c.getContext('2d', { willReadFrequently: true })!;
-  ctx.drawImage(img, 0, 0, 2, 2, 0, 0, 2, 2);
-  const d = ctx.getImageData(0, 0, 1, 1).data;
-  return [d[0], d[1], d[2]];
-}
-
 /** Looks at a small copy of the picture and says whether it is a flat-colour graphic. */
 function analyseFlat(img: ImageBitmap) {
   const s = Math.min(1, 256 / Math.max(img.width, img.height));
@@ -244,6 +234,51 @@ function analyseFlat(img: ImageBitmap) {
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(img, 0, 0, c.width, c.height);
   return detectFlatBackground(ctx.getImageData(0, 0, c.width, c.height).data, c.width, c.height);
+}
+
+/** Small copy of the picture (≤ 640 px) for analysis. */
+function thumb(img: ImageBitmap, max = 640) {
+  const s = Math.min(1, max / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.max(8, Math.round(img.width * s));
+  c.height = Math.max(8, Math.round(img.height * s));
+  const ctx = c.getContext('2d', { willReadFrequently: true })!;
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  return { data: ctx.getImageData(0, 0, c.width, c.height).data, w: c.width, h: c.height };
+}
+
+/** Logos and graphics on a flat colour, gradient or glow: follow the smooth background in from the edges. */
+function analyseGraphic(img: ImageBitmap) {
+  const t = thumb(img);
+  return { ...smoothBackgroundMask(t.data, t.w, t.h), w: t.w, h: t.h };
+}
+
+/** Applies a low-resolution mask to the full picture with smooth, anti-aliased edges. */
+function applyMask(img: ImageBitmap, mask: Uint8ClampedArray, w: number, h: number): HTMLCanvasElement {
+  const m = document.createElement('canvas');
+  m.width = w;
+  m.height = h;
+  const mctx = m.getContext('2d')!;
+  const id = mctx.createImageData(w, h);
+  for (let i = 0; i < w * h; i++) id.data[i * 4 + 3] = mask[i];
+  mctx.putImageData(id, 0, 0);
+  const out = document.createElement('canvas');
+  out.width = img.width;
+  out.height = img.height;
+  const ctx = out.getContext('2d', { willReadFrequently: true })!;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(m, 0, 0, img.width, img.height);
+  // Sharpen the scaled-up edge so it is crisp but still anti-aliased.
+  const d = ctx.getImageData(0, 0, out.width, out.height);
+  for (let i = 3; i < d.data.length; i += 4) {
+    const a = (d.data[i] / 255 - 0.3) / 0.4;
+    d.data[i] = a <= 0 ? 0 : a >= 1 ? 255 : Math.round(a * 255);
+  }
+  ctx.putImageData(d, 0, 0);
+  ctx.globalCompositeOperation = 'source-in';
+  ctx.drawImage(img, 0, 0);
+  ctx.globalCompositeOperation = 'source-over';
+  return out;
 }
 
 /** Runs the chosen model and returns a canvas of the original size with the background made transparent. */
@@ -291,7 +326,11 @@ async function cutOut(
     [session.inputNames[0]]: new ort.Tensor('float32', input, [1, 3, h, w]),
   });
   const raw = result[session.outputNames[0]].data as Float32Array;
-  const alpha = despeckle(refineMatte(raw.length === n ? raw : raw.subarray(0, n), q === 'hq'), w, h);
+  const alpha = cleanMask(
+    despeckle(refineMatte(raw.length === n ? raw : raw.subarray(0, n), q === 'hq'), w, h),
+    w,
+    h,
+  );
   const m = sctx.createImageData(w, h);
   for (let i = 0; i < n; i++) m.data[i * 4 + 3] = alpha[i];
   const mask = document.createElement('canvas');
@@ -369,14 +408,17 @@ export function BackgroundRemoverAI() {
     try {
       // Logos and graphics on one flat colour get exact colour removal (an AI model would leave speckles).
       const flat = analyseFlat(bitmap.current);
+      const graphic = flat ? null : analyseGraphic(bitmap.current);
       let c: HTMLCanvasElement;
-      if (quality === 'logo' || (flat && !forceAi)) {
-        const use = flat || { bg: cornerColour(bitmap.current), tol: 28 };
-        c = cutOutFlat(bitmap.current, use);
+      if (flat && (quality === 'logo' || !forceAi)) {
+        c = cutOutFlat(bitmap.current, flat);
+        setNote(quality === 'logo' ? '' : 'flat');
+      } else if (graphic && (quality === 'logo' || (graphic.isGraphic && !forceAi))) {
+        c = applyMask(bitmap.current, graphic.mask, graphic.w, graphic.h);
         setNote(quality === 'logo' ? '' : 'flat');
       } else {
         setNote('');
-        const q: Quality = quality;
+        const q: Quality = quality === 'logo' ? 'hq' : quality;
         c = await cutOut(bitmap.current, q, pct =>
           setStatus(`Downloading the AI model (${MODELS[q].mb} MB, one time only)… ${pct}%`),
         );
@@ -480,7 +522,7 @@ export function BackgroundRemoverAI() {
         />
         <small className="proHint">
           {quality === 'logo'
-            ? 'For logos, icons, signatures and graphics on one flat colour: removes that exact colour with crisp edges. No download needed.'
+            ? 'For logos, icons, signatures and graphics: removes a flat, gradient or glowing background with crisp edges. No download needed.'
             : quality === 'hq'
               ? 'People, products, cars, pets and objects. First use downloads a 44 MB AI model (kept for next time); a photo takes about 5–30 seconds depending on your device.'
               : 'Small 6 MB model, best for photos of people. Quicker on phones.'}
@@ -499,8 +541,8 @@ export function BackgroundRemoverAI() {
       {error && <Note error>{error}</Note>}
       {note === 'flat' && (
         <p className="notice" role="status">
-          This looks like a logo or graphic on one flat colour, so that exact colour was removed for crisp,
-          clean edges.{' '}
+          This looks like a logo or graphic, so its background colour (flat, gradient or glow) was removed for
+          crisp, clean edges.{' '}
           <button
             type="button"
             className="dropLink"

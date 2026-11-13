@@ -121,3 +121,48 @@ describe('background remover: logos on a flat colour', () => {
     expect(despeckle(a, 5, 5)[12]).toBe(255);
   });
 });
+
+import { cleanMask, smoothBackgroundMask } from '@/lib/utils/matte';
+describe('background remover: gradient logos and AI mask clean-up', () => {
+  const W = 120;
+  const H = 120;
+  // A logo like CraftSprint's: white and blue shapes on a navy radial gradient with a glow.
+  const gradientLogo = () => {
+    const d = new Uint8ClampedArray(W * H * 4);
+    for (let y = 0; y < H; y++)
+      for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4;
+        const r = Math.hypot(x - 60, y - 60) / 85;
+        let c = [Math.round(10 + 8 * (1 - r)), Math.round(20 + 50 * (1 - r)), Math.round(60 + 120 * (1 - r))];
+        const ring = Math.hypot(x - 50, y - 60);
+        if (ring < 30 && ring > 16 && x < 62) c = [255, 255, 255]; // white "C" (open on the right)
+        if (x > 58 && x < 95 && y > 52 && y < 82) c = [10, 110, 250]; // blue "S" block
+        d.set([...c, 255], i);
+      }
+    return d;
+  };
+  it('removes a gradient/glow background and keeps the logo shapes solid', () => {
+    const r = smoothBackgroundMask(gradientLogo(), W, H);
+    expect(r.isGraphic).toBe(true);
+    expect(r.mask[5 * W + 5]).toBe(0); // dark corner
+    expect(r.mask[60 * W + 110]).toBe(0); // gradient near the right edge
+    expect(r.mask[60 * W + 27]).toBe(255); // white C
+    expect(r.mask[66 * W + 80]).toBe(255); // blue S
+  });
+  it('says a noisy photo is not a graphic', () => {
+    const d = new Uint8ClampedArray(W * H * 4);
+    for (let i = 0; i < W * H; i++) d.set([(i * 37) % 256, (i * 91) % 256, (i * 53) % 256, 255], i * 4);
+    expect(smoothBackgroundMask(d, W, H).isGraphic).toBe(false);
+  });
+  it('fills speckled patches inside the subject and removes stray dots', () => {
+    const a = new Uint8ClampedArray(W * H);
+    for (let y = 30; y < 90; y++) for (let x = 30; x < 90; x++) a[y * W + x] = 255; // subject
+    for (let y = 50; y < 62; y++) for (let x = 50; x < 62; x++) a[y * W + x] = (x + y) % 2 ? 200 : 90; // speckle inside
+    a[5 * W + 5] = 255; // stray dot in the background
+    const out = cleanMask(a, W, H);
+    for (let y = 50; y < 62; y++) for (let x = 50; x < 62; x++) expect(out[y * W + x]).toBe(255);
+    expect(out[5 * W + 5]).toBe(0);
+    expect(out[40 * W + 40]).toBe(255);
+    expect(out[10 * W + 60]).toBe(0);
+  });
+});
