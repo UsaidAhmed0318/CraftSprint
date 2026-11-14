@@ -69,7 +69,14 @@ export default function Hero3D() {
         </div>
 
         <div className="h3Logo">
-          <Image src="/icons/icon-192.png" alt="" width={70} height={70} priority />
+          <Image
+            src="/icons/icon-192.png"
+            alt="CraftSprint logo"
+            aria-hidden="true"
+            width={70}
+            height={70}
+            priority
+          />
         </div>
 
         {ORBIT.map((Icon, i) => (
@@ -102,7 +109,13 @@ export default function Hero3D() {
         </div>
         <div className="hero3dAi">
           <div className="hero3dAiHead">
-            <Image src="/images/favicon.png" alt="" width={22} height={22} />
+            <Image
+              src="/images/favicon.png"
+              alt="CraftSprint logo"
+              aria-hidden="true"
+              width={22}
+              height={22}
+            />
             <b>CraftSprint AI</b>
             <i>online</i>
           </div>

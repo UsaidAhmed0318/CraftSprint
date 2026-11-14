@@ -120,7 +120,7 @@ export default function PwaManager() {
           <X size={20} />
         </button>
         <span className="installLogo">
-          <Image src="/icons/icon-192.png" alt="" width={68} height={68} />
+          <Image src="/icons/icon-192.png" alt="CraftSprint logo" aria-hidden="true" width={68} height={68} />
         </span>
         <h2 id="install-title">
           {mode === 'installed' ? 'Installed' : `Install ${appName || 'CraftSprint'}`}

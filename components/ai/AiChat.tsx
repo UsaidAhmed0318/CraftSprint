@@ -96,7 +96,14 @@ export default function AiChat() {
         {msgs.length === 0 ? (
           <div className="aiHello">
             <span className="aiHelloLogo">
-              <Image src="/icons/icon-192.png" alt="" width={64} height={64} priority />
+              <Image
+                src="/icons/icon-192.png"
+                alt="CraftSprint logo"
+                aria-hidden="true"
+                width={64}
+                height={64}
+                priority
+              />
             </span>
             <h1>
               Hi! Welcome to CraftSprint.
@@ -112,7 +119,15 @@ export default function AiChat() {
           <div className="aiThread" aria-live="polite">
             {msgs.map((m, i) => (
               <div key={i} className={`aiMsg ${m.role}`}>
-                {m.role === 'assistant' && <Image src="/images/favicon.png" alt="" width={30} height={30} />}
+                {m.role === 'assistant' && (
+                  <Image
+                    src="/images/favicon.png"
+                    alt="CraftSprint logo"
+                    aria-hidden="true"
+                    width={30}
+                    height={30}
+                  />
+                )}
                 <div>
                   <p>
                     {m.content
@@ -144,7 +159,13 @@ export default function AiChat() {
             ))}
             {busy && (
               <div className="aiMsg assistant">
-                <Image src="/images/favicon.png" alt="" width={30} height={30} />
+                <Image
+                  src="/images/favicon.png"
+                  alt="CraftSprint logo"
+                  aria-hidden="true"
+                  width={30}
+                  height={30}
+                />
                 <p className="assistDots">
                   <span />
                   <span />

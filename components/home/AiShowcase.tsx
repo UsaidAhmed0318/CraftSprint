@@ -20,7 +20,7 @@ export function AskAiButton({
 }) {
   return (
     <button type="button" className={`btn aiBtn ${className}`} onClick={() => openAssistant()}>
-      <Image src="/images/favicon.png" alt="" width={22} height={22} />
+      <Image src="/images/favicon.png" alt="CraftSprint logo" aria-hidden="true" width={22} height={22} />
       {label}
     </button>
   );
@@ -67,7 +67,13 @@ export default function AiShowcase() {
       <div className="aiMock" aria-hidden="true">
         <div className="aiMockHead">
           <span className="aiMockLogo">
-            <Image src="/images/favicon.png" alt="" width={34} height={34} />
+            <Image
+              src="/images/favicon.png"
+              alt="CraftSprint logo"
+              aria-hidden="true"
+              width={34}
+              height={34}
+            />
           </span>
           <div>
             <b>CraftSprint AI</b>

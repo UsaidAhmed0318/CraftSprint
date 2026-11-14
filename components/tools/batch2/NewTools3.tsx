@@ -84,7 +84,7 @@ export function OpenGraphGenerator() {
         set={setCard}
       />
       <div className="ogPreview" aria-label="Share preview">
-        {image ? <img src={image} alt="" /> : <div className="ogNoImg">Image preview</div>}
+        {image ? <img src={image} alt="Share image preview" /> : <div className="ogNoImg">Image preview</div>}
         <div>
           <small>
             {(() => {

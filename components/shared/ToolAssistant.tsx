@@ -165,7 +165,14 @@ export default function ToolAssistant() {
           {open ? (
             <X size={22} />
           ) : (
-            <Image src="/images/favicon.png" alt="" width={34} height={34} priority />
+            <Image
+              src="/images/favicon.png"
+              alt="CraftSprint logo"
+              aria-hidden="true"
+              width={34}
+              height={34}
+              priority
+            />
           )}
         </span>
         {!open && (
@@ -203,7 +210,13 @@ export default function ToolAssistant() {
             {msgs.length === 1 && (
               <div className="assistWelcome">
                 <span className="assistWelcomeLogo">
-                  <Image src="/images/favicon.png" alt="" width={58} height={58} />
+                  <Image
+                    src="/images/favicon.png"
+                    alt="CraftSprint logo"
+                    aria-hidden="true"
+                    width={58}
+                    height={58}
+                  />
                 </span>
                 <b>CraftSprint AI</b>
                 <small>
@@ -215,7 +228,14 @@ export default function ToolAssistant() {
             {msgs.map((m, i) => (
               <div key={i} className={`assistMsg ${m.role}`}>
                 {m.role === 'assistant' && (
-                  <Image className="assistMini" src="/images/favicon.png" alt="" width={26} height={26} />
+                  <Image
+                    className="assistMini"
+                    src="/images/favicon.png"
+                    alt="CraftSprint logo"
+                    aria-hidden="true"
+                    width={26}
+                    height={26}
+                  />
                 )}
                 <div>
                   <p>
@@ -249,7 +269,14 @@ export default function ToolAssistant() {
             ))}
             {busy && (
               <div className="assistMsg assistant">
-                <Image className="assistMini" src="/images/favicon.png" alt="" width={26} height={26} />
+                <Image
+                  className="assistMini"
+                  src="/images/favicon.png"
+                  alt="CraftSprint logo"
+                  aria-hidden="true"
+                  width={26}
+                  height={26}
+                />
                 <p className="assistDots">
                   <span />
                   <span />

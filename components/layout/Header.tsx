@@ -76,7 +76,15 @@ export default function Header() {
     <header className={`siteHeader ${scrolled ? 'scrolled' : ''}`}>
       <div className="container nav">
         <Link href="/" className="brand" aria-label="CraftSprint home" onClick={() => setOpen(false)}>
-          <Image src="/images/favicon.png" alt="" width={36} height={36} priority className="brandMark" />
+          <Image
+            src="/images/favicon.png"
+            alt="CraftSprint logo"
+            aria-hidden="true"
+            width={36}
+            height={36}
+            priority
+            className="brandMark"
+          />
           <span className="brandName">CraftSprint</span>
         </Link>
         <nav className="navLinks">
@@ -116,7 +124,13 @@ export default function Header() {
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/ai" className="navAi">
-            <Image src="/images/favicon.png" alt="" width={18} height={18} />
+            <Image
+              src="/images/favicon.png"
+              alt="CraftSprint logo"
+              aria-hidden="true"
+              width={18}
+              height={18}
+            />
             CraftSprint AI
           </Link>
         </nav>
@@ -208,7 +222,13 @@ export default function Header() {
             </a>
           </nav>
           <div className="drawerBrand">
-            <Image src="/icons/icon-192.png" alt="" width={44} height={44} />
+            <Image
+              src="/icons/icon-192.png"
+              alt="CraftSprint logo"
+              aria-hidden="true"
+              width={44}
+              height={44}
+            />
             <div>
               <b>CraftSprint</b>
               <small>Work smarter, not harder.</small>

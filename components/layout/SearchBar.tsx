@@ -142,14 +142,20 @@ export default function SearchBar({ compact = false }: { compact?: boolean }) {
         aria-label="Ask CraftSprint AI"
         title="Ask CraftSprint AI"
       >
-        <Image src="/images/favicon.png" alt="" width={20} height={20} />
+        <Image src="/images/favicon.png" alt="CraftSprint logo" aria-hidden="true" width={20} height={20} />
         {!compact && <span>Ask AI</span>}
       </button>
       {open && q && (
         <div className="searchResults">
           <button className="searchAsk" onClick={askAssistant}>
             <span className="searchAskIcon">
-              <Image src="/images/favicon.png" alt="" width={22} height={22} />
+              <Image
+                src="/images/favicon.png"
+                alt="CraftSprint logo"
+                aria-hidden="true"
+                width={22}
+                height={22}
+              />
             </span>
             <span className="searchAskText">
               <small>Ask CraftSprint AI</small>

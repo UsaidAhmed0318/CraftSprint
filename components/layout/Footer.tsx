@@ -10,7 +10,14 @@ export default function Footer() {
         <div className="footerGrid">
           <div className="footerBrand">
             <div className="brand" style={{ color: '#fff', gap: 10 }}>
-              <Image src="/images/favicon.png" alt="" width={30} height={30} style={{ borderRadius: 8 }} />
+              <Image
+                src="/images/favicon.png"
+                alt="CraftSprint logo"
+                aria-hidden="true"
+                width={30}
+                height={30}
+                style={{ borderRadius: 8 }}
+              />
               CraftSprint
             </div>
             <p>

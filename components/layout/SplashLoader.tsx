@@ -30,11 +30,11 @@ export default function SplashLoader() {
         <div className="csSplashCoin">
           <div className="csCoinFace">
             {/* eslint-disable-next-line @next/next/no-img-element -- must show before React loads */}
-            <img src="/icons/icon-192.png" alt="" width={86} height={86} />
+            <img src="/icons/icon-192.png" alt="CraftSprint logo" aria-hidden="true" width={86} height={86} />
           </div>
           <div className="csCoinFace back">
             {/* eslint-disable-next-line @next/next/no-img-element -- must show before React loads */}
-            <img src="/icons/icon-192.png" alt="" width={86} height={86} />
+            <img src="/icons/icon-192.png" alt="CraftSprint logo" aria-hidden="true" width={86} height={86} />
           </div>
         </div>
       </div>

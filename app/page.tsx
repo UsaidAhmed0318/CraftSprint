@@ -33,7 +33,7 @@ import { withSeo } from '@/lib/seo';
 
 export const metadata = withSeo('/', {
   title: 'CraftSprint — Free Online Tools for Images, PDFs, Code & More',
-  description: `${tools.length} free online tools for images, PDFs, developers, engineers, students, writing, calculators and quick games. Everything runs in your browser — no signup, no uploads.`,
+  description: `${tools.length} free online tools and games for images, PDFs, video, writing and developers. Runs in your browser: no signup, no uploads.`,
 });
 
 const faqs = [
