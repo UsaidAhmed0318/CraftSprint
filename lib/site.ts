@@ -14,12 +14,11 @@ export const site = {
    * recognise CraftSprint as one entity. Add each profile URL once it exists; remove ones you don't use.
    */
   sameAs: [
-    'https://www.pinterest.com/CraftSprintTools/',
+    'https://www.facebook.com/CraftSprint.io',
+    'https://www.youtube.com/@Craft_Sprint',
+    'https://x.com/UsaidD43890',
     'https://www.instagram.com/craftsprint.io/',
-    // 'https://www.youtube.com/@REPLACE',
-    // 'https://x.com/REPLACE',
-    // 'https://www.linkedin.com/company/REPLACE',
-    // 'https://www.facebook.com/REPLACE',
-    // 'https://alternativeto.net/software/craftsprint/',
+    'https://www.linkedin.com/company/craft-sprint/',
+    'https://www.pinterest.com/CraftSprintTools/',
   ] as string[],
 };

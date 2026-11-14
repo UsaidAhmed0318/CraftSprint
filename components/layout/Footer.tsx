@@ -41,6 +41,28 @@ export default function Footer() {
             <Link href="/faq">FAQ</Link>
           </div>
           <div className="footerCol">
+            <h4>Follow us</h4>
+            <a href="https://www.youtube.com/@Craft_Sprint" target="_blank" rel="noopener noreferrer">
+              YouTube
+            </a>
+            <a href="https://www.facebook.com/CraftSprint.io" target="_blank" rel="noopener noreferrer">
+              Facebook
+            </a>
+            <a href="https://www.instagram.com/craftsprint.io/" target="_blank" rel="noopener noreferrer">
+              Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/company/craft-sprint/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+            <a href="https://x.com/UsaidD43890" target="_blank" rel="noopener noreferrer">
+              X (Twitter)
+            </a>
+          </div>
+          <div className="footerCol">
             <h4>Legal</h4>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
