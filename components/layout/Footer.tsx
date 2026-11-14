@@ -1,84 +1,180 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import {
+  ArrowUp,
+  Facebook,
+  Gift,
+  Instagram,
+  Linkedin,
+  LayoutGrid,
+  Mail,
+  MessageCircle,
+  ShieldCheck,
+  Twitter,
+  UserX,
+  Youtube,
+} from 'lucide-react';
 import { site } from '@/lib/site';
-import { categories } from '@/data/tools';
+import { categories, tools } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
+
+const POPULAR = [
+  'background-remover',
+  'image-compressor',
+  'pdf-merge',
+  'pdf-to-word',
+  'qr-code-generator',
+  'video-compressor',
+  'audio-trimmer',
+  'word-counter',
+];
+const SOCIAL = [
+  { href: 'https://www.youtube.com/@Craft_Sprint', label: 'YouTube', Icon: Youtube },
+  { href: 'https://www.facebook.com/CraftSprint.io', label: 'Facebook', Icon: Facebook },
+  { href: 'https://www.instagram.com/craftsprint.io/', label: 'Instagram', Icon: Instagram },
+  { href: 'https://www.linkedin.com/company/craft-sprint/', label: 'LinkedIn', Icon: Linkedin },
+  { href: 'https://x.com/UsaidD43890', label: 'X (Twitter)', Icon: Twitter },
+];
+
 export default function Footer() {
+  const games = tools.filter(t => t.category === 'Games').length;
+  const popular = POPULAR.map(s => tools.find(t => t.slug === s)).filter(Boolean) as typeof tools;
+  const trust = [
+    { Icon: Gift, title: '100% free', text: 'No plans, no limits, no watermark' },
+    { Icon: ShieldCheck, title: 'Private by design', text: 'Files stay on your device' },
+    { Icon: UserX, title: 'No sign-up', text: 'Open a tool and start' },
+    {
+      Icon: LayoutGrid,
+      title: `${tools.length - games} tools · ${games} games`,
+      text: 'One place for everyday work',
+    },
+  ];
   return (
-    <footer className="siteFooter">
+    <footer className="siteFooter ft">
       <div className="container">
-        <div className="footerGrid">
-          <div className="footerBrand">
-            <div className="brand" style={{ color: '#fff', gap: 10 }}>
+        <div className="ftCta">
+          <div>
+            <h2>Need a tool we don’t have yet?</h2>
+            <p>
+              Tell us what would save you time. We also build custom websites, apps and tools for businesses.
+            </p>
+          </div>
+          <div className="ftCtaBtns">
+            <Link href="/contact" className="btn ftBtnLight">
+              Request a tool
+            </Link>
+            <Link href="/services" className="btn ftBtnGhost">
+              Our services
+            </Link>
+          </div>
+        </div>
+
+        <ul className="ftTrust">
+          {trust.map(({ Icon, title, text }) => (
+            <li key={title}>
+              <span className="ftTrustIcon" aria-hidden="true">
+                <Icon size={20} />
+              </span>
+              <span>
+                <b>{title}</b>
+                <small>{text}</small>
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="ftGrid">
+          <div className="ftBrand">
+            <Link href="/" className="ftLogo">
               <Image
                 src="/images/favicon.png"
                 alt="CraftSprint logo"
                 aria-hidden="true"
-                width={30}
-                height={30}
-                style={{ borderRadius: 8 }}
+                width={38}
+                height={38}
               />
               CraftSprint
-            </div>
+            </Link>
             <p>
-              Simple, fast online tools for images, text and developers. Built for everyday work with privacy
-              and performance in mind.
+              Free online tools and games for images, PDFs, video, writing and code. Fast, private and built
+              for everyday work.
             </p>
-            <p style={{ marginTop: 14 }}>
-              WhatsApp:{' '}
-              <a href={`https://wa.me/${site.whatsapp}`} style={{ color: '#fff', fontWeight: 700 }}>
-                {site.whatsappDisplay}
-              </a>
-            </p>
-          </div>
-          <div className="footerCol">
-            <h4>Categories</h4>
-            {categories.map(c => (
-              <Link key={c} href={`/category/${categoryInfo[c].slug}`}>
-                {categoryInfo[c].short}
-              </Link>
-            ))}
-          </div>
-          <div className="footerCol">
-            <h4>Company</h4>
-            <Link href="/services">Services</Link>
-            <Link href="/blog">Guides</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/faq">FAQ</Link>
-          </div>
-          <div className="footerCol">
-            <h4>Follow us</h4>
-            <a href="https://www.youtube.com/@Craft_Sprint" target="_blank" rel="noopener noreferrer">
-              YouTube
-            </a>
-            <a href="https://www.facebook.com/CraftSprint.io" target="_blank" rel="noopener noreferrer">
-              Facebook
-            </a>
-            <a href="https://www.instagram.com/craftsprint.io/" target="_blank" rel="noopener noreferrer">
-              Instagram
-            </a>
             <a
-              href="https://www.linkedin.com/company/craft-sprint/"
+              className="ftContact"
+              href={`https://wa.me/${site.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              LinkedIn
+              <MessageCircle size={17} aria-hidden="true" /> WhatsApp: {site.whatsappDisplay}
             </a>
-            <a href="https://x.com/UsaidD43890" target="_blank" rel="noopener noreferrer">
-              X (Twitter)
+            <a className="ftContact" href={`mailto:${site.email}`}>
+              <Mail size={17} aria-hidden="true" /> {site.email}
             </a>
+            <div className="ftSocial">
+              {SOCIAL.map(({ href, label, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`CraftSprint on ${label}`}
+                  title={label}
+                >
+                  <Icon size={19} aria-hidden="true" />
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="footerCol">
-            <h4>Legal</h4>
+
+          <nav className="ftCol" aria-label="Popular tools">
+            <h3>Popular tools</h3>
+            {popular.map(t => (
+              <Link key={t.slug} href={`/tools/${t.slug}`}>
+                {t.name}
+              </Link>
+            ))}
+            <Link href="/tools" className="ftMore">
+              All tools →
+            </Link>
+          </nav>
+
+          <nav className="ftCol ftCats" aria-label="Categories">
+            <h3>Categories</h3>
+            <div className="ftCatGrid">
+              {categories.map(c => (
+                <Link key={c} href={`/category/${categoryInfo[c].slug}`}>
+                  {categoryInfo[c].short}
+                </Link>
+              ))}
+            </div>
+          </nav>
+
+          <nav className="ftCol" aria-label="Company">
+            <h3>Company</h3>
+            <Link href="/about">About</Link>
+            <Link href="/services">Services</Link>
+            <Link href="/blog">Guides</Link>
+            <Link href="/ai">CraftSprint AI</Link>
+            <Link href="/faq">FAQ</Link>
+            <Link href="/contact">Contact</Link>
+            <h3 className="ftSub">Legal</h3>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
             <Link href="/cookies">Cookies</Link>
-          </div>
+          </nav>
         </div>
-        <div className="copyright">
-          <span>© {new Date().getFullYear()} CraftSprint</span>
-          <span>Made for useful work.</span>
+
+        <div className="ftBottom">
+          <span>
+            © {new Date().getFullYear()} CraftSprint. Built by{' '}
+            <a href="https://www.overthestack.com/" target="_blank" rel="noopener noreferrer">
+              Over The Stack Solutions
+            </a>
+            .
+          </span>
+          <a href="#" className="ftTop">
+            <ArrowUp size={16} aria-hidden="true" /> Back to top
+          </a>
         </div>
       </div>
     </footer>

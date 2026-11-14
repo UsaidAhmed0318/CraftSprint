@@ -26,6 +26,7 @@ import {
   Store,
 } from 'lucide-react';
 import { HeroHeadline, HeroSub, HeroButtons } from '@/components/home/HeroText';
+import ToolOfDay from '@/components/home/ToolOfDay';
 import GamePoster from '@/components/shared/GamePoster';
 import { tools, categories, benefits } from '@/data/tools';
 import { categoryInfo, categoryIcon } from '@/lib/categories';
@@ -178,6 +179,8 @@ export default function Home() {
               })}
           </div>
         </section>
+
+        <ToolOfDay />
 
         <section className="panelBox" aria-labelledby="cats" style={{ marginTop: 26 }}>
           <div className="panelHead">
