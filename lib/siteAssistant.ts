@@ -150,6 +150,18 @@ const PAGES: Page[] = [
     text: 'Most CraftSprint tools run inside your own browser, so your files and text stay on your device and are not uploaded. CraftSprint does not need an account from you and does not store your chats with this assistant. The full details are on the Privacy page.',
   },
   {
+    keys: ['cookie', 'cookies'],
+    href: '/cookies',
+    label: 'Cookie policy',
+    text: 'CraftSprint keeps your preferences (theme, language, favourites, high scores) in your own browser. Google Analytics and Google AdSense use cookies to measure visits and show ads; where the law requires it, you are asked first. The Cookie policy explains how to control or delete them.',
+  },
+  {
+    keys: ['faq', 'faqs', 'questions'],
+    href: '/faq',
+    label: 'FAQ',
+    text: 'The FAQ page answers the most common questions about CraftSprint: price, privacy, installing the app, supported devices, file limits and getting help. Each tool page also has its own questions.',
+  },
+  {
     keys: ['terms', 'conditions', 'rules', 'legal', 'licence', 'license'],
     href: '/terms',
     label: 'Terms',
@@ -341,7 +353,7 @@ const INTENTS: { re: RegExp; slug: string; say: string; more?: string[] }[] = [
 ];
 
 /** Questions about CraftSprint as a whole (privacy, safety, install, languages…). */
-const SITE_FAQ: { q: string; a: string; link?: Link }[] = [
+export const SITE_FAQ: { q: string; a: string; link?: Link }[] = [
   {
     q: 'Are my files uploaded to a server? Is it safe and private?',
     a: 'No. Almost every CraftSprint tool runs inside your own browser, so your images, PDFs, audio and video stay on your device. Nothing you type in a tool is stored. Only a few tools that need the internet (live currency rates, website speed, domain age) send the small piece of information they need, and they say so on the page.',

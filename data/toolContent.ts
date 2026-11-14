@@ -896,4 +896,1120 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
       'Free, instant and private in your browser.',
     ],
   },
+  'color-palette-extractor': {
+    heading: 'Pull a colour palette out of any image',
+    paragraphs: [
+      'A photo, logo or screenshot often already contains the colours you want for a design. The Color Palette Extractor reads an image and lists its dominant colours as HEX codes, so you can reuse them in a website, presentation, brand kit or social post without guessing.',
+      'The image is analysed inside your browser and is not uploaded. Use the extracted colours as a starting point, then check text and background pairs with the Color Contrast Checker so the result stays readable.',
+    ],
+    steps: [
+      'Choose or drop an image.',
+      'Look at the dominant colours the tool finds.',
+      'Copy the HEX codes you want to use.',
+    ],
+  },
+  'border-radius-previewer': {
+    heading: 'Design rounded corners and copy the CSS',
+    paragraphs: [
+      'Rounded corners change how a button, card or image feels, and each corner can have its own value. The Border Radius Previewer gives you a slider for every corner and shows the shape live, so you can find the look you want without editing and refreshing code.',
+      'When the shape is right, copy the generated border-radius rule and paste it into your stylesheet. Equal values give a soft card; a very large value on a square makes a circle or a pill-shaped button.',
+    ],
+    steps: [
+      'Move the Top left, Top right, Bottom right and Bottom left sliders.',
+      'Watch the preview update as you go.',
+      'Press “Copy CSS” and paste the rule into your project.',
+    ],
+  },
+  'svg-pattern-generator': {
+    heading: 'Make a repeating background pattern',
+    paragraphs: [
+      'Subtle patterns add texture to hero sections, cards and slides without heavy image files. The SVG Pattern Generator creates tiling dots, stripes, grids and cross-hatch patterns in the colour and tile size you choose.',
+      'The result is CSS with the pattern built in as SVG, so it stays sharp on every screen and needs no extra file. Keep the pattern colour close to the background colour when text will sit on top of it.',
+    ],
+    steps: [
+      'Pick a pattern style.',
+      'Choose the colour and tile size.',
+      'Press “Copy CSS” and paste it into your stylesheet.',
+    ],
+  },
+  'placeholder-image-generator': {
+    heading: 'Create placeholder images at any size',
+    paragraphs: [
+      'While a design is being built, real photos are often not ready. A placeholder with the exact pixel size keeps the layout honest, so nothing jumps when the final image arrives. This tool makes a solid-colour image with its dimensions printed on it.',
+      'Choose the width, height, background colour and text colour, then download the image. It is handy for mockups, wireframes, theme demos and testing how a page behaves with different image shapes.',
+    ],
+    steps: [
+      'Enter the width and height in pixels.',
+      'Pick the background and text colours.',
+      'Press “Generate placeholder” and download the image.',
+    ],
+  },
+  'mockup-generator': {
+    heading: 'Show a screenshot inside a phone or laptop',
+    paragraphs: [
+      'A plain screenshot looks unfinished in a portfolio, pitch or social post. The Device Mockup Generator places your screenshot inside a simple phone or laptop frame, so people can see at a glance what your app or website looks like on a device.',
+      'Your screenshot is processed in your browser and is not uploaded. For the cleanest result, use a screenshot with the same shape as the device: tall for a phone, wide for a laptop.',
+    ],
+    steps: [
+      'Choose or drop a screenshot.',
+      'Pick the phone or laptop frame.',
+      'Download the finished mockup.',
+    ],
+  },
+  'font-pairing-finder': {
+    heading: 'Find heading and body fonts that work together',
+    paragraphs: [
+      'Choosing two fonts that look good together is one of the hardest parts of a design. The Font Pairing Finder shows curated Google Font combinations for headings and body text, with a live preview of each pair.',
+      'Type your own preview text to see how real headlines and paragraphs will look. Once you find a pair that fits your brand, note the two font names and load them from Google Fonts in your project.',
+    ],
+    steps: [
+      'Type your own preview text if you like.',
+      'Browse the font pairings.',
+      'Note the heading and body font names you prefer.',
+    ],
+  },
+  'css-keyframe-generator': {
+    heading: 'Build a CSS animation without writing it by hand',
+    paragraphs: [
+      'A small animation such as a fade, slide or pop makes an interface feel alive, but @keyframes syntax is easy to get wrong. This generator lets you describe the start and end state and shows the animation running straight away.',
+      'Set the animation name, the duration and the CSS for the From (0%) and To (100%) states, then copy the generated code. Animating opacity and transform gives the smoothest result on phones.',
+    ],
+    steps: [
+      'Enter an animation name and duration.',
+      'Write the CSS for the From (0%) and To (100%) states.',
+      'Watch the preview, then press “Copy CSS”.',
+    ],
+  },
+  'svg-animation-previewer': {
+    heading: 'Preview spin, pulse and bounce on an SVG',
+    paragraphs: [
+      'Icons and logos often need a small motion effect such as a loading spinner or a pulsing badge. The SVG Animation Previewer lets you paste SVG markup and instantly see it with a spin, pulse or bounce animation applied.',
+      'It is a quick way to check whether an icon is centred and rotates cleanly before you add the animation to a real project. Paste only SVG code that you trust and understand.',
+    ],
+    steps: [
+      'Paste your SVG markup.',
+      'Choose spin, pulse or bounce.',
+      'Watch the preview and adjust your SVG if needed.',
+    ],
+  },
+  'solid-background-remover': {
+    heading: 'Remove a plain background from a logo or graphic',
+    paragraphs: [
+      'Logos, icons, signatures and product shots on one flat colour do not need an AI model. This tool removes the colour you point at and exports a transparent PNG with clean edges, which is ideal for placing a logo on a website or slide.',
+      'Click the background in the picture to sample its colour, or let the tool read it from the corners, then adjust Sensitivity until the background is gone and the subject is intact. For photos of people, products or cars, use the AI Background Remover instead.',
+    ],
+    steps: [
+      'Choose or drop your image.',
+      'Click the background to sample its colour and adjust Sensitivity.',
+      'Press “Remove background” and download the transparent PNG.',
+    ],
+  },
+  'ai-token-counter': {
+    heading: 'Estimate how many tokens your prompt uses',
+    paragraphs: [
+      'AI models measure text in tokens, not words, and both limits and prices are based on them. The AI Token Counter gives a quick estimate using the common rule of thumb that one token is about four characters of English text.',
+      'Use it to check whether a prompt or document is likely to fit a model’s limit before you send it. The figure is an estimate: each model has its own tokenizer, so the real count can be somewhat higher or lower, especially for code or other languages.',
+    ],
+    steps: [
+      'Paste or type your prompt.',
+      'Read the estimated tokens, characters and words.',
+      'Shorten the text if it is close to your model’s limit.',
+    ],
+  },
+  'sitemap-generator': {
+    heading: 'Create a sitemap.xml from a list of URLs',
+    paragraphs: [
+      'A sitemap tells search engines which pages exist on your site, which helps new pages get discovered. The Sitemap Generator turns a plain list of page addresses into a valid sitemap.xml file.',
+      'Paste one full URL per line, generate the file and upload it to the root of your website. Then submit its address in Google Search Console and Bing Webmaster Tools. Only list pages that you want to appear in search results.',
+    ],
+    steps: [
+      'Paste your page URLs, one per line.',
+      'Generate the sitemap.',
+      'Save it as sitemap.xml, upload it to your site and submit it in Search Console.',
+    ],
+  },
+  'css-grid-generator': {
+    heading: 'Set up a CSS Grid layout visually',
+    paragraphs: [
+      'CSS Grid is the easiest way to build galleries, dashboards and page layouts, but the syntax takes time to remember. The CSS Grid Generator lets you choose the number of columns and rows and the gap between them, with a live preview.',
+      'When the grid looks right, copy the code and paste it onto your container element. Start with equal columns; you can change individual column widths in your own stylesheet later.',
+    ],
+    steps: [
+      'Set the number of columns and rows.',
+      'Adjust the gap.',
+      'Press “Copy CSS” and add it to your container.',
+    ],
+  },
+  'css-flexbox-generator': {
+    heading: 'Get Flexbox alignment right the first time',
+    paragraphs: [
+      'Flexbox is perfect for navigation bars, button rows and centring things, yet justify-content and align-items are easy to mix up. This generator lets you switch each option and see the items move instantly.',
+      'Choose the direction, how items are spread along the main axis, how they align on the cross axis and the gap between them, then copy the CSS. To centre something both ways, set justify-content and align-items to center.',
+    ],
+    steps: [
+      'Choose the direction, justify-content and align-items.',
+      'Set the gap and the number of items.',
+      'Press “Copy CSS”.',
+    ],
+  },
+  'tailwind-config-generator': {
+    heading: 'Add your brand colours and fonts to Tailwind',
+    paragraphs: [
+      'Using your own colours and fonts in Tailwind CSS means extending the theme in tailwind.config.js. This generator writes that snippet for you from a primary colour, a secondary colour, a heading font and a body font.',
+      'Copy the result into the theme.extend section of your config file, then use the new names in your classes. Remember to load the fonts themselves, for example from Google Fonts, or the browser will fall back to a default.',
+    ],
+    steps: [
+      'Pick your primary and secondary colours.',
+      'Enter the heading and body font names.',
+      'Press “Copy config” and paste it into tailwind.config.js.',
+    ],
+  },
+  'css-minifier': {
+    heading: 'Make CSS files smaller',
+    paragraphs: [
+      'Comments, line breaks and extra spaces make CSS easy to read but add weight that every visitor has to download. The CSS Minifier strips them out so your stylesheet loads faster, while the styles keep working exactly the same.',
+      'Keep your original, readable file for editing and publish the minified copy. The minifier runs in your browser, so private code is never uploaded. For large projects, a build tool can do this step automatically.',
+    ],
+    steps: ['Paste your CSS.', 'Minify it.', 'Copy the result into your production stylesheet.'],
+  },
+  'js-minifier': {
+    heading: 'Shrink JavaScript by removing comments and spaces',
+    paragraphs: [
+      'Readable JavaScript contains comments, indentation and blank lines that browsers do not need. The JavaScript Minifier removes them to make a smaller file that downloads faster.',
+      'Always keep the original source and test the minified version before you publish it. This tool strips comments and whitespace only; it does not rename variables or bundle files, which is a job for a build tool. Your code is processed in your browser and is not uploaded.',
+    ],
+    steps: ['Paste your JavaScript.', 'Minify it.', 'Copy the result and test it on your page.'],
+  },
+  'sql-query-builder': {
+    heading: 'Build a SELECT query without typing it',
+    paragraphs: [
+      'Writing SQL by hand is slow when you only need a quick query. The SQL Query Builder lets you fill in the table, the columns, WHERE conditions, sorting and a limit, and writes the SELECT statement for you.',
+      'It is useful for beginners learning how a query is put together and for anyone who wants a correct starting point. The tool only writes the text of the query; it never connects to a database. Check table and column names before you run it.',
+    ],
+    steps: [
+      'Enter the table name and the columns.',
+      'Add conditions, sorting and a limit if you need them.',
+      'Press “Copy SQL” and run it in your database tool.',
+    ],
+  },
+  'api-tester': {
+    heading: 'Send a test request to any REST API',
+    paragraphs: [
+      'When you build or debug an API you need to see exactly what it returns. The API Testing Tool sends a request with the method, headers and body you choose, then shows the response status, headers and body.',
+      'Requests go directly from your browser to the address you enter, so the API must allow browser requests (CORS); otherwise the browser blocks the response. Avoid pasting production secrets on a shared computer.',
+    ],
+    steps: [
+      'Choose the method and enter the URL.',
+      'Add headers and a body if the request needs them.',
+      'Send the request and read the status and response.',
+    ],
+  },
+  'js-obfuscator': {
+    heading: 'Make JavaScript hard to read',
+    paragraphs: [
+      'Code that runs in a browser can be viewed by anyone. Obfuscation rewrites JavaScript into a version that behaves the same but is very hard for a person to follow, which discourages casual copying.',
+      'This tool uses the widely used javascript-obfuscator engine and runs entirely in your browser. Obfuscation is not encryption: a determined person can still study the code, so never put passwords or secret keys in front-end code. Keep your original source, and test the result.',
+    ],
+    steps: ['Paste your JavaScript.', 'Obfuscate it.', 'Press “Copy result” and test it before publishing.'],
+  },
+  'text-cleaner': {
+    heading: 'Clean up messy copied text',
+    paragraphs: [
+      'Text copied from PDFs, emails and websites often arrives with double spaces, broken spacing and empty lines. The Text Cleaner fixes these in one click so you can paste clean text into a document, post or form.',
+      'Use “Clean spaces” to remove extra spaces and “Remove blank lines” to close up empty lines. Your text stays in your browser. To join lines that were broken in the wrong place, use the Line Break Remover.',
+    ],
+    steps: ['Paste your text.', 'Press “Clean spaces” or “Remove blank lines”.', 'Copy the cleaned text.'],
+  },
+  'seo-meta-preview': {
+    heading: 'See your page as Google would show it',
+    paragraphs: [
+      'The title and meta description are your advert in the search results. If they are too long they get cut off; if they are vague, people scroll past. The SEO Meta Preview shows how your page is likely to appear and warns you about length.',
+      'As a guide, keep titles to about 60 characters and descriptions to about 155. Put the main keyword near the start of the title and give a clear reason to click. Google sometimes rewrites snippets, so treat the preview as a close estimate.',
+    ],
+    steps: [
+      'Enter your page title, URL and meta description.',
+      'Check the preview and the character counts.',
+      'Edit until nothing is cut off, then use the text on your page.',
+    ],
+  },
+  'headline-analyzer': {
+    heading: 'Check a headline before you publish',
+    paragraphs: [
+      'Most people decide whether to read something from the headline alone. The Headline Analyzer scores yours against simple copywriting practices: length, whether it contains a number, a power word or a question.',
+      'Use the score as a guide, not a rule. Write several versions, compare them and choose the one that is clear and honest about what the reader will get. A specific promise usually beats a clever phrase.',
+    ],
+    steps: [
+      'Type your headline.',
+      'Read the score and the checks.',
+      'Rewrite and compare different versions.',
+    ],
+  },
+  'email-subject-line-tester': {
+    heading: 'Test an email subject line before sending',
+    paragraphs: [
+      'The subject line decides whether an email gets opened. This tester checks its length, spam-trigger words, emoji and personalisation so you can fix problems before you press send.',
+      'Shorter subject lines are less likely to be cut off on phones. Avoid all capitals and too many exclamation marks, and make sure the email delivers what the subject promises. Nothing you type is sent anywhere.',
+    ],
+    steps: [
+      'Type your subject line.',
+      'Check the length, spam words, emoji and personalisation results.',
+      'Adjust the wording and test again.',
+    ],
+  },
+  'cta-generator': {
+    heading: 'Find the right call-to-action phrase',
+    paragraphs: [
+      'A button that says “Submit” wastes a chance to tell people what they get. The CTA Generator gives you a curated bank of call-to-action phrases, grouped by category, to use on buttons, banners, emails and ads.',
+      'Pick a phrase that describes the result for the visitor, such as starting a free trial or downloading a guide, and keep it short. Test two versions on your page when you can.',
+    ],
+    steps: ['Choose a category.', 'Browse the phrases.', 'Copy the one that fits your campaign.'],
+  },
+  'social-bio-generator': {
+    heading: 'Write a social media bio in seconds',
+    paragraphs: [
+      'A bio has to say who you are and why someone should follow you in very few characters. Fill in your role, niche and a personality trait, and the Social Media Bio Generator gives you several ready-to-use templates for Instagram, X, LinkedIn and TikTok.',
+      'Use a template as a first draft, then add something specific, such as a result, a place or a link. These are templates filled with your words, so the text is yours to edit freely.',
+    ],
+    steps: [
+      'Enter your role, niche and a personality trait.',
+      'Read the generated bios.',
+      'Copy your favourite and personalise it.',
+    ],
+  },
+  'blog-outline-generator': {
+    heading: 'Plan a blog post before you write it',
+    paragraphs: [
+      'A clear outline makes writing faster and keeps an article on topic. Enter a title and your subtopics, and the Blog Outline Generator arranges them into a structured outline with an introduction and a conclusion.',
+      'Use the outline as headings in your editor, then fill in each section. It is a template tool, not an AI writer, so the ideas and the words stay yours.',
+    ],
+    steps: [
+      'Enter the article title.',
+      'Add your subtopics, one per line.',
+      'Press “Copy outline” and paste it into your editor.',
+    ],
+  },
+  'srt-subtitle-formatter': {
+    heading: 'Fix subtitle timing and numbering',
+    paragraphs: [
+      'Subtitles that appear too early or too late make a video hard to watch. The SRT Subtitle Formatter shifts every timestamp in an .srt file by the same amount and renumbers the blocks in order.',
+      'Enter a positive offset in milliseconds to delay the subtitles, or a negative one to show them earlier; 1000 milliseconds is one second. The file is processed in your browser.',
+    ],
+    steps: [
+      'Paste the contents of your .srt file.',
+      'Enter the time offset in milliseconds.',
+      'Press “Format & shift”, then “Copy SRT” and save the text as a .srt file.',
+    ],
+  },
+  'audio-speed-changer': {
+    heading: 'Change audio speed without changing the voice',
+    paragraphs: [
+      'Lectures and podcasts are quicker to get through at a faster speed, and music or language practice is easier when slowed down. The Audio Speed Changer changes speed from 0.5× to 2× while keeping the voice at its natural pitch.',
+      '“Keep the voice natural” is on by default; turn it off if you want the classic higher or deeper effect. Save the result as MP3 or WAV. Everything is processed on your device.',
+    ],
+    steps: [
+      'Choose an audio file.',
+      'Pick a speed with the slider or a quick-speed button.',
+      'Press “Change speed & export”, listen and download.',
+    ],
+  },
+  'gif-optimizer': {
+    heading: 'Make an animated GIF smaller',
+    paragraphs: [
+      'GIFs are often too large to send or to load quickly on a web page. The GIF Optimizer shrinks an animated GIF by reducing its resolution, its quality or the number of frames.',
+      'Start by lowering the scale, which saves the most; then lower the quality or keep every second frame if you need a smaller file. The GIF is decoded and rebuilt in your browser and is not uploaded.',
+    ],
+    steps: [
+      'Choose your GIF.',
+      'Adjust Scale, Quality and “Keep every Nth frame”.',
+      'Optimise and download the smaller GIF.',
+    ],
+  },
+  'profit-margin-calculator': {
+    heading: 'Work out profit, margin and markup',
+    paragraphs: [
+      'Margin and markup are often confused, and the difference affects your prices. Margin is profit as a share of the selling price; markup is profit as a share of the cost. This calculator shows both from a cost price and a selling price.',
+      'You can also enter a target margin to find the price you need to charge. For example, a product that costs 60 and sells for 100 has a 40% margin and a 66.7% markup.',
+    ],
+    steps: [
+      'Enter the cost price and the selling price.',
+      'Read the profit, margin and markup.',
+      'Or enter a target margin to see the price to charge.',
+    ],
+  },
+  'date-calculator': {
+    heading: 'Count the days between two dates',
+    paragraphs: [
+      'Deadlines, notice periods, visas and project plans all depend on exact day counts. The Date Calculator shows the total days, weeks and business days between two dates.',
+      'It can also add or subtract a number of days from a date to find a due date. Business days count Monday to Friday; public holidays differ by country and are not removed.',
+    ],
+    steps: [
+      'Choose a start date and an end date.',
+      'Read the total days, weeks and business days.',
+      'Or pick a date and add or subtract days.',
+    ],
+  },
+  'pomodoro-timer': {
+    heading: 'Focus in short, timed sessions',
+    paragraphs: [
+      'The Pomodoro technique breaks work into focused sessions, traditionally 25 minutes, followed by a short break. It makes large tasks less daunting and helps you notice how long things really take.',
+      'Set the focus length that suits you, start the timer and work on one task until it ends. Then take a few minutes away from the screen before the next session.',
+    ],
+    steps: [
+      'Set the focus length in minutes.',
+      'Start the timer and work on a single task.',
+      'Take a short break when the timer ends, then repeat.',
+    ],
+  },
+  'timezone-meeting-planner': {
+    heading: 'Find a meeting time across time zones',
+    paragraphs: [
+      'Scheduling a call between cities in different time zones is where mistakes happen. Pick a date and time in your own local time and the Timezone Meeting Planner shows the equivalent time in major time zones around the world.',
+      'Look for a slot inside working hours for everyone, and include the time zone when you send the invitation. Daylight saving time changes the difference between some cities during the year, so always check the actual date of the meeting.',
+    ],
+    steps: [
+      'Pick the date and time in your local time.',
+      'Compare the local times shown for other time zones.',
+      'Choose a slot that suits everyone.',
+    ],
+  },
+  'random-picker-wheel': {
+    heading: 'Let a wheel choose for you',
+    paragraphs: [
+      'For giveaways, classroom turns, team tasks or simply choosing where to eat, a wheel makes a random choice quick and visible. Enter your names or options, spin, and the wheel lands on one of them.',
+      'Every option has the same chance. The list stays in your browser. Remove the winner and spin again when you need a second pick.',
+    ],
+    steps: [
+      'Type your options, one per line.',
+      'Spin the wheel.',
+      'Read the selected option and spin again if you need another.',
+    ],
+  },
+  'kanban-board': {
+    heading: 'Track small tasks on a simple board',
+    paragraphs: [
+      'A Kanban board shows work as cards moving through three columns: To Do, In Progress and Done. Seeing everything in one place makes it clear what to do next and how much is already on your plate.',
+      'This board is deliberately simple and needs no account. Your tasks are saved in this browser on this device, so they are private, but they will not appear on your other devices and are removed if you clear your browser data.',
+    ],
+    steps: [
+      'Type a task and press “Add”.',
+      'Move a card forward as the work progresses.',
+      'Delete tasks you no longer need.',
+    ],
+  },
+  'tip-bill-splitter': {
+    heading: 'Add a tip and split the bill fairly',
+    paragraphs: [
+      'Working out a tip and each person’s share at the table is awkward. Enter the bill, the tip percentage and the number of people, and the Tip & Bill Splitter shows the tip, the total and what each person pays.',
+      'Tipping customs differ between countries, so choose the percentage that is normal where you are. The split is equal; if people ordered very different amounts, settle those differences separately.',
+    ],
+    steps: [
+      'Enter the bill amount.',
+      'Set the tip percentage and the number of people.',
+      'Read the tip, the total and each person’s share.',
+    ],
+  },
+  'number-base-converter': {
+    heading: 'Convert between binary, octal, decimal and hex',
+    paragraphs: [
+      'Programmers and electronics students constantly move between number systems: binary for bits, hexadecimal for colours and memory addresses, octal for file permissions. This converter shows the same whole number in all four bases.',
+      'Type a number, choose which base it is written in and read the others. It handles very large whole numbers. For example, decimal 255 is 11111111 in binary, 377 in octal and FF in hexadecimal.',
+    ],
+    steps: [
+      'Type a whole number.',
+      'Choose the base it is written in.',
+      'Read the value in binary, octal, decimal and hexadecimal.',
+    ],
+  },
+  'roman-numeral-converter': {
+    heading: 'Convert numbers to Roman numerals and back',
+    paragraphs: [
+      'Roman numerals still appear on clocks, in book chapters, film credits, outlines and event names. This converter turns any number from 1 to 3999 into Roman numerals, and reads a Roman numeral back as a number.',
+      'The system uses seven letters: I (1), V (5), X (10), L (50), C (100), D (500) and M (1000). A smaller letter before a larger one is subtracted, so IV is 4 and CM is 900. For example, 2026 is MMXXVI.',
+    ],
+    steps: [
+      'Type a number between 1 and 3999 to see it in Roman numerals.',
+      'Or type a Roman numeral to see it as a number.',
+      'Copy the result.',
+    ],
+  },
+  'random-number-generator': {
+    heading: 'Pick fair random numbers in any range',
+    paragraphs: [
+      'Raffles, sampling, games, classroom activities and test data all need numbers that nobody can predict. The Random Number Generator picks one or many numbers between a minimum and a maximum that you set.',
+      'Choose whether repeats are allowed: turn them off for a draw where each number can win only once. The numbers come from your browser’s secure random source, which is suitable for fair draws.',
+    ],
+    steps: [
+      'Enter the minimum and maximum.',
+      'Choose how many numbers you want and whether repeats are allowed.',
+      'Press “Generate”.',
+    ],
+  },
+  'stopwatch-countdown': {
+    heading: 'Time anything with a stopwatch or countdown',
+    paragraphs: [
+      'Workouts, cooking, presentations, exams and games all need accurate timing. This tool gives you a stopwatch with lap times and a countdown timer that sounds an alarm when it reaches zero.',
+      'Use laps to time each round or section without stopping the clock. Keep the tab open while a timer is running, and turn your device volume up so you hear the countdown alarm.',
+    ],
+    steps: [
+      'Choose the stopwatch or the countdown.',
+      'For a countdown, enter the minutes and start it.',
+      'Use lap to record split times on the stopwatch.',
+    ],
+  },
+  'morse-code-translator': {
+    heading: 'Translate text to Morse code and back',
+    paragraphs: [
+      'Morse code represents letters and numbers as short and long signals, written as dots and dashes. It is still used by radio amateurs and is a popular thing to learn for fun, scouting and puzzles.',
+      'Type ordinary text to see it in Morse code, or paste dots and dashes to read them as text; the tool detects which one you entered. Press “Play sound” to hear the rhythm, which is the best way to learn it. SOS is three dots, three dashes, three dots.',
+    ],
+    steps: ['Type text or paste Morse code.', 'Read the translation.', 'Press “Play sound” to hear it.'],
+  },
+  'color-contrast-checker': {
+    heading: 'Check that your text is readable',
+    paragraphs: [
+      'Light grey text on a white background may look elegant, but many people cannot read it. The Color Contrast Checker measures the contrast ratio between a text colour and a background colour and tells you whether it passes the WCAG 2.1 accessibility guidelines.',
+      'Level AA needs a ratio of at least 4.5:1 for normal text and 3:1 for large text. Level AAA needs 7:1 and 4.5:1. Passing AA is a sensible minimum for websites, apps and slides, and helps every reader in bright light.',
+    ],
+    steps: [
+      'Choose the text colour and the background colour.',
+      'Read the contrast ratio.',
+      'Adjust the colours until AA (or AAA) shows a pass.',
+    ],
+  },
+  'image-watermark': {
+    heading: 'Add a text watermark to a photo',
+    paragraphs: [
+      'A watermark shows who owns a picture and discourages people from reusing it without credit. This tool places text such as your name, brand or website on a photo, in a corner, in the centre or tiled across the whole image.',
+      'Choose the colour, size and opacity so the mark is visible without spoiling the picture. Your image is processed in your browser and never leaves your device. Keep an unmarked original for your own records.',
+    ],
+    steps: [
+      'Choose your image.',
+      'Type the watermark text and choose position, colour, size and opacity.',
+      'Download the watermarked image.',
+    ],
+  },
+  'ohms-law-calculator': {
+    heading: 'Calculate voltage, current, resistance and power',
+    paragraphs: [
+      'Ohm’s law links the three basic quantities of a circuit: voltage equals current multiplied by resistance (V = I × R). Power is voltage multiplied by current (P = V × I). Knowing any two values lets you find the others.',
+      'Enter any two of voltage, current, resistance and power, and the calculator works out the rest. For example, 12 volts across a 6 ohm resistor gives a current of 2 amps and a power of 24 watts. Use it to size resistors and check power ratings.',
+    ],
+    steps: [
+      'Enter any two values.',
+      'Read the other two.',
+      'Check that your components are rated for the calculated power.',
+    ],
+  },
+  'resistor-color-code': {
+    heading: 'Read a resistor from its colour bands',
+    paragraphs: [
+      'Resistors are too small for printed numbers, so their value is shown with coloured bands. On a 4-band resistor the first two bands are digits, the third is a multiplier and the fourth is the tolerance. A 5-band resistor adds a third digit for more precision.',
+      'Pick the colours in the order they appear and the tool shows the resistance, the tolerance and the range the real value can fall in. For example, brown, black, red and gold is 1,000 ohms (1 kΩ) with 5% tolerance.',
+    ],
+    steps: [
+      'Choose a 4-band or 5-band resistor.',
+      'Pick the colour of each band in order.',
+      'Read the resistance, tolerance and range.',
+    ],
+  },
+  'quadratic-equation-solver': {
+    heading: 'Solve any quadratic equation',
+    paragraphs: [
+      'A quadratic equation has the form ax² + bx + c = 0. Its solutions, called roots, come from the quadratic formula. The value b² − 4ac, the discriminant, tells you what kind of roots to expect: two real roots if it is positive, one if it is zero and two complex roots if it is negative.',
+      'Enter a, b and c to see the roots, the discriminant and the vertex of the parabola. For example, x² − 5x + 6 = 0 has roots 2 and 3. It is useful for checking homework and for physics and engineering problems.',
+    ],
+    steps: ['Enter the values of a, b and c.', 'Read the roots.', 'Check the discriminant and the vertex.'],
+  },
+  'statistics-calculator': {
+    heading: 'Summarise a list of numbers',
+    paragraphs: [
+      'Before drawing conclusions from data you need its basic shape. Paste a list of numbers and this calculator gives the count, sum, mean, median, mode, range, variance and standard deviation.',
+      'The mean is the average; the median is the middle value and is less affected by extreme numbers. Use the sample standard deviation when your numbers are a sample from a larger group, and the population version when you have every value.',
+    ],
+    steps: [
+      'Paste or type your numbers.',
+      'Read the mean, median, mode and range.',
+      'Use the sample or population standard deviation as appropriate.',
+    ],
+  },
+  'fraction-calculator': {
+    heading: 'Add, subtract, multiply and divide fractions',
+    paragraphs: [
+      'Fraction arithmetic is easy to get wrong by hand because of common denominators. This calculator adds, subtracts, multiplies and divides fractions and mixed numbers and gives the answer in its simplest form.',
+      'The result is shown as a simplified fraction, as a mixed number and as a decimal. For example, 1/2 + 1/3 = 5/6. It is useful for homework, recipes and measurements in woodworking and sewing.',
+    ],
+    steps: [
+      'Enter the first fraction.',
+      'Choose the operation and enter the second fraction.',
+      'Read the simplified answer, mixed number and decimal.',
+    ],
+  },
+  'subnet-calculator': {
+    heading: 'Work out an IPv4 subnet',
+    paragraphs: [
+      'Subnetting divides a network into smaller parts. From an IPv4 address and a prefix length, this calculator shows the network address, subnet mask, broadcast address, wildcard mask, the range of usable host addresses and how many hosts fit.',
+      'The prefix length is the number after the slash. A /24 network has the mask 255.255.255.0 and 254 usable hosts. It is a handy check for network students, home labs and anyone configuring routers or firewalls.',
+    ],
+    steps: [
+      'Enter an IPv4 address.',
+      'Set the prefix length.',
+      'Read the network, mask, broadcast and usable host range.',
+    ],
+  },
+  'chmod-calculator': {
+    heading: 'Get the right chmod number for file permissions',
+    paragraphs: [
+      'On Linux and macOS every file has read, write and execute permissions for three groups: the owner, the group and everyone else. The chmod command sets them with a three-digit number, where read is 4, write is 2 and execute is 1.',
+      'Tick the permissions you want to see the numeric and symbolic value, or type a number to see what it means. For example, 755 means the owner can read, write and execute while others can read and execute; 644 is common for ordinary files.',
+    ],
+    steps: [
+      'Tick the permissions for owner, group and others.',
+      'Read the numeric and symbolic value.',
+      'Or type a number to decode it.',
+    ],
+  },
+  'discount-calculator': {
+    heading: 'See the sale price and what you save',
+    paragraphs: [
+      'Sales often stack an extra discount on top of the first one, which makes the real price hard to judge. Enter the original price and the discount, and this calculator shows the final price and how much you save.',
+      'A second discount applies to the already reduced price, so 20% off followed by an extra 10% is 28% off in total, not 30%. Use it to compare offers while shopping or to set promotions in your own shop.',
+    ],
+    steps: [
+      'Enter the original price.',
+      'Enter the discount, and an extra discount if there is one.',
+      'Read the final price, the saving and the total discount.',
+    ],
+  },
+  'vat-calculator': {
+    heading: 'Add or remove VAT, GST or sales tax',
+    paragraphs: [
+      'Prices are quoted either without tax (net) or including tax (gross), and moving between them is a common source of mistakes. This calculator adds tax to a net price or takes it out of a gross price at any rate you enter.',
+      'Removing tax is not the same as subtracting the percentage: at a 20% rate, a gross price of 120 contains 20 of tax, not 24. Tax rates and rules differ by country and product, so check the rate that applies to you.',
+    ],
+    steps: [
+      'Enter the tax rate.',
+      'Enter a net price to add tax, or a gross price to remove it.',
+      'Read the net amount, the tax and the gross amount.',
+    ],
+  },
+  'fuel-cost-calculator': {
+    heading: 'Estimate the fuel cost of a trip',
+    paragraphs: [
+      'Knowing what a journey will cost in fuel helps you budget, compare driving with other transport and share costs fairly. Enter the distance, your vehicle’s fuel consumption and the fuel price to see how much fuel you need and what it will cost.',
+      'Add the number of people sharing to see the cost per person. Real consumption changes with speed, load, traffic and air conditioning, so treat the result as an estimate and allow a little extra.',
+    ],
+    steps: [
+      'Enter the distance, fuel consumption and fuel price.',
+      'Enter how many people are sharing.',
+      'Read the trip cost and the cost per person.',
+    ],
+  },
+  'calorie-calculator': {
+    heading: 'Estimate the calories you burn each day',
+    paragraphs: [
+      'Your body uses energy even at rest; this is your basal metabolic rate (BMR). Adding your daily activity gives your total daily energy expenditure (TDEE), an estimate of the calories you burn in a day.',
+      'Enter your age, height, weight and activity level to see both figures. The result is an estimate from a standard formula and real needs vary from person to person. It is general information, not medical advice; speak to a doctor or dietitian before making significant changes to your diet.',
+    ],
+    steps: [
+      'Enter your age, height and weight.',
+      'Choose your activity level.',
+      'Read your BMR and estimated daily calories.',
+    ],
+  },
+  'open-graph-generator': {
+    heading: 'Control how your page looks when it is shared',
+    paragraphs: [
+      'When someone shares a link on Facebook, LinkedIn, WhatsApp or X, the preview card is built from Open Graph and Twitter Card meta tags. Without them, platforms guess, often with the wrong image or no image at all.',
+      'Enter the page title, description, URL and an image address, check the share preview and copy the tags into the head section of your page. Use an image of 1200 × 630 pixels for the best result on most platforms.',
+    ],
+    steps: [
+      'Enter the page title, description, site name, page URL and image URL.',
+      'Check the share preview.',
+      'Press “Copy meta tags” and paste them into your page’s head section.',
+    ],
+  },
+  'website-speed-checker': {
+    heading: 'Test how fast a web page loads',
+    paragraphs: [
+      'Slow pages lose visitors and can rank lower in search. The Website Speed Checker runs Google PageSpeed Insights on any public page and shows its performance score and Core Web Vitals, the measurements Google uses for loading, responsiveness and visual stability.',
+      'Test both mobile and desktop, because phones are usually slower. This tool needs an internet connection: the address you enter is sent to Google’s PageSpeed service to run the test. Scores vary a little between runs, so test two or three times.',
+    ],
+    steps: [
+      'Enter the website address.',
+      'Choose mobile or desktop.',
+      'Run the test and read the score and Core Web Vitals.',
+    ],
+  },
+  'whatsapp-link-generator': {
+    heading: 'Create a click-to-chat WhatsApp link',
+    paragraphs: [
+      'A WhatsApp link lets customers start a chat with you in one tap, without saving your number first. It works in website buttons, Instagram bios, emails, ads and QR codes.',
+      'Enter your phone number with its country code and, if you like, a message that will be typed in for the customer. The link uses WhatsApp’s official wa.me format. Only share a number that you are happy for the public to contact.',
+    ],
+    steps: [
+      'Enter your phone number with the country code.',
+      'Add an optional pre-filled message.',
+      'Press “Copy link” and use it on your website, bio or ads.',
+    ],
+  },
+  'payment-reminder-generator': {
+    heading: 'Write a payment reminder that gets results',
+    paragraphs: [
+      'Chasing an unpaid invoice is uncomfortable, and finding the right tone takes time. The Payment Reminder Generator writes a clear message from your client’s name, the invoice number, the amount and the due date.',
+      'Choose a polite reminder for a first nudge, a firm one when payment is late and a final notice when earlier messages were ignored. Read the message before sending and adjust it to fit your relationship with the client.',
+    ],
+    steps: [
+      'Enter the client name, invoice number, amount and due date.',
+      'Choose a polite, firm or final tone.',
+      'Press “Copy message” and send it by email or chat.',
+    ],
+  },
+  'google-review-qr-generator': {
+    heading: 'Get more Google reviews with a QR code',
+    paragraphs: [
+      'Happy customers rarely leave a review because finding the right page takes effort. A QR code that opens your Google review page removes that step: they scan it with their phone camera and can write a review straight away.',
+      'Paste your Google review link, generate the code and print it on receipts, table cards, packaging or flyers. Ask for honest reviews only; offering rewards for reviews is against Google’s rules.',
+    ],
+    steps: [
+      'Copy your review link from your Google Business Profile.',
+      'Paste it into the tool to create the QR code.',
+      'Download the code and print it where customers will see it.',
+    ],
+  },
+  'sip-calculator': {
+    heading: 'See how a monthly investment could grow',
+    paragraphs: [
+      'A systematic investment plan (SIP) means investing a fixed amount every month. Over time, returns are earned on earlier returns as well as on the money you put in, which is the effect of compounding.',
+      'Enter the monthly amount, an expected yearly return and the number of years to see the total invested, the estimated gains and the estimated final value. The result is an illustration, not a prediction: real returns change from year to year and investments can lose value. This is not financial advice.',
+    ],
+    steps: [
+      'Enter the monthly investment.',
+      'Enter the expected yearly return and the number of years.',
+      'Read the total invested, estimated gains and estimated value.',
+    ],
+  },
+  'roi-calculator': {
+    heading: 'Measure the return on an investment',
+    paragraphs: [
+      'Return on investment (ROI) shows how much you gained compared with what you put in: profit divided by the amount invested. It lets you compare a marketing campaign, a piece of equipment or a financial investment on the same scale.',
+      'Because a 50% return over one year is very different from 50% over five, the calculator also shows the annualised ROI. For example, 1,000 that becomes 1,500 is a 50% ROI. Remember to include every cost in the amount invested.',
+    ],
+    steps: [
+      'Enter the amount invested and the final value.',
+      'Enter the period in years.',
+      'Read the profit, ROI and annualised ROI.',
+    ],
+  },
+  'break-even-calculator': {
+    heading: 'Find the sales you need to break even',
+    paragraphs: [
+      'The break-even point is where income exactly covers costs, with no profit and no loss. It depends on your fixed costs, such as rent and salaries, and on the profit each unit makes after its own variable cost.',
+      'Enter your fixed costs, the price per unit and the variable cost per unit to see how many units you must sell and the revenue that represents. For example, fixed costs of 50,000, a price of 500 and a variable cost of 300 mean you break even at 250 units.',
+    ],
+    steps: [
+      'Enter your fixed costs for the period.',
+      'Enter the price per unit and the variable cost per unit.',
+      'Read the break-even units and revenue.',
+    ],
+  },
+  'remove-duplicate-lines': {
+    heading: 'Remove repeated lines from a list',
+    paragraphs: [
+      'Email lists, keyword lists and exported data often contain the same line more than once. This tool removes the repeats and keeps the first time each line appears, so the order of your list is preserved.',
+      'It is useful for cleaning mailing lists, tags, product codes and log files. Your text is processed in your browser and is not uploaded.',
+    ],
+    steps: ['Paste your list, one item per line.', 'Remove the duplicates.', 'Copy the cleaned list.'],
+  },
+  'text-sorter': {
+    heading: 'Sort lines of text any way you need',
+    paragraphs: [
+      'Putting a list in order by hand is slow and error-prone. The Text Sorter arranges lines from A to Z or Z to A, by number or by length, and can also reverse or shuffle them.',
+      'Use it for names, glossaries, keyword lists and reading lists, or shuffle a list to put it in random order. Your text stays in your browser.',
+    ],
+    steps: ['Paste your lines.', 'Choose how to sort them.', 'Copy the sorted result.'],
+  },
+  'find-and-replace': {
+    heading: 'Replace words across a whole text at once',
+    paragraphs: [
+      'Changing a name, a product code or a repeated mistake one by one invites errors. Find and Replace changes every match in your text in a single step and shows how many matches there are.',
+      'You can also search by pattern for more advanced changes. Check the result before you use it, because replacing a short word can also change longer words that contain it. Your text is not uploaded.',
+    ],
+    steps: [
+      'Paste your text.',
+      'Type what to find and what to replace it with.',
+      'Replace all matches and copy the result.',
+    ],
+  },
+  'sql-formatter': {
+    heading: 'Make SQL queries easy to read',
+    paragraphs: [
+      'A long query written on one line is hard to understand and harder to debug. The SQL Formatter rewrites it with one clause per line, indented columns and consistent keyword case.',
+      'Formatting changes only the layout, not what the query does. It is useful before a code review, when reading queries copied from logs and when learning how a complex query is built. Your SQL is formatted in your browser.',
+    ],
+    steps: ['Paste your SQL query.', 'Format it.', 'Copy the formatted query.'],
+  },
+  'xml-formatter': {
+    heading: 'Indent XML and check that it is valid',
+    paragraphs: [
+      'XML from feeds, sitemaps, configuration files and APIs often arrives as one long line. The XML Formatter indents it so the structure is easy to follow.',
+      'If the XML is not well formed, for example because a tag is not closed, the tool shows an error message to help you find the problem. Your XML is processed in your browser and is not uploaded.',
+    ],
+    steps: ['Paste your XML.', 'Format it and read any error message.', 'Copy the indented XML.'],
+  },
+  'rotate-pdf': {
+    heading: 'Turn the pages of a PDF the right way up',
+    paragraphs: [
+      'Scanned documents and phone photos saved as PDF are often sideways or upside down. Rotate PDF turns every page by 90°, 180° or 270° and gives you a corrected file that opens the right way round for everyone.',
+      'The rotation is saved in the file itself, not just in your viewer. Your PDF is processed in your browser and is not uploaded, so contracts and personal documents stay private.',
+    ],
+    steps: ['Choose your PDF.', 'Pick 90°, 180° or 270°.', 'Rotate and download the fixed PDF.'],
+  },
+  'domain-age-checker': {
+    heading: 'Find out how old a domain is',
+    paragraphs: [
+      'The age of a domain is a useful clue when you judge a website, research a competitor or think about buying a domain. The Domain Age Checker shows when a domain was first registered, when it expires, when it was last updated and which registrar manages it.',
+      'The information comes from RDAP, the official registry data service that replaced WHOIS. This tool needs an internet connection, and the domain name you enter is sent to look up the record. Some country-code domains do not publish RDAP data, so results are not available for every domain.',
+    ],
+    steps: [
+      'Enter a domain name, such as example.com.',
+      'Run the check.',
+      'Read the domain age, registration date, expiry date and registrar.',
+    ],
+  },
+  'screen-recorder': {
+    heading: 'Record your screen without installing anything',
+    paragraphs: [
+      'Tutorials, bug reports, presentations and quick demos are easier to show than to describe. The Screen Recorder captures your whole screen, one window or a single browser tab, with sound, and saves it as a video file.',
+      'There is no watermark and no time limit set by us, and the recording is created on your computer rather than uploaded. Screen recording in a browser works on computers using Chrome, Edge or Firefox; phones normally do not allow websites to record the screen.',
+    ],
+    steps: [
+      'Choose whether to include sound and press “Start recording”.',
+      'Pick the screen, window or tab in the browser prompt.',
+      'Press “Stop”, preview the video and download it.',
+    ],
+  },
+  'voice-recorder': {
+    heading: 'Record your voice in the browser',
+    paragraphs: [
+      'Voice notes, interview practice, song ideas and spoken reminders need nothing more than a microphone. The Voice Recorder records from your microphone, lets you play the recording back and saves it as an audio file.',
+      'Your browser asks for permission to use the microphone the first time. The recording stays in the browser tab until you download it and is not uploaded. To cut silence from the start or end afterwards, use the Audio Trimmer.',
+    ],
+    steps: [
+      'Press “Start recording” and allow the microphone.',
+      'Speak, then press “Stop”.',
+      'Listen to the recording and download it.',
+    ],
+  },
+  'speech-to-text': {
+    heading: 'Type with your voice',
+    paragraphs: [
+      'Speaking is faster than typing for notes, messages, essays and captions. Speech to Text turns what you say into written text in 12 languages, including English, Urdu, Hindi and Arabic, and lets you copy or download the result.',
+      'It uses the speech recognition built into your browser and works best in Chrome and Edge. The browser’s speech service may send audio to its provider in order to recognise it; CraftSprint does not receive or store your voice. Speak clearly and check the text afterwards.',
+    ],
+    steps: [
+      'Choose your language.',
+      'Press “Start listening”, allow the microphone and speak.',
+      'Edit the text if needed, then copy or download it.',
+    ],
+  },
+  'webcam-mic-test': {
+    heading: 'Check your camera and microphone before a call',
+    paragraphs: [
+      'Finding out that your camera or microphone does not work as an interview or meeting begins is stressful. This test shows your live video, its resolution and a sound level meter, so you can confirm everything works first.',
+      'Nothing is recorded or uploaded; the preview appears only on your own screen. If the meter does not move, check that the correct microphone is selected in your browser and that it is not muted.',
+    ],
+    steps: [
+      'Press “Start test” and allow the camera and microphone.',
+      'Check the picture and the resolution.',
+      'Speak and watch the microphone level move.',
+    ],
+  },
+  'smart-qr-generator': {
+    heading: 'Make QR codes that do something useful',
+    paragraphs: [
+      'A QR code can do more than open a web page. The Smart QR Generator makes codes that join a Wi-Fi network, save a contact to a phone, start an email, open a WhatsApp chat or prepare an SMS.',
+      'A Wi-Fi code lets guests connect without typing a long password; a contact code works as a digital business card. The codes are created on your device. A Wi-Fi code contains your password, so share it only with people you would give the password to.',
+    ],
+    steps: [
+      'Choose Wi-Fi, Contact, Email, WhatsApp or SMS.',
+      'Fill in the details.',
+      'Download the QR code as a PNG.',
+    ],
+  },
+  'coin-flip-dice-roller': {
+    heading: 'Flip a coin or roll dice fairly',
+    paragraphs: [
+      'When you need a quick, fair decision or have lost the dice from a board game, this tool flips a coin or rolls from one to six dice.',
+      'Results come from your browser’s secure random number generator, so each side of the coin and each face of a die has an equal chance. Your recent results are listed below so everyone can see them.',
+    ],
+    steps: [
+      'Choose coin or dice.',
+      'For dice, choose how many to roll.',
+      'Press the button and read the result.',
+    ],
+  },
+  'citation-generator': {
+    heading: 'Create APA, MLA and Chicago references',
+    paragraphs: [
+      'Essays, assignments and research papers must credit their sources in a set style. The Citation Generator formats references for websites and books in APA 7, MLA 9 and Chicago style from the details you enter.',
+      'Enter each author with the first name first, one per line. In your document, put book titles in italics, because plain text cannot show them. Always check the reference against your institution’s guide, since requirements vary.',
+    ],
+    steps: [
+      'Choose the style and whether the source is a website or a book.',
+      'Enter the authors, title, year and other details.',
+      'Press “Copy citation” and paste it into your reference list.',
+    ],
+  },
+  'hijri-date-converter': {
+    heading: 'Convert a date to the Islamic (Hijri) calendar',
+    paragraphs: [
+      'The Hijri calendar is a lunar calendar of twelve months, so its dates move about eleven days earlier each solar year. This converter shows any Gregorian date in the Hijri calendar using both the Umm al-Qura and the civil calculation, and also in Arabic.',
+      'In many countries the start of an Islamic month is confirmed by sighting the moon, which can differ by a day from calculated calendars. For religious dates such as the start of Ramadan or Eid, follow your local announcement.',
+    ],
+    steps: [
+      'Choose a Gregorian date.',
+      'Read the Hijri date in the Umm al-Qura and civil calendars.',
+      'See the date in Arabic and the day of the week.',
+    ],
+  },
+  'freelance-rate-calculator': {
+    heading: 'Work out what to charge as a freelancer',
+    paragraphs: [
+      'Many freelancers set their rate by guessing and then earn less than they expected. This calculator starts from the yearly income you want to take home and adds your business expenses, platform fees and tax to find the hourly and daily rate you need.',
+      'Be realistic about billable hours: time spent on admin, marketing and finding clients cannot be charged, so 20 to 30 billable hours a week is common. Allow for holidays and sick days in your working weeks.',
+    ],
+    steps: [
+      'Enter your yearly take-home goal and business expenses.',
+      'Enter working weeks, billable hours per week, platform fee and tax.',
+      'Read your hourly rate and day rate.',
+    ],
+  },
+  'reading-time-calculator': {
+    heading: 'See how long a text takes to read or say',
+    paragraphs: [
+      'Knowing the reading time helps you plan blog posts, newsletters, speeches and video scripts. Paste your text to see the word count, the time it takes to read silently and the time it takes to speak aloud.',
+      'The tool uses about 230 words per minute for reading, which you can change, and 150 words per minute for speaking. A five-minute speech is therefore roughly 750 words.',
+    ],
+    steps: [
+      'Paste your text.',
+      'Adjust the reading speed if you like.',
+      'Read the word count, reading time and speaking time.',
+    ],
+  },
+  'image-upscaler': {
+    heading: 'Make a small image bigger',
+    paragraphs: [
+      'Small images look blurry when stretched for printing, thumbnails or presentations. The Image Upscaler enlarges a picture 2×, 3× or 4× using high-quality step-by-step scaling and optional light sharpening.',
+      'This is not AI upscaling: it makes an image larger and crisper, but it cannot invent detail that was never in the photo. The result is saved as a PNG, and the image is processed on your device.',
+    ],
+    steps: [
+      'Choose your image.',
+      'Pick 2×, 3× or 4× and whether to sharpen.',
+      'Press “Upscale image” and download the PNG.',
+    ],
+  },
+  'game-2048': {
+    heading: 'How to play 2048',
+    paragraphs: [
+      '2048 is a number puzzle played on a 4×4 grid. Every move slides all the tiles in one direction, and two tiles with the same number merge into one tile with their sum. A new tile appears after each move, and the aim is to build a tile worth 2048.',
+      'A reliable strategy is to keep your largest tile in one corner and build a descending chain of tiles beside it, avoiding moves that pull it away. The game runs in your browser and remembers your best score on this device.',
+    ],
+    steps: [
+      'Use the arrow keys, or swipe on a phone, to slide the tiles.',
+      'Merge matching numbers to make larger ones.',
+      'Reach 2048, then keep going for a higher score.',
+    ],
+  },
+  'snake-game': {
+    heading: 'How to play Snake',
+    paragraphs: [
+      'Snake is a classic arcade game. You steer a snake around the board to eat the gold dots; each one makes the snake longer and the game faster. The game ends if you hit a wall or your own body.',
+      'Plan a few moves ahead and leave yourself room to turn, because a long snake fills the board quickly. Moving along the edges in a steady pattern helps in the later stages. Your best score is saved on this device.',
+    ],
+    steps: [
+      'Steer with the arrow keys or the on-screen buttons.',
+      'Eat the gold dots to grow and score.',
+      'Avoid the walls and your own tail.',
+    ],
+  },
+  'memory-match': {
+    heading: 'How to play Memory Match',
+    paragraphs: [
+      'Memory Match is a card game that trains concentration and short-term memory. Sixteen cards lie face down, hiding eight pairs. You turn over two at a time: a matching pair stays open, otherwise both cards turn back.',
+      'The aim is to find all eight pairs in as few moves as possible. Try to remember where each picture was, and work through the board in a regular order rather than at random. Your best result is saved on this device.',
+    ],
+    steps: [
+      'Tap two cards to turn them over.',
+      'Remember where each picture is.',
+      'Match all eight pairs in as few moves as you can.',
+    ],
+  },
+  'tic-tac-toe': {
+    heading: 'How to play Tic-Tac-Toe',
+    paragraphs: [
+      'Tic-Tac-Toe is a two-player game on a 3×3 grid. Players take turns placing X and O, and the first to line up three in a row, across, down or diagonally, wins. If the grid fills first, the game is a draw.',
+      'You can play a friend on the same device or play against the computer. Taking the centre or a corner first gives you the most ways to win. With perfect play from both sides, every game ends in a draw.',
+    ],
+    steps: [
+      'Choose to play a friend or the computer.',
+      'Take turns placing your mark.',
+      'Get three in a row to win the round.',
+    ],
+  },
+  minesweeper: {
+    heading: 'How to play Minesweeper',
+    paragraphs: [
+      'Minesweeper is a logic puzzle. Hidden mines are scattered under a grid of squares. Opening a square shows a number that tells you how many mines touch it, and you use those numbers to work out which squares are safe.',
+      'Mark squares that you are sure contain a mine with a flag: right-click on a computer, or long-press on a phone. You win by opening every safe square, and lose if you open a mine. Start anywhere, then reason from the numbers instead of guessing.',
+    ],
+    steps: [
+      'Click or tap a square to open it.',
+      'Use the numbers to work out where the mines are.',
+      'Right-click or long-press to flag a mine, and open every safe square to win.',
+    ],
+  },
+  'connect-four': {
+    heading: 'How to play Connect Four',
+    paragraphs: [
+      'Connect Four is a strategy game for two. Players take turns dropping coloured discs into a vertical grid, and each disc falls to the lowest free space in its column. The first to line up four discs across, down or diagonally wins.',
+      'Controlling the centre column gives you more ways to connect four. Watch for places where your opponent already has three in a row and block them, and try to create two threats at once.',
+    ],
+    steps: [
+      'Choose a column to drop your disc.',
+      'Block your opponent’s lines of three.',
+      'Line up four discs in any direction to win.',
+    ],
+  },
+  hangman: {
+    heading: 'How to play Hangman',
+    paragraphs: [
+      'Hangman is a word-guessing game. A hidden word is shown as blank spaces and you guess it one letter at a time. A correct letter appears in every place it occurs; a wrong letter costs you one of your limited tries.',
+      'Begin with common letters. In English, E, A, R, I, O and T appear most often, and vowels quickly reveal the shape of the word. You win by completing the word before your tries run out.',
+    ],
+    steps: [
+      'Pick a letter.',
+      'Correct letters fill the blanks; wrong ones use up a try.',
+      'Complete the word before you run out of tries.',
+    ],
+  },
+  'reaction-time-test': {
+    heading: 'Test your reaction time',
+    paragraphs: [
+      'Reaction time is how quickly you respond to something you see. In this test you wait for the box to turn green and click or tap as fast as you can; the result is shown in milliseconds, with the average of your last five tries.',
+      'Most people score roughly between 200 and 300 milliseconds on a simple visual test. Tiredness, distraction and the screen or mouse you use all affect the result, so compare your own scores on the same device. Clicking before the box turns green does not count.',
+    ],
+    steps: [
+      'Start the test and wait for the box to turn green.',
+      'Click or tap as quickly as you can.',
+      'Read your time and the average of your last five tries.',
+    ],
+  },
+  'simon-says': {
+    heading: 'How to play Simon Says',
+    paragraphs: [
+      'Simon Says is a memory game. Coloured pads light up in a sequence and you repeat the sequence by pressing the pads in the same order. Each round adds one more step, so the pattern grows longer and harder to remember.',
+      'Saying the colours quietly to yourself, or grouping them into short chunks, makes long sequences easier to hold in mind. One mistake ends the game. Your best score is saved on this device.',
+    ],
+    steps: [
+      'Watch the pads light up.',
+      'Repeat the pattern in the same order.',
+      'Keep going as the sequence gets longer.',
+    ],
+  },
+  'block-stack': {
+    heading: 'How to play Block Stack',
+    paragraphs: [
+      'Block Stack is a falling-blocks puzzle. Shapes made of four squares drop from the top of the board, and you move and rotate them so they fit together. A complete horizontal line disappears and scores points.',
+      'The blocks fall faster every ten lines. Keep the stack low and flat, avoid leaving holes under blocks, and leave a column free for long pieces. The game ends when the stack reaches the top.',
+    ],
+    steps: [
+      'Move the falling block left or right and rotate it.',
+      'Drop it into place to complete horizontal lines.',
+      'Clear lines to score before the stack reaches the top.',
+    ],
+  },
+  'brick-breaker': {
+    heading: 'How to play Brick Breaker',
+    paragraphs: [
+      'Brick Breaker is an arcade game in which you move a paddle to bounce a ball into a wall of bricks. Each brick the ball hits disappears, and you clear the level by breaking them all.',
+      'You have three lives and lose one each time the ball gets past the paddle. Where the ball lands on the paddle changes the angle of the bounce, so use the edges to aim at the bricks that are left. It works with a keyboard or by touch.',
+    ],
+    steps: [
+      'Move the paddle with the keyboard or by touch.',
+      'Keep the ball in play.',
+      'Break every brick before you lose your three lives.',
+    ],
+  },
+  'space-defender': {
+    heading: 'How to play Space Defender',
+    paragraphs: [
+      'Space Defender is an arcade shooter. Rows of invaders move down the screen towards you. Your ship fires automatically, so your job is to move left and right to line up the shots and clear the invaders before they reach you.',
+      'Deal with the lowest invaders first, because they are closest to ending the game, and keep moving rather than waiting in one place. Your best score is saved on this device.',
+    ],
+    steps: [
+      'Move your ship left and right.',
+      'Line up with the invaders while the ship fires automatically.',
+      'Clear them before they reach the bottom.',
+    ],
+  },
+  'sky-hopper': {
+    heading: 'How to play Sky Hopper',
+    paragraphs: [
+      'Sky Hopper is a one-button game. Your character keeps falling, and each tap or press of the space bar makes it hop upward. You steer it through the gaps between obstacles and score one point for every gap you pass.',
+      'Short, regular taps keep the height steady better than long bursts. Look at the next gap rather than at the character. Touching an obstacle ends the run, and your best score is saved on this device.',
+    ],
+    steps: [
+      'Tap the screen or press space to hop.',
+      'Time your hops to pass through each gap.',
+      'Score a point for every gap you clear.',
+    ],
+  },
+  'whack-a-mole': {
+    heading: 'How to play Whack-a-Mole',
+    paragraphs: [
+      'Whack-a-Mole is a quick reaction game. Moles pop up from their holes at random and you tap or click each one before it disappears. You have 30 seconds to hit as many as you can.',
+      'Keep your eyes on the centre of the board so you can reach any hole quickly, and stay relaxed; tense hands are slower. Your best score is saved on this device, so you can try to beat it.',
+    ],
+    steps: [
+      'Start the game.',
+      'Tap or click each mole as it appears.',
+      'Hit as many as you can in 30 seconds.',
+    ],
+  },
+  sudoku: {
+    heading: 'How to play Sudoku',
+    paragraphs: [
+      'Sudoku is a logic puzzle on a 9×9 grid divided into nine 3×3 boxes. Some numbers are given at the start, and you fill the empty cells so that every row, every column and every box contains each number from 1 to 9 exactly once.',
+      'No arithmetic is needed, only logic. Look for a row, column or box that is nearly full, or for a number that can go in only one cell. Choose Easy, Medium or Hard; harder puzzles give you fewer starting numbers.',
+    ],
+    steps: [
+      'Choose Easy, Medium or Hard.',
+      'Select an empty cell and enter a number from 1 to 9.',
+      'Fill the grid so that no number repeats in any row, column or box.',
+    ],
+  },
+  'word-guess': {
+    heading: 'How to play Word Guess',
+    paragraphs: [
+      'In Word Guess you have six tries to find a hidden five-letter English word. After each guess the letters change colour: green means the letter is in the right place, yellow means it is in the word but in a different place, and grey means it is not in the word.',
+      'Start with a word that has several common letters and different vowels. Then use the colours: keep green letters where they are, move yellow letters, and avoid grey ones. You can play again with a new word as often as you like.',
+    ],
+    steps: [
+      'Type a five-letter word and press Enter.',
+      'Read the colours: green, yellow and grey.',
+      'Use the clues to find the word within six tries.',
+    ],
+  },
+  'sliding-puzzle': {
+    heading: 'How to play the Sliding Puzzle',
+    paragraphs: [
+      'The sliding puzzle is a classic brain teaser. Numbered tiles are mixed up on a grid with one empty space, and you slide tiles into that space until they are in order from 1 to the last number, with the gap at the end.',
+      'Choose a 3×3, 4×4 or 5×5 board; larger boards are harder. A good method is to solve the top row first, then the left column, and repeat on the smaller area that remains.',
+    ],
+    steps: [
+      'Choose the board size.',
+      'Tap a tile next to the empty space to slide it.',
+      'Arrange the tiles in order with the empty space last.',
+    ],
+  },
 };

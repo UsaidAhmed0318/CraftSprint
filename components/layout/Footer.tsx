@@ -20,7 +20,7 @@ export default function Footer() {
             <p style={{ marginTop: 14 }}>
               WhatsApp:{' '}
               <a href={`https://wa.me/${site.whatsapp}`} style={{ color: '#fff', fontWeight: 700 }}>
-                +{site.whatsapp}
+                {site.whatsappDisplay}
               </a>
             </p>
           </div>
@@ -38,11 +38,13 @@ export default function Footer() {
             <Link href="/blog">Guides</Link>
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
+            <Link href="/faq">FAQ</Link>
           </div>
           <div className="footerCol">
             <h4>Legal</h4>
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
+            <Link href="/cookies">Cookies</Link>
           </div>
         </div>
         <div className="copyright">

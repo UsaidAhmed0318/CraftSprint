@@ -104,6 +104,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 email: site.email,
                 logo: { '@type': 'ImageObject', url: `${site.url}/images/logo.png` },
                 founder: { '@type': 'Person', name: site.founder },
+                contactPoint: {
+                  '@type': 'ContactPoint',
+                  contactType: 'customer support',
+                  telephone: `+${site.whatsapp}`,
+                  email: site.email,
+                  availableLanguage: ['English', 'Urdu'],
+                },
                 ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
               },
               {

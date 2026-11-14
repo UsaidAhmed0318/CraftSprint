@@ -5,7 +5,9 @@ export const site = {
   description:
     'Free online tools for images, text, developers and everyday work — compress, convert, resize, generate passwords and QR codes, format JSON and more, all in your browser.',
   email: 'usaidahmeddon@gmail.com',
-  whatsapp: '923181014996',
+  // WhatsApp / phone in international format without "+" (used in wa.me links), and how it is shown to people.
+  whatsapp: '447456251163',
+  whatsappDisplay: '+44 7456 251163',
   founder: 'Usaid Ahmed',
   /**
    * Official profiles (schema.org sameAs). Same brand everywhere helps Google and AI assistants

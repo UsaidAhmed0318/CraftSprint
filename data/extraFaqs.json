@@ -1,0 +1,74 @@
+{
+  "html-minifier": [
+    {
+      "q": "What does the HTML Minifier remove?",
+      "a": "It removes comments and the extra spaces and line breaks between tags. The page looks and works the same, but the file is smaller and loads faster."
+    },
+    {
+      "q": "Is my code uploaded?",
+      "a": "No. The HTML is minified in your browser and never leaves your device."
+    }
+  ],
+  "css-minifier": [
+    {
+      "q": "Will minifying change how my site looks?",
+      "a": "No. Only comments and unnecessary spaces and line breaks are removed, so every style rule keeps working exactly the same."
+    },
+    {
+      "q": "Should I keep the original CSS file?",
+      "a": "Yes. Keep the readable version for editing and publish the minified copy, because minified CSS is hard to read and change."
+    }
+  ],
+  "js-minifier": [
+    {
+      "q": "Does it rename variables or bundle files?",
+      "a": "No. It removes comments and extra whitespace only. Renaming variables, removing unused code and bundling are done by build tools such as esbuild or Terser."
+    },
+    {
+      "q": "Is it safe to minify my JavaScript here?",
+      "a": "Your code is processed in your browser and is not uploaded. Always test the minified file before publishing it."
+    }
+  ],
+  "minesweeper": [
+    {
+      "q": "What do the numbers mean in Minesweeper?",
+      "a": "A number shows how many mines are in the eight squares touching it. A 1 means exactly one neighbouring square hides a mine."
+    },
+    {
+      "q": "How do I place a flag?",
+      "a": "Right-click a square on a computer, or long-press it on a phone or tablet. Flags mark squares you believe contain a mine."
+    },
+    {
+      "q": "How do I win?",
+      "a": "Open every square that does not contain a mine. You do not need to flag all the mines to win."
+    }
+  ],
+  "hangman": [
+    {
+      "q": "Which letters should I guess first in Hangman?",
+      "a": "Start with the most common English letters: E, A, R, I, O and T. Vowels quickly show the shape of the word."
+    },
+    {
+      "q": "What happens when I guess a wrong letter?",
+      "a": "A wrong letter uses up one of your tries. The game ends if you run out of tries before the word is complete."
+    },
+    {
+      "q": "Can I play on my phone?",
+      "a": "Yes. Tap the on-screen letters to guess. The game runs in your browser with nothing to install."
+    }
+  ],
+  "sudoku": [
+    {
+      "q": "What are the rules of Sudoku?",
+      "a": "Fill the 9×9 grid so that every row, every column and every 3×3 box contains each number from 1 to 9 exactly once."
+    },
+    {
+      "q": "Do I need maths to solve Sudoku?",
+      "a": "No. Sudoku uses logic only. The numbers could be replaced by nine different symbols and the puzzle would work the same way."
+    },
+    {
+      "q": "What is the difference between Easy, Medium and Hard?",
+      "a": "Harder puzzles start with fewer numbers filled in and need more steps of reasoning to solve."
+    }
+  ]
+}

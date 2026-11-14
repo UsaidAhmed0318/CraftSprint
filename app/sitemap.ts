@@ -17,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/workspace',
     '/privacy',
     '/terms',
+    '/cookies',
+    '/faq',
     '/blog',
     ...posts.map(p => `/blog/${p.slug}`),
   ];

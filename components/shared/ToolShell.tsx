@@ -8,6 +8,7 @@ import AdSlot from '@/components/shared/AdSlot';
 import ResultBanner from '@/components/shared/ResultBanner';
 import InstallButton from '@/components/pwa/InstallButton';
 import { track } from '@/lib/analytics';
+import extraFaqs from '@/data/extraFaqs.json';
 import { PrivacyBadge } from '@/components/shared/ProFx';
 import { tools } from '@/data/tools';
 import { categoryInfo } from '@/lib/categories';
@@ -20,7 +21,7 @@ export default function ToolShell({
   title,
   description,
   children,
-  faq,
+  faq: ownFaq,
   wide,
 }: {
   title: string;
@@ -60,6 +61,11 @@ export default function ToolShell({
   const steps = tool ? toolContent[tool.slug]?.steps : undefined;
   const showSide = !wide && !!tool;
 
+  // FAQs written in the tool itself, plus any extra ones kept in data/extraFaqs.json.
+  const faq = [
+    ...(ownFaq || []),
+    ...((tool && (extraFaqs as Record<string, { q: string; a: string }[]>)[tool.slug]) || []),
+  ];
   useEffect(() => {
     if (tool) track('tool_view', { tool_slug: tool.slug, tool_category: tool.category });
   }, [tool]);

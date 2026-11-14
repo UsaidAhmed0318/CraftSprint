@@ -42,7 +42,7 @@ export default function Contact() {
               rel="noopener noreferrer"
               style={{ color: 'var(--brand)', fontWeight: 700 }}
             >
-              +{site.whatsapp}
+              {site.whatsappDisplay}
             </a>
           </div>
         </div>
