@@ -10,6 +10,8 @@ export type Post = {
   description: string;
   topic: string;
   date: string; // YYYY-MM-DD
+  /** Optional: last time the post was meaningfully updated (YYYY-MM-DD). Shown to Google as dateModified. */
+  updated?: string;
   tools: string[];
   sections?: { heading: string; paragraphs: string[] }[];
 };

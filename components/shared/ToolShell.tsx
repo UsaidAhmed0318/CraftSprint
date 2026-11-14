@@ -92,7 +92,7 @@ export default function ToolShell({
           <script
             key={i}
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }}
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(d).replace(/</g, '\\u003c') }}
           />
         ))}
         {tool && cat && (
@@ -239,6 +239,24 @@ export default function ToolShell({
                   </details>
                 ))}
               </div>
+            </div>
+          </section>
+        )}
+        {tool && !isGame && (
+          <section
+            className="section"
+            style={{ paddingBottom: 0, paddingTop: 40 }}
+            aria-label="Custom development"
+          >
+            <div className="article">
+              <h2>Need a custom tool for your business?</h2>
+              <p>
+                The team behind CraftSprint builds custom web apps, calculators, dashboards and internal tools
+                for businesses.{' '}
+                <Link href="/services" onClick={() => track('services_cta_click', { tool_slug: tool.slug })}>
+                  See our services <ArrowRight size={14} style={{ verticalAlign: 'middle' }} />
+                </Link>
+              </p>
             </div>
           </section>
         )}

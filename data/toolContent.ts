@@ -476,4 +476,424 @@ export const toolContent: Record<string, { heading: string; paragraphs: string[]
       'Read your monthly tax, take-home pay and effective tax rate.',
     ],
   },
+
+  // ---- Added for SEO/AEO: tools that had no long-form content ----
+  'text-diff-checker': {
+    steps: [
+      'Paste the original text into the left box.',
+      'Paste the new version into the right box.',
+      'Read the result: added lines, removed lines and unchanged lines are marked clearly.',
+    ],
+    heading: 'Compare two texts and spot every change',
+    paragraphs: [
+      'When a contract, an essay, a config file or a piece of code changes, it is easy to miss what actually moved. This free text diff checker compares two versions line by line and highlights exactly which lines were added, removed or left the same.',
+      'It works well for documents, code, lists and paragraphs: paste the old text on one side, the new text on the other, and read the differences at a glance instead of scanning both copies by eye. Because the comparison is line by line, putting each sentence or item on its own line gives the clearest result.',
+      'Everything runs in your browser, so private drafts and source code are never uploaded. There is no sign-up and no limit on how often you compare.',
+    ],
+  },
+  'html-to-markdown-converter': {
+    steps: [
+      'Paste your HTML into the input box.',
+      'Press “Convert to Markdown”.',
+      'Copy the Markdown and paste it into your editor, docs or CMS.',
+    ],
+    heading: 'Turn HTML into clean Markdown',
+    paragraphs: [
+      'Moving content from a website, an email or a CMS into a Markdown-based tool — a README, a static site, Notion-style docs or a new blog platform — usually means rewriting the formatting by hand. This converter turns HTML markup into clean Markdown source in one click.',
+      'Headings, lists, links, images, tables and code blocks are converted to their Markdown equivalents, so the structure of the page survives the move. Paste the HTML, convert, then copy the result. If you need to go the other way, use the Markdown to HTML converter.',
+      'The conversion happens on your device, so unpublished pages and internal documents are not uploaded anywhere. It is free and needs no account.',
+    ],
+  },
+  'markdown-to-html-converter': {
+    steps: [
+      'Write or paste Markdown into the input box.',
+      'Press convert to generate the HTML.',
+      'Copy the HTML source into your CMS, template or email.',
+    ],
+    heading: 'Convert Markdown to raw HTML',
+    paragraphs: [
+      'Markdown is quick to write, but many website builders, email templates and CMS fields only accept HTML. This tool converts Markdown source into raw HTML markup that you can copy anywhere.',
+      'Headings, emphasis, lists, links, code and tables become the matching HTML tags. The output is the HTML source itself, not a rendered page — if you want to see how the Markdown looks while you write, use the Markdown Previewer instead.',
+      'Conversion runs locally in your browser with no upload, no sign-up and no limits.',
+    ],
+  },
+  'markdown-previewer': {
+    steps: [
+      'Type or paste Markdown in the editor.',
+      'Watch the rendered preview update next to it as you write.',
+      'Copy the Markdown when it looks right.',
+    ],
+    heading: 'Write Markdown with a live preview',
+    paragraphs: [
+      'Writing a README, documentation page or blog post in Markdown is faster when you can see the result as you type. This previewer shows your Markdown and the rendered page side by side.',
+      'Standard Markdown is supported, including headings, lists, links, code blocks and tables, so you can check formatting mistakes — a missing blank line, a broken table or an unclosed code block — before you publish.',
+      'Parsing and rendering happen entirely in your browser, so drafts are never uploaded. It is free, needs no account and works on phones as well as computers.',
+    ],
+  },
+  'json-to-csv-converter': {
+    steps: [
+      'Paste a JSON array of objects, for example an API response.',
+      'Press convert to build the CSV table.',
+      'Download the CSV and open it in Excel or Google Sheets.',
+    ],
+    heading: 'Convert JSON arrays into CSV spreadsheets',
+    paragraphs: [
+      'API responses and exports often arrive as JSON, but spreadsheets and reports need rows and columns. This converter turns a JSON array of objects into a CSV file you can open in Excel, Google Sheets or any database tool.',
+      'Each object becomes one row and each field becomes a column. If your objects have different fields, the header includes every field found across all of them and missing values are left blank, so no data is dropped.',
+      'The conversion happens in your browser, so customer records and internal data are not sent to a server. It is free, with no sign-up.',
+    ],
+  },
+  'csv-to-json-converter': {
+    steps: ['Paste CSV text that has a header row.', 'Press convert.', 'Copy or download the JSON.'],
+    heading: 'Convert CSV data into clean JSON',
+    paragraphs: [
+      'Spreadsheets and exports are usually CSV, while apps, APIs and config files expect JSON. This converter reads CSV with a header row and turns every row into a JSON object, using the header names as keys.',
+      'Quoted fields are handled properly, including values that contain commas or escaped quotes, which is where many quick scripts break. Paste the data, convert, and copy clean JSON ready for code or a mock API.',
+      'Everything is processed in your browser with no upload, so it is safe for internal data. Free and no account needed.',
+    ],
+  },
+  'json-to-typescript': {
+    steps: [
+      'Paste a JSON object, such as a sample API response.',
+      'Generate the TypeScript interfaces.',
+      'Copy them into your project and adjust names if needed.',
+    ],
+    heading: 'Generate TypeScript interfaces from JSON',
+    paragraphs: [
+      'Writing TypeScript types by hand for a large API response is slow and easy to get wrong. Paste a sample JSON object and this tool generates matching TypeScript interfaces in seconds.',
+      'Nested objects become their own named interfaces and arrays are typed from their first item, so the result mirrors the shape of your data. Review optional fields and union types afterwards, because a single sample cannot show every possible value.',
+      'The JSON is processed locally in your browser and never sent to a server, which matters when samples contain real tokens or customer data. Free, no sign-up.',
+    ],
+  },
+  'url-encoder-decoder': {
+    steps: ['Paste the text or URL you want to convert.', 'Choose Encode or Decode.', 'Copy the result.'],
+    heading: 'Encode and decode URL text',
+    paragraphs: [
+      'Spaces, ampersands, slashes and non-English characters can break a link when they are placed inside a URL. URL encoding (percent-encoding) replaces them with safe codes like %20, and decoding turns them back into readable text.',
+      'Use it for query parameters, form values, redirect links, UTM tags or any text with special characters that needs to go into a URL. Decoding is handy when you receive a long encoded link and want to read what it actually contains.',
+      'Encoding and decoding happen instantly in your browser, with no upload and no account.',
+    ],
+  },
+  'svg-to-png-converter': {
+    steps: ['Choose an SVG file.', 'Set the width you want for the PNG.', 'Convert and download the PNG.'],
+    heading: 'Convert SVG files to PNG images',
+    paragraphs: [
+      'SVG is perfect for logos and icons on the web, but many apps, social networks, documents and email clients only accept PNG or JPG. This converter turns an SVG file into a PNG at the width you choose.',
+      'Because SVG is a vector format, you can pick a large width and still get a sharp PNG — useful for app icons, presentations or print-ready graphics. Most standard SVG files work; SVGs that reference external images or fonts may not render exactly as expected.',
+      'The conversion happens on your device with no upload. It is free and needs no sign-up.',
+    ],
+  },
+  'png-to-svg-converter': {
+    steps: ['Choose a PNG or JPG image.', 'Generate the SVG wrapper.', 'Download the SVG file.'],
+    heading: 'Wrap a PNG or JPG inside an SVG file',
+    paragraphs: [
+      'Some tools, uploaders and design systems only accept SVG files. This tool places your raster image inside an SVG container so it can be used wherever an .svg file is required.',
+      'Important: this does not trace your picture into true vector shapes, so it will not become infinitely scalable. It embeds the original image inside the SVG. For real vector tracing, a design tool such as Inkscape or Illustrator is needed.',
+      'The file is processed in your browser, never uploaded, and the tool is free with no account.',
+    ],
+  },
+  'image-to-base64': {
+    steps: [
+      'Choose an image file.',
+      'The Base64 data URI is generated instantly.',
+      'Copy it into your HTML, CSS or JSON.',
+    ],
+    heading: 'Convert images to Base64 data URIs',
+    paragraphs: [
+      'A Base64 data URI lets you embed an image directly inside HTML, CSS or JSON instead of loading it as a separate file. This tool converts any image into a ready-to-paste data URI.',
+      'Data URIs are best for small icons, email templates and inline images where an extra network request is not worth it. Base64 makes files about one third larger, so for big photos a normal image file is usually faster.',
+      'The image is read locally in your browser with the FileReader API and never uploaded. Free and no sign-up.',
+    ],
+  },
+  'barcode-generator': {
+    steps: [
+      'Type the text or number to encode.',
+      'Choose a format such as CODE128, EAN-13, EAN-8 or UPC.',
+      'Download the barcode image and print or use it.',
+    ],
+    heading: 'Generate scannable barcodes',
+    paragraphs: [
+      'Barcodes are used on product labels, inventory, shipping and libraries. This generator creates scannable barcodes in common formats, including CODE128, EAN-13, EAN-8 and UPC.',
+      'CODE128 accepts letters and numbers and suits internal labels and logistics. EAN and UPC are retail formats with fixed lengths and a check digit, so enter the right number of digits. Always test-scan a printed barcode before printing a large batch.',
+      'Barcodes are generated in your browser with no upload, no watermark and no account.',
+    ],
+  },
+  'receipt-maker': {
+    steps: [
+      'Fill in your business name, the customer and the items sold.',
+      'Check the totals in the preview.',
+      'Press Print receipt and choose “Save as PDF” to keep a copy.',
+    ],
+    heading: 'Make a simple sales receipt',
+    paragraphs: [
+      'Small shops, freelancers and home businesses often need a quick receipt without buying accounting software. This receipt maker creates a clean sales receipt you can print or save as a PDF.',
+      'Add your business details, the items and prices, and the receipt totals itself. To save it, press Print receipt and pick “Save as PDF” in your browser’s print window — then you can email or WhatsApp it to the customer.',
+      'Nothing is uploaded or stored on a server, it is free, and there is no watermark or account.',
+    ],
+  },
+  'digital-signature-creator': {
+    steps: [
+      'Draw your signature with a mouse, trackpad or finger.',
+      'Clear and redraw until you are happy.',
+      'Download it as a transparent PNG.',
+    ],
+    heading: 'Draw your signature as a transparent PNG',
+    paragraphs: [
+      'Signing a PDF, a letter or a form often means printing, signing and scanning. This tool lets you draw your signature once and download it as a transparent PNG you can place on documents.',
+      'Because the background is transparent, the signature sits cleanly on top of any document. A phone or tablet with a finger or stylus usually gives the most natural result.',
+      'Your signature is drawn and saved entirely on your device and never uploaded. Note that an image of a signature is not the same as a certified digital signature; for legally binding e-signatures, check what your organisation requires.',
+    ],
+  },
+  'text-to-pdf': {
+    steps: ['Type or paste your text.', 'Generate the PDF.', 'Download the document.'],
+    heading: 'Turn plain text into a PDF',
+    paragraphs: [
+      'Sometimes you just need a PDF from plain text — notes, a letter, a list or a log — without opening a word processor. This tool converts text into a downloadable PDF document.',
+      'Long text is wrapped and split across pages automatically. It creates a simple plain-text PDF: bold text, images and complex layouts are not included. For documents with formatting, write them in a word processor and export to PDF there.',
+      'The PDF is created in your browser with no upload, free and without an account.',
+    ],
+  },
+  'pdf-text-extractor': {
+    steps: [
+      'Choose a PDF file.',
+      'Wait a moment while the text is read.',
+      'Copy or download the extracted text.',
+    ],
+    heading: 'Extract text from a PDF',
+    paragraphs: [
+      'Copying text out of a PDF page by page is slow and often messes up line breaks. This tool pulls the plain text out of a PDF so you can search it, quote it or reuse it.',
+      'It extracts text that is already selectable in the PDF. Scanned PDFs are pictures of pages and have no text layer, so they need OCR instead. Formatting, images and layout are not kept — use PDF to Word if you need an editable document.',
+      'The PDF is read locally in your browser and never uploaded, so it is safe for contracts and reports. Free, no sign-up.',
+    ],
+  },
+  'pdf-password-protector': {
+    steps: [
+      'Choose the PDF you want to protect.',
+      'Enter a strong password.',
+      'Download the encrypted PDF and keep the password safe.',
+    ],
+    heading: 'Password-protect a PDF',
+    paragraphs: [
+      'Sending a salary slip, contract, ID scan or report by email or WhatsApp? Adding a password means only people who know it can open the file. This tool encrypts a PDF with a password of your choice.',
+      'It uses AES-256 encryption, the strongest option in the current PDF standard. Share the password through a different channel than the file, and keep a copy of it — a lost password cannot be recovered.',
+      'Encryption happens entirely in your browser, so the document never leaves your device. Free and no account needed.',
+    ],
+  },
+  'pdf-password-unlocker': {
+    steps: ['Choose the protected PDF.', 'Enter its current password.', 'Download an unlocked copy.'],
+    heading: 'Remove a known password from a PDF',
+    paragraphs: [
+      'Bank statements and official documents often arrive password-protected, which is annoying when you need to open them repeatedly or combine them with other files. If you know the password, this tool saves an unlocked copy.',
+      'It does not crack or guess passwords: you must enter the correct one. Use it only on documents you own or have permission to access.',
+      'Decryption happens locally in your browser and the file is never uploaded. Free, with no sign-up.',
+    ],
+  },
+  'password-strength-checker': {
+    steps: [
+      'Type a password to test.',
+      'Read the strength rating.',
+      'Follow the suggestions to make it stronger.',
+    ],
+    heading: 'Check how strong your password is',
+    paragraphs: [
+      'Weak and reused passwords are one of the most common ways accounts get taken over. This checker rates a password’s strength and gives specific tips to improve it.',
+      'Length matters most: a long passphrase of several random words is both strong and easy to remember. Mix in numbers or symbols, avoid names and dates, and never reuse the same password on important accounts. A password manager makes this easy.',
+      'The check runs entirely in your browser and the password is never sent anywhere. Free, no account.',
+    ],
+  },
+  'lorem-ipsum-generator': {
+    steps: [
+      'Choose paragraphs, sentences or words.',
+      'Set how many you need.',
+      'Copy the placeholder text into your design.',
+    ],
+    heading: 'Generate placeholder text',
+    paragraphs: [
+      'Designers and developers need neutral filler text to see how a layout looks before the real content is ready. This generator creates Lorem Ipsum paragraphs, sentences or words in any amount.',
+      'Lorem Ipsum is scrambled Latin-like text, so readers focus on spacing, fonts and layout instead of the words. Replace it with real copy before publishing — placeholder text left on a live page looks unfinished and can hurt SEO.',
+      'Free, instant and generated in your browser with no sign-up.',
+    ],
+  },
+  'meta-tag-generator': {
+    steps: [
+      'Enter your page title, description and URL.',
+      'Add a share image for Open Graph and Twitter Cards.',
+      'Copy the tags into the <head> of your page.',
+    ],
+    heading: 'Create SEO and social meta tags',
+    paragraphs: [
+      'Meta tags decide how a page appears in Google results and when it is shared on WhatsApp, Facebook, LinkedIn or X. This generator creates the title, description, Open Graph and Twitter Card tags for you.',
+      'Keep titles around 50–60 characters and descriptions around 150–160 so they are not cut off. Use a 1200×630 image for social previews. Paste the generated tags inside the <head> section of your HTML.',
+      'Free, no sign-up, and nothing you type leaves your browser.',
+    ],
+  },
+  'robots-txt-generator': {
+    steps: [
+      'Choose which crawlers and paths to allow or block.',
+      'Add your sitemap URL.',
+      'Download the file and place it at the root of your domain.',
+    ],
+    heading: 'Generate a robots.txt file',
+    paragraphs: [
+      'A robots.txt file tells search engine crawlers which parts of your site they may crawl. This generator builds a correct file without memorising the syntax.',
+      'Save it as robots.txt at the root of your domain, for example https://example.com/robots.txt, and include your sitemap address so search engines find every page. Be careful: blocking a path stops crawling but does not guarantee a page is removed from search results — use a noindex tag for that.',
+      'Free, created in your browser, no account needed.',
+    ],
+  },
+  'utm-link-builder': {
+    steps: [
+      'Enter the destination URL.',
+      'Fill in source, medium and campaign name.',
+      'Copy the finished link into your ad, email or post.',
+    ],
+    heading: 'Build UTM campaign links',
+    paragraphs: [
+      'Without tracking, it is hard to know which post, ad or email actually brought visitors to your site. UTM links add small utm_ parameters to a normal URL so Google Analytics and other tools can attribute each visit to the right campaign.',
+      'At minimum set the source (for example instagram), the medium (social or email) and a campaign name. Keep naming consistent — always lowercase — so reports group traffic correctly.',
+      'Links are built instantly in your browser. Free, no sign-up.',
+    ],
+  },
+  'slug-generator': {
+    steps: [
+      'Type or paste a title.',
+      'The slug is generated instantly.',
+      'Copy it into your CMS or blog URL field.',
+    ],
+    heading: 'Create clean URL slugs',
+    paragraphs: [
+      'A clean URL slug makes pages easier to read, share and understand for both people and search engines. This tool turns any title into a short, lowercase, hyphen-separated slug.',
+      'Special characters, extra spaces and punctuation are removed automatically. Keep slugs short and descriptive, include the main keyword, and avoid changing them after publishing — if you must, set up a redirect from the old address.',
+      'Free, instant and private in your browser.',
+    ],
+  },
+  'hashtag-generator': {
+    steps: [
+      'Type keywords or phrases, separated by commas or new lines.',
+      'Generate the hashtags.',
+      'Copy them into your caption.',
+    ],
+    heading: 'Turn keywords into clean hashtags',
+    paragraphs: [
+      'Formatting hashtags by hand — removing spaces, symbols and duplicates — is tedious. This tool turns a list of keywords into clean, ready-to-paste hashtags for Instagram, TikTok, X and LinkedIn.',
+      'Duplicates are removed automatically, regardless of capital letters. Instagram allows up to 30 hashtags, but 5–15 relevant ones usually work better than the maximum; LinkedIn and X posts work best with just a few.',
+      'Free, no sign-up, and everything runs in your browser.',
+    ],
+  },
+  'aspect-ratio-calculator': {
+    steps: [
+      'Enter a width and height.',
+      'See the simplified ratio, such as 16:9.',
+      'Or pick a preset for Instagram, YouTube, TikTok, X or LinkedIn.',
+    ],
+    heading: 'Calculate aspect ratios and social sizes',
+    paragraphs: [
+      'Using the wrong shape for an image or video leads to automatic cropping or black bars. This calculator simplifies any resolution into its aspect ratio and lists the standard sizes for popular platforms.',
+      'Common ratios: 16:9 for YouTube and landscape video, 9:16 for Reels, Shorts and TikTok, 4:5 for Instagram feed posts and 1:1 for square posts. Pick a preset to get exact pixel dimensions.',
+      'Free, instant and works on any device without an account.',
+    ],
+  },
+  'video-thumbnail-grabber': {
+    steps: [
+      'Choose a video file from your device.',
+      'Scrub to the exact frame you want.',
+      'Grab the frame and download it as an image.',
+    ],
+    heading: 'Grab any frame from a video as an image',
+    paragraphs: [
+      'Need a still from your own video for a thumbnail, a blog post or a presentation? This tool lets you scrub through a video and save any frame as an image.',
+      'Pause on a clear, sharp moment — a frame with a visible face or the key action usually makes the best thumbnail. Then add text in a design tool if you need a YouTube-style thumbnail.',
+      'The video is played and captured locally with your browser’s video and canvas features, so it is never uploaded. Free, no sign-up.',
+    ],
+  },
+  'css-gradient-generator': {
+    steps: [
+      'Pick linear or radial.',
+      'Choose colours and the angle or position.',
+      'Copy the CSS background value.',
+    ],
+    heading: 'Design CSS gradients visually',
+    paragraphs: [
+      'Gradients add depth to buttons, backgrounds and hero sections, but writing the CSS by hand takes trial and error. This generator lets you design linear and radial gradients visually with a live preview.',
+      'Choose your colours, adjust the direction, and copy the generated background value into any stylesheet, inline style or utility class. Subtle gradients between two related colours usually look more professional than strong rainbow blends.',
+      'Free and runs entirely in your browser.',
+    ],
+  },
+  'box-shadow-generator': {
+    steps: [
+      'Adjust offset, blur, spread and colour.',
+      'Turn on inset for an inner shadow if you need one.',
+      'Copy the CSS box-shadow value.',
+    ],
+    heading: 'Create CSS box shadows',
+    paragraphs: [
+      'Soft shadows make cards, buttons and modals look lifted and modern. This generator lets you fine-tune a box-shadow with a live preview and copy the CSS.',
+      'Low opacity and a larger blur look more natural than dark, hard shadows. The tool creates one shadow layer; for layered shadows, copy several values and separate them with commas in your CSS.',
+      'Free, instant and private in your browser.',
+    ],
+  },
+  'color-converter': {
+    steps: [
+      'Enter a colour in HEX, RGB or HSL.',
+      'See the other formats and a live swatch.',
+      'Copy the format you need.',
+    ],
+    heading: 'Convert colours between HEX, RGB and HSL',
+    paragraphs: [
+      'Design tools, CSS and apps describe colours in different formats. This converter switches any colour between HEX, RGB and HSL and shows a preview swatch.',
+      'HEX is common in web design, RGB in code and graphics apps, and HSL is the easiest to adjust because hue, saturation and lightness are separate. Use the Random colour button to explore new ideas.',
+      'Conversion happens instantly in your browser with nothing stored. Free, no sign-up.',
+    ],
+  },
+  'cron-parser': {
+    steps: [
+      'Paste a cron expression, for example */15 * * * *.',
+      'Read the plain-English description.',
+      'Adjust the expression until the schedule is right.',
+    ],
+    heading: 'Understand cron schedules in plain English',
+    paragraphs: [
+      'Cron expressions control scheduled jobs on servers, CI pipelines and cloud platforms, but five cryptic fields are easy to misread. This parser explains any standard cron expression in plain English.',
+      'The five fields are minute, hour, day of month, month and day of week. For example, */15 * * * * means every 15 minutes. Check the time zone your server uses, because cron runs on server time.',
+      'Free and runs in your browser.',
+    ],
+  },
+  'plagiarism-checker': {
+    steps: [
+      'Paste your text.',
+      'The tool creates an exact-match Google search link for each longer sentence.',
+      'Open the links to see whether the same wording appears elsewhere.',
+    ],
+    heading: 'Check your text for copied sentences',
+    paragraphs: [
+      'Before you submit an essay or publish an article, it helps to know whether any sentence matches text already online. This helper prepares exact-match Google search links for each sentence so you can check them one click at a time.',
+      'It does not scan a plagiarism database automatically — there is no free way to search the whole web programmatically. Sentences under six words are skipped because they are too generic to search meaningfully.',
+      'Your text stays in your browser until you choose to open a search link. Free, no sign-up.',
+    ],
+  },
+  'readability-checker': {
+    steps: [
+      'Paste your article or paragraph.',
+      'See the Flesch reading-ease score and grade level.',
+      'Shorten long sentences and simplify words, then check again.',
+    ],
+    heading: 'Measure how easy your text is to read',
+    paragraphs: [
+      'Clear writing keeps readers on the page. This checker calculates the Flesch reading-ease score and an approximate US grade level for any text.',
+      'A score of 60–70 is easy for most readers; higher scores mean simpler text. Short sentences, common words and one idea per paragraph raise the score quickly.',
+      'Your text is analysed in your browser and not stored anywhere. Free, no sign-up.',
+    ],
+  },
+  'keyword-density-checker': {
+    steps: [
+      'Paste your text.',
+      'Enter the keyword or phrase.',
+      'See how often it appears and its percentage of all words.',
+    ],
+    heading: 'Check keyword density in your content',
+    paragraphs: [
+      'Using a keyword naturally helps search engines understand a page, but repeating it too often reads badly and can look like keyword stuffing. This checker shows how many times a keyword appears and what percentage of your text it makes up.',
+      'Most SEO guidance suggests about 1–2% as a healthy range. Use related words and synonyms instead of repeating the exact phrase, and write for readers first.',
+      'Free, instant and private in your browser.',
+    ],
+  },
 };

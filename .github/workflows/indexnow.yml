@@ -1,0 +1,17 @@
+# Tells Bing / IndexNow about every page after each push to main.
+# Waits a few minutes so Vercel finishes deploying first. The key is already public (public/<key>.txt).
+name: IndexNow ping
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sleep 240
+      - run: node scripts/indexnow.mjs

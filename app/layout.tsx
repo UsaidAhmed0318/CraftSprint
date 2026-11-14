@@ -26,14 +26,21 @@ const GA = process.env.NEXT_PUBLIC_GA_ID || 'G-4N6T8DLQ7B';
 const gaOn = IS_PRODUCTION && !!GA && !GA.includes('XXXX');
 const ADS = ADSENSE_CLIENT;
 const adsOn = IS_PRODUCTION && !!ADS && !ADS.includes('XXXX');
+// Pinterest "claim website" code. NEXT_PUBLIC_PINTEREST_VERIFY (Vercel) can override it.
+const PINTEREST = process.env.NEXT_PUBLIC_PINTEREST_VERIFY?.trim() || 'ff6bdd41018a3711aa68ce27dcc79f96';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   // iPhone/iPad: 'Add to Home Screen' opens CraftSprint full-screen with its own name
   // AdSense site ownership (live site only)
-  // Site ownership tags (live site only): Google AdSense and Pinterest.
+  // Pinterest "claim website" tag: set NEXT_PUBLIC_PINTEREST_VERIFY in Vercel to the content value Pinterest gives you.
   ...(IS_PRODUCTION
-    ? { other: { 'google-adsense-account': ADSENSE_CLIENT, 'p:domain_verify': 'ff6bdd41018a3711aa68ce27dcc79f96' } }
+    ? {
+        other: {
+          'google-adsense-account': ADSENSE_CLIENT,
+          ...(PINTEREST ? { 'p:domain_verify': PINTEREST } : {}),
+        },
+      }
     : {}),
   appleWebApp: { capable: true, title: 'CraftSprint', statusBarStyle: 'black-translucent' },
   title: {
@@ -87,16 +94,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd
           data={{
             '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: site.name,
-            url: site.url,
-            description: site.description,
-            email: site.email,
-            logo: `${site.url}/images/logo.png`,
+            '@graph': [
+              {
+                '@type': 'Organization',
+                '@id': `${site.url}/#organization`,
+                name: site.name,
+                url: site.url,
+                description: site.description,
+                email: site.email,
+                logo: { '@type': 'ImageObject', url: `${site.url}/images/logo.png` },
+                founder: { '@type': 'Person', name: site.founder },
+                ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
+              },
+              {
+                '@type': 'WebSite',
+                '@id': `${site.url}/#website`,
+                name: site.name,
+                url: site.url,
+                description: site.description,
+                inLanguage: 'en',
+                publisher: { '@id': `${site.url}/#organization` },
+              },
+            ],
           }}
-        />
-        <JsonLd
-          data={{ '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: site.url }}
         />
         <a href="#main" className="skipLink">
           Skip to content

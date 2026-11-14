@@ -9,7 +9,7 @@ export const OG_IMAGE = {
   url: '/images/og.png?v=2',
   width: 1200,
   height: 630,
-  alt: 'CraftSprint — 175+ free online tools and games',
+  alt: 'CraftSprint — free online tools and games that run in your browser',
 };
 
 /**
